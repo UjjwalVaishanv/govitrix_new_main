@@ -26,9 +26,12 @@ import {
   Building2,
   Plane,
 } from "lucide-react";
+import { useState } from "react";
 import { HeroVisual } from "../components/site/HeroVisual";
 import { Section, CTASection } from "../components/site/Section";
 import { Counter } from "../components/site/Counter";
+import { DiscoveryDialog, ProposalDialog } from "../components/site/CTADialogs";
+import { ConceptProductsShowcase } from "../components/site/ConceptProducts";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -54,9 +57,10 @@ export const Route = createFileRoute("/")({
 const trustChips = [
   "Product Engineering",
   "AI Solutions",
-  "Cloud & DevOps",
   "Mobile Development",
+  "Cloud & DevOps",
   "Global Delivery",
+  "NDA Protected",
 ];
 
 const credibility = [
