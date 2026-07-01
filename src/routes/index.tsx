@@ -241,54 +241,69 @@ const insights = [
 ];
 
 function HomePage() {
+  const [discoveryOpen, setDiscoveryOpen] = useState(false);
+  const [proposalOpen, setProposalOpen] = useState(false);
+
+  const scrollToPortfolio = () => {
+    const el = document.getElementById("portfolio");
+    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
   return (
     <>
+      <DiscoveryDialog open={discoveryOpen} onClose={() => setDiscoveryOpen(false)} />
+      <ProposalDialog open={proposalOpen} onClose={() => setProposalOpen(false)} />
+
       {/* HERO */}
       <section className="relative overflow-hidden border-b border-border bg-background">
         <div aria-hidden className="absolute inset-0 hairline-grid opacity-[0.45]" />
         <div aria-hidden className="soft-blur-orb left-1/2 top-0 h-[420px] w-[420px] -translate-x-1/2 bg-accent/15" />
         <div className="container-page relative grid items-center gap-14 py-20 md:py-28 lg:grid-cols-12">
-          <div className="lg:col-span-7">
+          <div className="lg:col-span-7 fade-in-up">
             <div className="inline-flex items-center gap-2 rounded-full border border-border bg-background/70 px-3 py-1.5 text-xs font-medium text-ink-soft backdrop-blur">
-              <span className="size-1.5 rounded-full bg-success" />
-              From Imagination to Innovation
+              <span className="size-1.5 rounded-full bg-success animate-pulse" />
+              Product Engineering · AI · Cloud · Mobile
             </div>
             <h1 className="mt-6 text-balance text-4xl font-semibold tracking-tight text-ink md:text-6xl md:leading-[1.05] lg:text-[68px]">
-              Building digital products that drive{" "}
+              Transforming Businesses.{" "}
               <span className="relative whitespace-nowrap">
-                <span className="relative z-10">growth.</span>
-                <span
-                  aria-hidden
-                  className="absolute inset-x-0 bottom-1 -z-0 h-3 bg-accent/20 md:h-4"
-                />
+                <span className="relative z-10 bg-gradient-to-r from-accent to-success bg-clip-text text-transparent">Intelligently.</span>
               </span>
             </h1>
             <p className="mt-6 max-w-2xl text-pretty text-lg text-ink-soft">
-              Govitrix Corporation partners with startups, SMBs, and enterprises to design, build,
-              and scale intelligent digital products, web applications, mobile apps, AI-powered
-              solutions, and cloud platforms.
+              We engineer tomorrow's technology today — creating scalable web applications, mobile experiences,
+              AI-powered systems, cloud infrastructure, and intelligent digital products that drive measurable business growth.
             </p>
 
             <div className="mt-8 flex flex-wrap items-center gap-3">
-              <Link
-                to="/contact"
+              <button
+                type="button"
+                onClick={() => setDiscoveryOpen(true)}
                 className="group inline-flex items-center gap-1.5 rounded-xl bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground shadow-soft transition-all hover:bg-secondary hover:shadow-elevated"
               >
                 Book Discovery Call
                 <ArrowUpRight className="size-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-              </Link>
-              <Link
-                to="/portfolio"
+              </button>
+              <button
+                type="button"
+                onClick={() => setProposalOpen(true)}
+                className="inline-flex items-center gap-1.5 rounded-xl bg-accent px-5 py-3 text-sm font-semibold text-accent-foreground shadow-soft transition-all hover:opacity-90"
+              >
+                Get Proposal <ArrowRight className="size-4" />
+              </button>
+              <button
+                type="button"
+                onClick={scrollToPortfolio}
                 className="inline-flex items-center gap-1.5 rounded-xl border border-border bg-background px-5 py-3 text-sm font-semibold text-ink transition-colors hover:bg-surface"
               >
-                View Our Work <ArrowRight className="size-4" />
-              </Link>
+                Explore Portfolio <ArrowRight className="size-4" />
+              </button>
             </div>
 
             <div className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-3 text-xs font-medium text-ink-muted">
               {trustChips.map((c) => (
                 <span key={c} className="inline-flex items-center gap-2">
-                  <span className="size-1 rounded-full bg-accent" />
+                  <Check className="size-3.5 text-success" />
                   {c}
                 </span>
               ))}
