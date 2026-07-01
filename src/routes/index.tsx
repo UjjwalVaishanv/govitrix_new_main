@@ -26,9 +26,12 @@ import {
   Building2,
   Plane,
 } from "lucide-react";
+import { useState } from "react";
 import { HeroVisual } from "../components/site/HeroVisual";
 import { Section, CTASection } from "../components/site/Section";
 import { Counter } from "../components/site/Counter";
+import { DiscoveryDialog, ProposalDialog } from "../components/site/CTADialogs";
+import { ConceptProductsShowcase } from "../components/site/ConceptProducts";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -54,9 +57,10 @@ export const Route = createFileRoute("/")({
 const trustChips = [
   "Product Engineering",
   "AI Solutions",
-  "Cloud & DevOps",
   "Mobile Development",
+  "Cloud & DevOps",
   "Global Delivery",
+  "NDA Protected",
 ];
 
 const credibility = [
@@ -75,44 +79,6 @@ const stats = [
   { value: 22, suffix: "", label: "Countries Targeted" },
 ];
 
-const works = [
-  {
-    name: "Lumenly Health",
-    industry: "Healthcare",
-    summary:
-      "An AI-assisted clinical workflow platform that reduced patient triage time by 42% across 14 hospitals.",
-    tags: ["AI", "HIPAA", "React", "AWS"],
-    accent: "from-accent/15 to-accent/0",
-    stat: { value: "−42%", label: "Triage time" },
-  },
-  {
-    name: "Northvault Finance",
-    industry: "FinTech",
-    summary:
-      "A wealth management SaaS with real-time portfolio analytics, KYC, and compliance-grade reporting.",
-    tags: ["SaaS", "Next.js", "PostgreSQL", "SOC 2"],
-    accent: "from-success/20 to-success/0",
-    stat: { value: "$420M", label: "AUM tracked" },
-  },
-  {
-    name: "Cargolane",
-    industry: "Logistics",
-    summary:
-      "End-to-end shipment visibility platform powering 6,000+ daily routes across 9 countries.",
-    tags: ["Mobile", "Flutter", "GCP", "IoT"],
-    accent: "from-accent/15 to-accent/0",
-    stat: { value: "6k+", label: "Daily routes" },
-  },
-  {
-    name: "Atlas Learn",
-    industry: "Education",
-    summary:
-      "A personalized learning platform with adaptive curriculum and generative-AI tutors for K-12 students.",
-    tags: ["GenAI", "Vue", "Node.js", "Azure"],
-    accent: "from-success/20 to-success/0",
-    stat: { value: "+3.1x", label: "Engagement" },
-  },
-];
 
 const services = [
   {
@@ -237,54 +203,69 @@ const insights = [
 ];
 
 function HomePage() {
+  const [discoveryOpen, setDiscoveryOpen] = useState(false);
+  const [proposalOpen, setProposalOpen] = useState(false);
+
+  const scrollToPortfolio = () => {
+    const el = document.getElementById("portfolio");
+    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
   return (
     <>
+      <DiscoveryDialog open={discoveryOpen} onClose={() => setDiscoveryOpen(false)} />
+      <ProposalDialog open={proposalOpen} onClose={() => setProposalOpen(false)} />
+
       {/* HERO */}
       <section className="relative overflow-hidden border-b border-border bg-background">
         <div aria-hidden className="absolute inset-0 hairline-grid opacity-[0.45]" />
         <div aria-hidden className="soft-blur-orb left-1/2 top-0 h-[420px] w-[420px] -translate-x-1/2 bg-accent/15" />
         <div className="container-page relative grid items-center gap-14 py-20 md:py-28 lg:grid-cols-12">
-          <div className="lg:col-span-7">
+          <div className="lg:col-span-7 fade-in-up">
             <div className="inline-flex items-center gap-2 rounded-full border border-border bg-background/70 px-3 py-1.5 text-xs font-medium text-ink-soft backdrop-blur">
-              <span className="size-1.5 rounded-full bg-success" />
-              From Imagination to Innovation
+              <span className="size-1.5 rounded-full bg-success animate-pulse" />
+              Product Engineering · AI · Cloud · Mobile
             </div>
             <h1 className="mt-6 text-balance text-4xl font-semibold tracking-tight text-ink md:text-6xl md:leading-[1.05] lg:text-[68px]">
-              Building digital products that drive{" "}
+              Transforming Businesses.{" "}
               <span className="relative whitespace-nowrap">
-                <span className="relative z-10">growth.</span>
-                <span
-                  aria-hidden
-                  className="absolute inset-x-0 bottom-1 -z-0 h-3 bg-accent/20 md:h-4"
-                />
+                <span className="relative z-10 bg-gradient-to-r from-accent to-success bg-clip-text text-transparent">Intelligently.</span>
               </span>
             </h1>
             <p className="mt-6 max-w-2xl text-pretty text-lg text-ink-soft">
-              Govitrix Corporation partners with startups, SMBs, and enterprises to design, build,
-              and scale intelligent digital products, web applications, mobile apps, AI-powered
-              solutions, and cloud platforms.
+              We engineer tomorrow's technology today — creating scalable web applications, mobile experiences,
+              AI-powered systems, cloud infrastructure, and intelligent digital products that drive measurable business growth.
             </p>
 
             <div className="mt-8 flex flex-wrap items-center gap-3">
-              <Link
-                to="/contact"
+              <button
+                type="button"
+                onClick={() => setDiscoveryOpen(true)}
                 className="group inline-flex items-center gap-1.5 rounded-xl bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground shadow-soft transition-all hover:bg-secondary hover:shadow-elevated"
               >
                 Book Discovery Call
                 <ArrowUpRight className="size-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-              </Link>
-              <Link
-                to="/portfolio"
+              </button>
+              <button
+                type="button"
+                onClick={() => setProposalOpen(true)}
+                className="inline-flex items-center gap-1.5 rounded-xl bg-accent px-5 py-3 text-sm font-semibold text-accent-foreground shadow-soft transition-all hover:opacity-90"
+              >
+                Get Proposal <ArrowRight className="size-4" />
+              </button>
+              <button
+                type="button"
+                onClick={scrollToPortfolio}
                 className="inline-flex items-center gap-1.5 rounded-xl border border-border bg-background px-5 py-3 text-sm font-semibold text-ink transition-colors hover:bg-surface"
               >
-                View Our Work <ArrowRight className="size-4" />
-              </Link>
+                Explore Portfolio <ArrowRight className="size-4" />
+              </button>
             </div>
 
             <div className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-3 text-xs font-medium text-ink-muted">
               {trustChips.map((c) => (
                 <span key={c} className="inline-flex items-center gap-2">
-                  <span className="size-1 rounded-full bg-accent" />
+                  <Check className="size-3.5 text-success" />
                   {c}
                 </span>
               ))}
@@ -301,20 +282,17 @@ function HomePage() {
       <section aria-label="Trusted by" className="border-b border-border bg-surface py-10">
         <div className="container-page">
           <p className="text-center text-xs font-semibold uppercase tracking-[0.18em] text-ink-muted">
-            Trusted by ambitious teams worldwide
+            Concept Products & Innovation Labs
           </p>
           <div className="relative mt-6 overflow-hidden">
             <div className="marquee-track flex w-max items-center gap-12 whitespace-nowrap">
               {[...Array(2)].flatMap((_, i) =>
                 [
-                  "NORTHVAULT",
-                  "LUMENLY",
-                  "CARGOLANE",
-                  "ATLAS LEARN",
-                  "HELIOSTACK",
-                  "BLUEFIN",
-                  "NIMBUS RX",
-                  "OBSIDIAN",
+                  "MEDICARE HMS",
+                  "FINBUD",
+                  "APEXSCORE",
+                  "SELLMATE",
+                  "ANAHATA AI",
                 ].map((name) => (
                   <span
                     key={`${i}-${name}`}
@@ -362,81 +340,14 @@ function HomePage() {
         </div>
       </Section>
 
-      {/* FEATURED WORK */}
+      {/* CONCEPT PRODUCTS & INNOVATION LABS */}
       <Section
         tone="surface"
-        eyebrow="Featured Work"
-        title="Products we've engineered"
-        description="A glimpse of the platforms, apps, and intelligence layers we've built with our partners."
+        eyebrow="Concept Products & Innovation Labs"
+        title="Featured product case studies"
+        description="A curated look at products engineered inside Govitrix — showcasing how we approach product thinking, architecture, and delivery across industries."
       >
-        <div className="grid gap-6 lg:grid-cols-2">
-          {works.map((w) => (
-            <article
-              key={w.name}
-              className="group relative overflow-hidden rounded-3xl border border-border bg-background shadow-card transition-all hover:shadow-elevated"
-            >
-              <div className={`relative h-56 bg-gradient-to-br ${w.accent} overflow-hidden`}>
-                <div aria-hidden className="absolute inset-0 hairline-grid opacity-50" />
-                <div className="absolute inset-0 flex items-center justify-center p-8">
-                  <div className="w-full max-w-sm rounded-2xl border border-border bg-background/95 p-4 shadow-elevated backdrop-blur">
-                    <div className="flex items-center justify-between">
-                      <span className="text-[10px] font-semibold uppercase tracking-wider text-ink-muted">
-                        {w.industry}
-                      </span>
-                      <span className="inline-flex items-center gap-1 rounded-full bg-success/10 px-2 py-0.5 text-[10px] font-semibold text-success">
-                        <span className="size-1.5 rounded-full bg-success" /> Live
-                      </span>
-                    </div>
-                    <p className="mt-3 font-display text-lg font-bold text-ink">{w.name}</p>
-                    <div className="mt-3 grid grid-cols-3 gap-2">
-                      <div className="col-span-2 rounded-lg bg-surface p-2">
-                        <div className="h-1.5 w-2/3 rounded bg-accent/40" />
-                        <div className="mt-1.5 h-1.5 w-1/2 rounded bg-border-strong" />
-                        <div className="mt-1.5 h-1.5 w-3/4 rounded bg-border-strong" />
-                      </div>
-                      <div className="rounded-lg bg-primary p-2 text-primary-foreground">
-                        <p className="text-[10px] font-medium opacity-70">{w.stat.label}</p>
-                        <p className="text-base font-bold leading-tight text-success">
-                          {w.stat.value}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="p-7">
-                <div className="flex items-start justify-between gap-4">
-                  <div>
-                    <p className="text-xs font-semibold uppercase tracking-wider text-accent">
-                      {w.industry}
-                    </p>
-                    <h3 className="mt-1.5 font-display text-2xl font-semibold text-ink">{w.name}</h3>
-                  </div>
-                </div>
-                <p className="mt-3 text-sm leading-relaxed text-ink-soft">{w.summary}</p>
-                <div className="mt-5 flex flex-wrap items-center justify-between gap-4">
-                  <div className="flex flex-wrap gap-1.5">
-                    {w.tags.map((t) => (
-                      <span
-                        key={t}
-                        className="rounded-full border border-border bg-surface px-2.5 py-0.5 text-[11px] font-medium text-ink-soft"
-                      >
-                        {t}
-                      </span>
-                    ))}
-                  </div>
-                  <Link
-                    to="/case-studies"
-                    className="inline-flex items-center gap-1 text-sm font-semibold text-ink transition-colors hover:text-accent"
-                  >
-                    View case study <ArrowUpRight className="size-4" />
-                  </Link>
-                </div>
-              </div>
-            </article>
-          ))}
-        </div>
+        <ConceptProductsShowcase />
 
         <div className="mt-10 text-center">
           <Link
