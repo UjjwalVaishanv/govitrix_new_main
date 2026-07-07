@@ -1,5 +1,9 @@
 import { useEffect, useState, type ReactNode } from "react";
-import { X } from "lucide-react";
+import { X, CalendarIcon, Check } from "lucide-react";
+import { format } from "date-fns";
+import { Calendar } from "@/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { cn } from "@/lib/utils";
 
 export function Modal({
   open,
@@ -69,56 +73,176 @@ export function Modal({
 
 /* ---------------- Discovery Call Dialog ---------------- */
 
-const slots = ["Tue · 10:00", "Tue · 15:30", "Wed · 09:00", "Wed · 14:00", "Thu · 11:30", "Fri · 16:00"];
+const timeSlots = [
+  "09:00 AM", "10:00 AM", "11:00 AM", "12:00 PM",
+  "02:00 PM", "03:00 PM", "04:00 PM", "05:00 PM",
+];
+
+const serviceOptions = [
+  "Web Application Development",
+  "Mobile App Development",
+  "AI & Machine Learning",
+  "Cloud & DevOps",
+  "UI / UX Design",
+  "Product Strategy & Consulting",
+  "Digital Transformation",
+  "Other",
+];
 
 export function DiscoveryDialog({ open, onClose }: { open: boolean; onClose: () => void }) {
-  const [slot, setSlot] = useState<string | null>(null);
-  const [form, setForm] = useState({ name: "", email: "", company: "", notes: "" });
+  const [form, setForm] = useState({
+    name: "", company: "", email: "", phone: "", country: "",
+    service: "", notes: "",
+  });
+  const [date, setDate] = useState<Date | undefined>(undefined);
+  const [time, setTime] = useState<string>("");
+  const [datePopoverOpen, setDatePopoverOpen] = useState(false);
   const [sent, setSent] = useState(false);
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const canSubmit =
+    form.name.trim() && form.company.trim() && form.email.trim() &&
+    form.phone.trim() && form.country.trim() && form.service && date && time;
+
+  const reset = () => {
+    setForm({ name: "", company: "", email: "", phone: "", country: "", service: "", notes: "" });
+    setDate(undefined);
+    setTime("");
+    setSent(false);
+  };
+
+  const handleClose = () => {
+    onClose();
+    setTimeout(reset, 300);
+  };
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!slot || !form.name || !form.email) return;
+    if (!canSubmit) return;
     setSent(true);
   };
 
   return (
-    <Modal open={open} onClose={onClose} title="Book a Discovery Call" description="30-minute strategy call with our founding team. No commitments." size="lg">
+    <Modal
+      open={open}
+      onClose={handleClose}
+      title="Book a Discovery Call"
+      description="Schedule a 30-minute strategy call with our founding team. No commitments — just a focused conversation about your goals."
+      size="xl"
+    >
       {sent ? (
-        <div className="text-center py-6">
-          <div className="mx-auto inline-flex size-14 items-center justify-center rounded-full bg-success/15 text-success">✓</div>
-          <h3 className="mt-4 font-display text-xl font-semibold text-ink">You're booked, {form.name.split(" ")[0] || "there"}.</h3>
-          <p className="mt-2 text-sm text-ink-soft">
-            We'll send a calendar invite to <span className="font-medium text-ink">{form.email}</span> for <span className="font-medium text-ink">{slot}</span>.
+        <div className="text-center py-8 animate-fade-in">
+          <div className="mx-auto inline-flex size-16 items-center justify-center rounded-full bg-success/15 text-success animate-scale-in">
+            <Check className="size-8" strokeWidth={2.5} />
+          </div>
+          <h3 className="mt-6 font-display text-2xl font-semibold text-ink md:text-3xl">
+            Thank you for reaching out to Govitrix
+          </h3>
+          <p className="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-ink-soft md:text-base">
+            Your discovery call request has been successfully submitted. Our team will review your details
+            and contact you shortly to confirm the meeting schedule. We look forward to discussing your
+            project and exploring how we can help bring your vision to life.
           </p>
-          <button onClick={onClose} className="mt-6 inline-flex rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground hover:bg-secondary">Done</button>
+          {date && time && (
+            <div className="mx-auto mt-6 inline-flex items-center gap-2 rounded-xl border border-border bg-surface px-4 py-2.5 text-sm">
+              <CalendarIcon className="size-4 text-accent" />
+              <span className="font-medium text-ink">{format(date, "EEEE, MMMM d, yyyy")}</span>
+              <span className="text-ink-muted">·</span>
+              <span className="font-medium text-ink">{time}</span>
+            </div>
+          )}
+          <button
+            onClick={handleClose}
+            className="mt-8 inline-flex rounded-xl bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-soft transition-all hover:-translate-y-0.5 hover:bg-secondary"
+          >
+            Done
+          </button>
         </div>
       ) : (
         <form onSubmit={submit} className="grid gap-6">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-wider text-ink-muted">Pick a time (your local time)</p>
-            <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3">
-              {slots.map((s) => (
-                <button
-                  type="button"
-                  key={s}
-                  onClick={() => setSlot(s)}
-                  className={`rounded-xl border px-3 py-2.5 text-sm font-medium transition-all ${slot === s ? "border-accent bg-accent/10 text-ink" : "border-border bg-background text-ink-soft hover:border-border-strong hover:text-ink"}`}
-                >
-                  {s}
-                </button>
-              ))}
-            </div>
-          </div>
           <div className="grid gap-4 sm:grid-cols-2">
             <Field label="Full name" required value={form.name} onChange={(v) => setForm({ ...form, name: v })} />
+            <Field label="Company name" required value={form.company} onChange={(v) => setForm({ ...form, company: v })} />
             <Field label="Work email" required type="email" value={form.email} onChange={(v) => setForm({ ...form, email: v })} />
-            <Field label="Company" value={form.company} onChange={(v) => setForm({ ...form, company: v })} />
-            <Field label="What would you like to discuss?" value={form.notes} onChange={(v) => setForm({ ...form, notes: v })} />
+            <Field label="Phone number" required type="tel" value={form.phone} onChange={(v) => setForm({ ...form, phone: v })} />
+            <Field label="Country" required value={form.country} onChange={(v) => setForm({ ...form, country: v })} />
+            <div>
+              <label className="text-sm font-medium text-ink">Service interest <span className="text-destructive">*</span></label>
+              <select
+                required
+                value={form.service}
+                onChange={(e) => setForm({ ...form, service: e.target.value })}
+                className="mt-1.5 w-full rounded-xl border border-border bg-background px-3.5 py-2.5 text-sm text-ink transition-all focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20"
+              >
+                <option value="">Select a service…</option>
+                {serviceOptions.map((s) => <option key={s} value={s}>{s}</option>)}
+              </select>
+            </div>
           </div>
-          <div className="flex items-center justify-between gap-3">
-            <p className="text-xs text-ink-muted">Prefer a direct calendar? <a href="https://calendly.com/" target="_blank" rel="noreferrer" className="text-accent underline">Open Calendly</a></p>
-            <button type="submit" disabled={!slot} className="inline-flex items-center gap-1.5 rounded-xl bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground shadow-soft transition-all hover:bg-secondary disabled:opacity-50">
+
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div>
+              <label className="text-sm font-medium text-ink">Preferred date <span className="text-destructive">*</span></label>
+              <Popover open={datePopoverOpen} onOpenChange={setDatePopoverOpen}>
+                <PopoverTrigger asChild>
+                  <button
+                    type="button"
+                    className={cn(
+                      "mt-1.5 flex w-full items-center gap-2 rounded-xl border border-border bg-background px-3.5 py-2.5 text-left text-sm transition-all hover:border-border-strong focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20",
+                      !date && "text-ink-muted",
+                    )}
+                  >
+                    <CalendarIcon className="size-4 text-ink-soft" />
+                    {date ? format(date, "EEEE, MMMM d, yyyy") : "Select a date"}
+                  </button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0 pointer-events-auto" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={date}
+                    onSelect={(d) => { setDate(d); setDatePopoverOpen(false); }}
+                    disabled={(d) => d < today}
+                    initialFocus
+                    className={cn("p-3 pointer-events-auto")}
+                  />
+                </PopoverContent>
+              </Popover>
+            </div>
+            <div>
+              <label className="text-sm font-medium text-ink">Preferred time <span className="text-destructive">*</span></label>
+              <select
+                required
+                value={time}
+                onChange={(e) => setTime(e.target.value)}
+                className="mt-1.5 w-full rounded-xl border border-border bg-background px-3.5 py-2.5 text-sm text-ink transition-all focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20"
+              >
+                <option value="">Select a time slot…</option>
+                {timeSlots.map((t) => <option key={t} value={t}>{t}</option>)}
+              </select>
+              <p className="mt-1.5 text-xs text-ink-muted">Business hours · your local time</p>
+            </div>
+          </div>
+
+          <div>
+            <label className="text-sm font-medium text-ink">Additional notes</label>
+            <textarea
+              value={form.notes}
+              onChange={(e) => setForm({ ...form, notes: e.target.value })}
+              rows={4}
+              placeholder="Anything you'd like us to know before the call — goals, current stack, timelines, etc."
+              className="mt-1.5 w-full rounded-xl border border-border bg-background px-3.5 py-2.5 text-sm text-ink placeholder:text-ink-muted transition-all focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20"
+            />
+          </div>
+
+          <div className="flex items-center justify-between gap-3 border-t border-border pt-5">
+            <p className="text-xs text-ink-muted">We'll confirm your slot by email within a few business hours.</p>
+            <button
+              type="submit"
+              disabled={!canSubmit}
+              className="inline-flex items-center gap-1.5 rounded-xl bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-soft transition-all hover:-translate-y-0.5 hover:bg-secondary disabled:opacity-50 disabled:hover:translate-y-0"
+            >
               Confirm booking
             </button>
           </div>
