@@ -1,5 +1,9 @@
 import { useEffect, useState, type ReactNode } from "react";
-import { X } from "lucide-react";
+import { X, CalendarIcon, Check } from "lucide-react";
+import { format } from "date-fns";
+import { Calendar } from "@/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { cn } from "@/lib/utils";
 
 export function Modal({
   open,
