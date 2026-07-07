@@ -147,8 +147,10 @@ function HomePage() {
               </span>
             </h1>
             <p className="mt-6 max-w-2xl text-pretty text-lg text-ink-soft">
-              We engineer tomorrow's technology today — creating scalable web applications, mobile experiences,
-              AI-powered systems, cloud infrastructure, and intelligent digital products that drive measurable business growth.
+              We engineer intelligent digital products that help businesses innovate, scale, and stay ahead in an
+              increasingly competitive world. From enterprise software and SaaS platforms to AI-powered systems,
+              cloud-native solutions, and modern mobile experiences, Govitrix transforms ambitious ideas into
+              measurable business outcomes.
             </p>
 
             <div className="mt-8 flex flex-wrap items-center gap-3">
