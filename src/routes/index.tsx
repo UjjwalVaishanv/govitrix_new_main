@@ -66,6 +66,7 @@ const trustChips = [
   "Cloud & DevOps",
   "Global Delivery",
   "NDA Protected",
+  "SaaS Products",
 ];
 
 const credibility = [
@@ -123,10 +124,6 @@ function HomePage() {
         <div aria-hidden className="soft-blur-orb left-1/2 top-0 h-[420px] w-[420px] -translate-x-1/2 bg-accent/15" />
         <div className="container-page relative grid items-center gap-14 py-20 md:py-28 lg:grid-cols-12">
           <div className="lg:col-span-7 fade-in-up">
-            <div className="inline-flex items-center gap-2 rounded-full border border-border bg-background/70 px-3 py-1.5 text-xs font-medium text-ink-soft backdrop-blur">
-              <span className="size-1.5 rounded-full bg-success animate-pulse" />
-              Product Engineering · AI · Cloud · Mobile
-            </div>
             <h1 className="mt-6 text-balance text-4xl font-semibold tracking-tight text-ink md:text-6xl md:leading-[1.05] lg:text-[68px]">
               Transforming Businesses.{" "}
               <span className="relative whitespace-nowrap">
@@ -182,7 +179,7 @@ function HomePage() {
       <section aria-label="Products" className="border-b border-border bg-surface py-10">
         <div className="container-page">
           <p className="text-center text-xs font-semibold uppercase tracking-[0.18em] text-ink-muted">
-            Products & Innovation Labs
+            Our Work
           </p>
           <div className="relative mt-6 overflow-hidden">
             <div className="marquee-track flex w-max items-center gap-12 whitespace-nowrap">

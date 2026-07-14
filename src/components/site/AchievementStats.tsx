@@ -2,8 +2,8 @@ import { Counter } from "./Counter";
 import { Rocket, Users, Layers, Award, Clock } from "lucide-react";
 
 const items = [
-  { icon: Rocket, value: 100, suffix: "+", label: "Projects Delivered" },
-  { icon: Users, value: 50, suffix: "+", label: "Satisfied Clients" },
+  { icon: Rocket, value: 30, suffix: "+", label: "Projects Delivered" },
+  { icon: Users, value: 30, suffix: "+", label: "Satisfied Clients" },
   { icon: Layers, value: 15, suffix: "+", label: "Technology Domains" },
   { icon: Award, value: 99, suffix: "%", label: "Client Satisfaction" },
   { icon: Clock, value: 24, suffix: "/7", label: "Support Availability" },
