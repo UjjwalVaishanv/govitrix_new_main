@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite dev",
     "build": "vite build",
-    "postbuild": "node -e \"const fs=require('fs'),path=require('path');function cp(s,d){fs.mkdirSync(d,{recursive:true});for(const e of fs.readdirSync(s,{withFileTypes:true})){const ss=path.join(s,e.name),dd=path.join(d,e.name);e.isDirectory()?cp(ss,dd):fs.copyFileSync(ss,dd);}};if(fs.existsSync('dist'))fs.rmSync('dist',{recursive:true,force:true});cp('.output','dist');console.log('✓ Build output copied to dist/')\"",
+    "postbuild": "node -e \"const fs=require('fs'),path=require('path');function cp(s,d){fs.mkdirSync(d,{recursive:true});for(const e of fs.readdirSync(s,{withFileTypes:true})){const ss=path.join(s,e.name),dd=path.join(d,e.name);e.isDirectory()?cp(ss,dd):fs.copyFileSync(ss,dd);}};if(!fs.existsSync('.output')){console.log('ℹ .output not found (Vercel preset), skipping dist copy.');process.exit(0);}if(fs.existsSync('dist'))fs.rmSync('dist',{recursive:true,force:true});cp('.output','dist');console.log('✓ Build output copied to dist/')\"",
     "build:dev": "vite build --mode development",
     "preview": "vite preview",
     "lint": "eslint .",
