@@ -290,20 +290,21 @@ function CaseStudiesPage() {
 
             {/* Screenshots */}
             <div>
-              <p className="eyebrow">Product screenshots</p>
+              <p className="eyebrow">Screenshots</p>
               <div className="mt-3 grid gap-3 sm:grid-cols-3">
-                {active.screenshots && active.screenshots.length > 0
-                  ? active.screenshots.map((s) => (
-                      <div key={s.src} className="group overflow-hidden rounded-xl border border-border bg-surface">
-                        <div className="aspect-video overflow-hidden">
-                          <img
-                            src={s.src}
-                            alt={s.caption}
-                            className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                          />
-                        </div>
-                        <p className="px-3 py-2 text-[11px] font-medium text-ink-muted">{s.caption}</p>
-                      </div>
+                {active.slug === "medicare-hms"
+                  ? [
+                      "https://iad.microlink.io/0WR0VC9roNYzpfEZ3BhA4hVcuUIQ03MD-EfvhuBFTWFzqz5exTs9_Sek03QywdU2u_aW7a8ckWVg9UPYv0L8ZA.png",
+                      "https://iad.microlink.io/T6j31wxdE6G3aJiEes61c2cxF_EQpmN4uPw46cZSw6VZhOEhuOH2nuSx4WzicHV6UZCiaZWisnsX2U8StRLy7w.png",
+                      "https://iad.microlink.io/Iewh5PR8tgpi43Sn8ls1VCuuebW9bbkMHxFaxwn59Cxcit49nV0ZH5MgTKKmCuzYunJHEVF9t1-oWkRcr0GUjA.png",
+                    ].map((src, i) => (
+                      <img
+                        key={i}
+                        src={src}
+                        alt={`Medicare HMS screen ${i + 1}`}
+                        className="w-full rounded-xl border border-border object-cover object-top shadow-elevated"
+                        style={{ aspectRatio: "16/9" }}
+                      />
                     ))
                   : [0, 1, 2].map((i) => (
                       <div

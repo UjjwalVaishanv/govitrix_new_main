@@ -14,7 +14,7 @@ type Product = {
   stack: string[];
   results: { value: string; label: string }[];
   accent: string;
-  screenshots?: { src: string; caption: string }[];
+  screenshots?: string[];
 };
 
 export const conceptProducts: Product[] = [
@@ -31,9 +31,9 @@ export const conceptProducts: Product[] = [
     results: [{ value: "−42%", label: "Patient triage time" }, { value: "+31%", label: "Billing accuracy" }, { value: "3.1x", label: "Faster admin workflows" }],
     accent: "from-accent/20 to-success/10",
     screenshots: [
-      { src: "/medicare-hms-dashboard.png", caption: "Admin Dashboard — live patient flow & KPIs" },
-      { src: "/medicare-hms-patients.png", caption: "Patient Records — EMR & appointment history" },
-      { src: "/medicare-hms-billing.png", caption: "Billing & Claims — revenue tracking & insurance" },
+      "https://iad.microlink.io/0WR0VC9roNYzpfEZ3BhA4hVcuUIQ03MD-EfvhuBFTWFzqz5exTs9_Sek03QywdU2u_aW7a8ckWVg9UPYv0L8ZA.png",
+      "https://iad.microlink.io/T6j31wxdE6G3aJiEes61c2cxF_EQpmN4uPw46cZSw6VZhOEhuOH2nuSx4WzicHV6UZCiaZWisnsX2U8StRLy7w.png",
+      "https://iad.microlink.io/Iewh5PR8tgpi43Sn8ls1VCuuebW9bbkMHxFaxwn59Cxcit49nV0ZH5MgTKKmCuzYunJHEVF9t1-oWkRcr0GUjA.png",
     ],
   },
   {
@@ -102,8 +102,18 @@ export function ConceptProductsShowcase() {
             onClick={() => setActive(p)}
             className={`group text-left relative overflow-hidden rounded-3xl border border-border bg-background shadow-card transition-all hover:-translate-y-1 hover:shadow-elevated ${i === 0 ? "lg:col-span-2" : ""}`}
           >
-            <div className={`relative ${i === 0 ? "h-64" : "h-52"} bg-gradient-to-br ${p.accent} overflow-hidden`}>
-              <div aria-hidden className="absolute inset-0 hairline-grid opacity-40" />
+            <div className={`relative ${i === 0 ? "h-64" : "h-52"} overflow-hidden`}
+              style={p.screenshots?.[0] ? { backgroundImage: `url(${p.screenshots[0]})`, backgroundSize: "cover", backgroundPosition: "center top" } : undefined}
+            >
+              {/* gradient accent bg for products without screenshots */}
+              {!p.screenshots?.[0] && (
+                <div className={`absolute inset-0 bg-gradient-to-br ${p.accent}`} />
+              )}
+              {/* dark overlay so the stats card stays readable */}
+              {p.screenshots?.[0] && (
+                <div className="absolute inset-0 bg-gradient-to-r from-background/70 via-background/30 to-background/10" />
+              )}
+              <div aria-hidden className="absolute inset-0 hairline-grid opacity-20" />
               <div className="absolute inset-0 flex items-center justify-center p-8">
                 <div className="w-full max-w-sm rounded-2xl border border-border bg-background/95 p-4 shadow-elevated backdrop-blur transition-transform group-hover:-translate-y-1">
                   <div className="flex items-center justify-between">
@@ -149,8 +159,14 @@ export function ConceptProductsShowcase() {
       <Modal open={!!active} onClose={() => setActive(null)} title={active?.name || ""} description={active?.tagline} size="xl">
         {active && (
           <div className="grid gap-8">
-            <div className={`relative overflow-hidden rounded-2xl bg-gradient-to-br ${active.accent} p-8`}>
-              <div aria-hidden className="absolute inset-0 hairline-grid opacity-30" />
+            <div
+              className={`relative overflow-hidden rounded-2xl p-8 ${!active.screenshots?.[0] ? `bg-gradient-to-br ${active.accent}` : ""}`}
+              style={active.screenshots?.[0] ? { backgroundImage: `url(${active.screenshots[0]})`, backgroundSize: "cover", backgroundPosition: "center top" } : undefined}
+            >
+              {active.screenshots?.[0] && (
+                <div className="absolute inset-0 bg-gradient-to-r from-background/75 via-background/50 to-background/20 rounded-2xl" />
+              )}
+              <div aria-hidden className="absolute inset-0 hairline-grid opacity-20" />
               <div className="relative grid gap-4 sm:grid-cols-3">
                 {active.results.map((r) => (
                   <div key={r.label} className="rounded-xl border border-border bg-background/95 p-4 backdrop-blur">
@@ -159,6 +175,20 @@ export function ConceptProductsShowcase() {
                   </div>
                 ))}
               </div>
+              {/* Screenshot strip for products with real screenshots */}
+              {active.screenshots && active.screenshots.length > 1 && (
+                <div className="relative mt-6 grid grid-cols-3 gap-2">
+                  {active.screenshots.map((src, idx) => (
+                    <img
+                      key={idx}
+                      src={src}
+                      alt={`${active.name} screen ${idx + 1}`}
+                      className="w-full rounded-xl border border-border/40 object-cover object-top shadow-elevated ring-1 ring-white/10"
+                      style={{ aspectRatio: "16/9" }}
+                    />
+                  ))}
+                </div>
+              )}
             </div>
 
             <div className="grid gap-6 md:grid-cols-2">
@@ -177,27 +207,6 @@ export function ConceptProductsShowcase() {
                 ))}
               </ul>
             </div>
-
-            {/* Screenshots — only shown when available */}
-            {active.screenshots && active.screenshots.length > 0 && (
-              <div>
-                <p className="eyebrow">Product screenshots</p>
-                <div className="mt-3 grid gap-3 sm:grid-cols-3">
-                  {active.screenshots.map((s) => (
-                    <div key={s.src} className="group overflow-hidden rounded-xl border border-border bg-surface">
-                      <div className="aspect-video overflow-hidden">
-                        <img
-                          src={s.src}
-                          alt={s.caption}
-                          className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                        />
-                      </div>
-                      <p className="px-3 py-2 text-[11px] font-medium text-ink-muted">{s.caption}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
 
             <div>
               <p className="eyebrow">Technology</p>
