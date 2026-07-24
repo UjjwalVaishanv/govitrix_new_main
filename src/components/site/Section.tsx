@@ -72,12 +72,12 @@ export function PageHero({
         <>
           <div
             aria-hidden
-            className="absolute inset-0 bg-cover bg-center"
+            className="absolute inset-0 bg-cover bg-center brightness-110"
             style={{ backgroundImage: `url(${image})` }}
           />
           <div
             aria-hidden
-            className="absolute inset-0 bg-gradient-to-r from-surface via-surface/85 to-surface/40"
+            className="absolute inset-0 bg-gradient-to-r from-surface/65 via-surface/35 to-surface/10"
           />
         </>
       )}
@@ -122,10 +122,10 @@ export function CTASection({
               <p className="inline-flex items-center gap-2 rounded-full border border-primary-foreground/20 bg-primary-foreground/5 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-success">
                 Let's build
               </p>
-              <h2 className="mt-5 text-balance font-display text-4xl font-semibold tracking-tight md:text-5xl md:leading-[1.05]">
+              <h2 className="mt-5 text-balance font-display text-4xl font-semibold tracking-tight text-primary-foreground md:text-5xl md:leading-[1.05]">
                 {title}
               </h2>
-              <p className="mt-5 max-w-xl text-base leading-relaxed text-primary-foreground/85 md:text-lg">
+              <p className="mt-5 max-w-xl text-base leading-relaxed text-primary-foreground/95 md:text-lg">
                 {description}
               </p>
             </div>
@@ -144,7 +144,7 @@ export function CTASection({
                 <FileText className="size-4" strokeWidth={1.75} />
                 {secondary.label}
               </Link>
-              <p className="mt-1 text-xs text-primary-foreground/60 md:text-right">
+              <p className="mt-1 text-xs text-primary-foreground/80 md:text-right">
                 Prefer sharing details? Submit through our contact form.
               </p>
             </div>
