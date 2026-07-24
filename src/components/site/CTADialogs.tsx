@@ -1,7 +1,8 @@
-import { useEffect, useState, type ReactNode } from "react";
-import { X, CalendarIcon, Check, ChevronDown } from "lucide-react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
+import { X, CalendarIcon, Check, ChevronDown, Clock, Briefcase } from "lucide-react";
 import { format } from "date-fns";
 import { Calendar } from "@/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 
 export function Modal({
@@ -70,6 +71,129 @@ export function Modal({
   );
 }
 
+/* ─── Shared floating dropdown (Radix Popover portal, z-[200]) ─── */
+function DropdownSelect({
+  label,
+  required,
+  placeholder,
+  value,
+  options,
+  icon,
+  onChange,
+  hint,
+}: {
+  label: string;
+  required?: boolean;
+  placeholder: string;
+  value: string;
+  options: string[];
+  icon?: ReactNode;
+  onChange: (v: string) => void;
+  hint?: string;
+}) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div>
+      <label className="text-sm font-medium text-ink">
+        {label}
+        {required && <span className="text-destructive"> *</span>}
+      </label>
+      <Popover open={open} onOpenChange={setOpen}>
+        <PopoverTrigger asChild>
+          <button
+            type="button"
+            className={cn(
+              "mt-1.5 flex w-full items-center gap-2 rounded-xl border border-border bg-background px-3.5 py-2.5 text-left text-sm transition-all hover:border-border-strong focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20",
+              !value && "text-ink-muted",
+            )}
+          >
+            {icon && <span className="shrink-0 text-ink-soft">{icon}</span>}
+            <span className="flex-1 truncate">{value || placeholder}</span>
+            <ChevronDown className={cn("size-4 shrink-0 text-ink-soft transition-transform duration-200", open && "rotate-180")} />
+          </button>
+        </PopoverTrigger>
+        <PopoverContent
+          align="start"
+          sideOffset={6}
+          className="z-[200] w-[--radix-popover-trigger-width] min-w-[200px] rounded-xl border border-border bg-background p-1 shadow-elevated"
+        >
+          {options.map((opt) => (
+            <button
+              key={opt}
+              type="button"
+              onClick={() => { onChange(opt); setOpen(false); }}
+              className={cn(
+                "flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm transition-colors",
+                value === opt
+                  ? "bg-accent/10 font-medium text-ink"
+                  : "text-ink-soft hover:bg-surface hover:text-ink",
+              )}
+            >
+              {value === opt && <Check className="size-3.5 shrink-0 text-accent" />}
+              <span className={value === opt ? "" : "ml-[22px]"}>{opt}</span>
+            </button>
+          ))}
+        </PopoverContent>
+      </Popover>
+      {hint && <p className="mt-1.5 text-xs text-ink-muted">{hint}</p>}
+    </div>
+  );
+}
+
+/* ─── Floating date picker (Radix Popover portal, z-[200]) ─── */
+function DatePickerField({
+  label,
+  required,
+  value,
+  onChange,
+  disableBefore,
+}: {
+  label: string;
+  required?: boolean;
+  value: Date | undefined;
+  onChange: (d: Date | undefined) => void;
+  disableBefore?: Date;
+}) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div>
+      <label className="text-sm font-medium text-ink">
+        {label}
+        {required && <span className="text-destructive"> *</span>}
+      </label>
+      <Popover open={open} onOpenChange={setOpen}>
+        <PopoverTrigger asChild>
+          <button
+            type="button"
+            className={cn(
+              "mt-1.5 flex w-full items-center gap-2 rounded-xl border border-border bg-background px-3.5 py-2.5 text-left text-sm transition-all hover:border-border-strong focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20",
+              !value && "text-ink-muted",
+            )}
+          >
+            <CalendarIcon className="size-4 shrink-0 text-ink-soft" />
+            <span className="flex-1">{value ? format(value, "EEE, MMM d, yyyy") : "Pick a date"}</span>
+            <ChevronDown className={cn("size-4 shrink-0 text-ink-soft transition-transform duration-200", open && "rotate-180")} />
+          </button>
+        </PopoverTrigger>
+        <PopoverContent
+          align="start"
+          sideOffset={6}
+          className="z-[200] w-auto rounded-xl border border-border bg-background p-0 shadow-elevated"
+        >
+          <Calendar
+            mode="single"
+            selected={value}
+            onSelect={(d) => { onChange(d); setOpen(false); }}
+            disabled={disableBefore ? (d) => d < disableBefore : undefined}
+            initialFocus
+            className="p-3"
+          />
+        </PopoverContent>
+      </Popover>
+    </div>
+  );
+}
+
 /* ---------------- Discovery Call Dialog ---------------- */
 
 const timeSlots = [
@@ -95,7 +219,6 @@ export function DiscoveryDialog({ open, onClose }: { open: boolean; onClose: () 
   });
   const [date, setDate] = useState<Date | undefined>(undefined);
   const [time, setTime] = useState<string>("");
-  const [calOpen, setCalOpen] = useState(false);
   const [sent, setSent] = useState(false);
 
   const today = new Date();
@@ -109,7 +232,6 @@ export function DiscoveryDialog({ open, onClose }: { open: boolean; onClose: () 
     setForm({ name: "", company: "", email: "", phone: "", country: "", service: "", notes: "" });
     setDate(undefined);
     setTime("");
-    setCalOpen(false);
     setSent(false);
   };
 
@@ -168,62 +290,35 @@ export function DiscoveryDialog({ open, onClose }: { open: boolean; onClose: () 
             <Field label="Work email" required type="email" placeholder="you@company.com" value={form.email} onChange={(v) => setForm({ ...form, email: v })} />
             <Field label="Phone number" required type="tel" placeholder="+91 98765 43210" value={form.phone} onChange={(v) => setForm({ ...form, phone: v })} />
             <Field label="Country" required placeholder="e.g. India" value={form.country} onChange={(v) => setForm({ ...form, country: v })} />
-            <div>
-              <label className="text-sm font-medium text-ink">Service interest <span className="text-destructive">*</span></label>
-              <select
-                required
-                value={form.service}
-                onChange={(e) => setForm({ ...form, service: e.target.value })}
-                className="mt-1.5 w-full rounded-xl border border-border bg-background px-3.5 py-2.5 text-sm text-ink transition-all focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20"
-              >
-                <option value="">Select a service…</option>
-                {serviceOptions.map((s) => <option key={s} value={s}>{s}</option>)}
-              </select>
-            </div>
+            <DropdownSelect
+              label="Service interest"
+              required
+              placeholder="Select a service…"
+              value={form.service}
+              options={serviceOptions}
+              icon={<Briefcase className="size-4" />}
+              onChange={(v) => setForm({ ...form, service: v })}
+            />
           </div>
 
           <div className="grid gap-4 sm:grid-cols-2">
-            {/* ── Inline date picker (no popover – avoids modal overflow clipping) ── */}
-            <div>
-              <label className="text-sm font-medium text-ink">Preferred date <span className="text-destructive">*</span></label>
-              <button
-                type="button"
-                onClick={() => setCalOpen((o) => !o)}
-                className={cn(
-                  "mt-1.5 flex w-full items-center gap-2 rounded-xl border border-border bg-background px-3.5 py-2.5 text-left text-sm transition-all hover:border-border-strong focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20",
-                  !date && "text-ink-muted",
-                )}
-              >
-                <CalendarIcon className="size-4 text-ink-soft shrink-0" />
-                <span className="flex-1">{date ? format(date, "EEE, MMM d, yyyy") : "Pick a date"}</span>
-                <ChevronDown className={cn("size-4 text-ink-soft transition-transform", calOpen && "rotate-180")} />
-              </button>
-              {calOpen && (
-                <div className="mt-1 rounded-xl border border-border bg-background shadow-elevated">
-                  <Calendar
-                    mode="single"
-                    selected={date}
-                    onSelect={(d) => { setDate(d); setCalOpen(false); }}
-                    disabled={(d) => d < today}
-                    initialFocus
-                    className="p-3"
-                  />
-                </div>
-              )}
-            </div>
-            <div>
-              <label className="text-sm font-medium text-ink">Preferred time <span className="text-destructive">*</span></label>
-              <select
-                required
-                value={time}
-                onChange={(e) => setTime(e.target.value)}
-                className="mt-1.5 w-full rounded-xl border border-border bg-background px-3.5 py-2.5 text-sm text-ink transition-all focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20"
-              >
-                <option value="">Select a time slot…</option>
-                {timeSlots.map((t) => <option key={t} value={t}>{t}</option>)}
-              </select>
-              <p className="mt-1.5 text-xs text-ink-muted">Business hours · your local time</p>
-            </div>
+            <DatePickerField
+              label="Preferred date"
+              required
+              value={date}
+              onChange={setDate}
+              disableBefore={today}
+            />
+            <DropdownSelect
+              label="Preferred time"
+              required
+              placeholder="Select a time slot…"
+              value={time}
+              options={timeSlots}
+              icon={<Clock className="size-4" />}
+              onChange={setTime}
+              hint="Business hours · your local time"
+            />
           </div>
 
           <div>
@@ -303,17 +398,13 @@ export function ProposalDialog({ open, onClose }: { open: boolean; onClose: () =
               <Field label="Work email" required type="email" placeholder="you@company.com" value={form.email} onChange={(v) => setForm({ ...form, email: v })} />
               <Field label="Phone" type="tel" placeholder="+91 98765 43210" value={form.phone} onChange={(v) => setForm({ ...form, phone: v })} />
               <Field label="Country" placeholder="e.g. India" value={form.country} onChange={(v) => setForm({ ...form, country: v })} />
-              <div>
-                <label className="text-sm font-medium text-ink">Industry</label>
-                <select
-                  value={form.industry}
-                  onChange={(e) => setForm({ ...form, industry: e.target.value })}
-                  className="mt-1.5 w-full rounded-xl border border-border bg-background px-3.5 py-2.5 text-sm text-ink focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20"
-                >
-                  <option value="">Select industry…</option>
-                  {industries.map((i) => <option key={i} value={i}>{i}</option>)}
-                </select>
-              </div>
+              <DropdownSelect
+                label="Industry"
+                placeholder="Select industry…"
+                value={form.industry}
+                options={industries}
+                onChange={(v) => setForm({ ...form, industry: v })}
+              />
             </div>
           )}
           {step === 2 && (
