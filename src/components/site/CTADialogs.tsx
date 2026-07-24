@@ -11,6 +11,7 @@ export function Modal({
   title,
   description,
   children,
+  footer,
   size = "md",
 }: {
   open: boolean;
@@ -18,6 +19,7 @@ export function Modal({
   title: string;
   description?: string;
   children: ReactNode;
+  footer?: ReactNode;
   size?: "md" | "lg" | "xl";
 }) {
   useEffect(() => {
@@ -48,9 +50,10 @@ export function Modal({
         className="absolute inset-0 bg-primary/60 backdrop-blur-sm animate-fade-in"
       />
       <div
-        className={`relative z-10 w-full ${maxW} max-h-[92vh] overflow-hidden rounded-t-3xl bg-background shadow-elevated sm:rounded-3xl animate-scale-in`}
+        className={`relative z-10 flex w-full flex-col ${maxW} max-h-[92vh] overflow-hidden rounded-t-3xl bg-background shadow-elevated sm:rounded-3xl animate-scale-in`}
       >
-        <div className="flex items-start justify-between gap-6 border-b border-border px-6 py-5 md:px-8">
+        {/* ── Header ── */}
+        <div className="flex shrink-0 items-start justify-between gap-6 border-b border-border px-6 py-5 md:px-8">
           <div>
             <h2 className="font-display text-xl font-semibold text-ink md:text-2xl">{title}</h2>
             {description && <p className="mt-1 text-sm text-ink-soft">{description}</p>}
@@ -63,9 +66,18 @@ export function Modal({
             <X className="size-4" />
           </button>
         </div>
-        <div className="max-h-[calc(92vh-5rem)] overflow-y-auto px-6 py-6 md:px-8 md:py-8">
+
+        {/* ── Scrollable body ── */}
+        <div className="min-h-0 flex-1 overflow-y-auto px-6 py-6 md:px-8 md:py-8">
           {children}
         </div>
+
+        {/* ── Sticky footer (outside scroll, no corner bleed) ── */}
+        {footer && (
+          <div className="shrink-0 border-t border-border bg-background px-6 py-4 md:px-8">
+            {footer}
+          </div>
+        )}
       </div>
     </div>
   );
@@ -253,6 +265,21 @@ export function DiscoveryDialog({ open, onClose }: { open: boolean; onClose: () 
       title="Book a Discovery Call"
       description="Schedule a 30-minute strategy call with our founding team. No commitments — just a focused conversation about your goals."
       size="xl"
+      footer={
+        !sent ? (
+          <div className="flex items-center justify-between gap-3">
+            <p className="text-xs text-ink-muted">We'll confirm your slot by email within a few business hours.</p>
+            <button
+              type="submit"
+              form="discovery-form"
+              disabled={!canSubmit}
+              className="inline-flex items-center gap-1.5 rounded-xl bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-soft transition-all hover:-translate-y-0.5 hover:bg-secondary disabled:opacity-50 disabled:hover:translate-y-0"
+            >
+              Confirm booking
+            </button>
+          </div>
+        ) : undefined
+      }
     >
       {sent ? (
         <div className="text-center py-8 animate-fade-in">
@@ -283,7 +310,7 @@ export function DiscoveryDialog({ open, onClose }: { open: boolean; onClose: () 
           </button>
         </div>
       ) : (
-        <form onSubmit={submit} className="grid gap-6">
+        <form id="discovery-form" onSubmit={submit} className="grid gap-6">
           <div className="grid gap-4 sm:grid-cols-2">
             <Field label="Full name" required placeholder="e.g. Priya Sharma" value={form.name} onChange={(v) => setForm({ ...form, name: v })} />
             <Field label="Company name" required placeholder="e.g. Acme Pvt. Ltd." value={form.company} onChange={(v) => setForm({ ...form, company: v })} />
@@ -332,16 +359,6 @@ export function DiscoveryDialog({ open, onClose }: { open: boolean; onClose: () 
             />
           </div>
 
-          <div className="flex items-center justify-between gap-3 border-t border-border pt-5">
-            <p className="text-xs text-ink-muted">We'll confirm your slot by email within a few business hours.</p>
-            <button
-              type="submit"
-              disabled={!canSubmit}
-              className="inline-flex items-center gap-1.5 rounded-xl bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-soft transition-all hover:-translate-y-0.5 hover:bg-secondary disabled:opacity-50 disabled:hover:translate-y-0"
-            >
-              Confirm booking
-            </button>
-          </div>
         </form>
       )}
     </Modal>
@@ -369,7 +386,25 @@ export function ProposalDialog({ open, onClose }: { open: boolean; onClose: () =
   const submit = (e: React.FormEvent) => { e.preventDefault(); setSent(true); };
 
   return (
-    <Modal open={open} onClose={onClose} title="Get a Proposal" description="Tell us about your project. Our team will review your requirements and provide a proposal within 24–48 hours." size="xl">
+    <Modal
+      open={open}
+      onClose={onClose}
+      title="Get a Proposal"
+      description="Tell us about your project. Our team will review your requirements and provide a proposal within 24–48 hours."
+      size="xl"
+      footer={
+        !sent ? (
+          <div className="flex items-center justify-between gap-3">
+            <button type="button" onClick={back} disabled={step === 1} className="rounded-xl border border-border px-4 py-2.5 text-sm font-semibold text-ink-soft disabled:opacity-40 hover:bg-surface">Back</button>
+            {step < 3 ? (
+              <button type="button" onClick={next} className="rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground hover:bg-secondary">Continue</button>
+            ) : (
+              <button type="submit" form="proposal-form" className="rounded-xl bg-accent px-5 py-2.5 text-sm font-semibold text-accent-foreground shadow-soft hover:opacity-90">Submit request</button>
+            )}
+          </div>
+        ) : undefined
+      }
+    >
       {sent ? (
         <div className="text-center py-8">
           <div className="mx-auto inline-flex size-14 items-center justify-center rounded-full bg-success/15 text-success">✓</div>
@@ -380,7 +415,7 @@ export function ProposalDialog({ open, onClose }: { open: boolean; onClose: () =
           <button onClick={onClose} className="mt-6 inline-flex rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground hover:bg-secondary">Close</button>
         </div>
       ) : (
-        <form onSubmit={submit} className="grid gap-6">
+        <form id="proposal-form" onSubmit={submit} className="grid gap-6">
           <div className="flex items-center gap-2 text-xs font-medium text-ink-muted">
             {[1, 2, 3].map((n) => (
               <div key={n} className="flex flex-1 items-center gap-2">
@@ -437,14 +472,6 @@ export function ProposalDialog({ open, onClose }: { open: boolean; onClose: () =
             </div>
           )}
 
-          <div className="flex items-center justify-between gap-3 border-t border-border pt-5">
-            <button type="button" onClick={back} disabled={step === 1} className="rounded-xl border border-border px-4 py-2.5 text-sm font-semibold text-ink-soft disabled:opacity-40 hover:bg-surface">Back</button>
-            {step < 3 ? (
-              <button type="button" onClick={next} className="rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground hover:bg-secondary">Continue</button>
-            ) : (
-              <button type="submit" className="rounded-xl bg-accent px-5 py-2.5 text-sm font-semibold text-accent-foreground shadow-soft hover:opacity-90">Submit request</button>
-            )}
-          </div>
         </form>
       )}
     </Modal>
