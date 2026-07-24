@@ -288,22 +288,35 @@ function CaseStudiesPage() {
               </ol>
             </div>
 
-            {/* Screenshots placeholder */}
+            {/* Screenshots */}
             <div>
-              <p className="eyebrow">Screenshots</p>
+              <p className="eyebrow">Product screenshots</p>
               <div className="mt-3 grid gap-3 sm:grid-cols-3">
-                {[0, 1, 2].map((i) => (
-                  <div
-                    key={i}
-                    className={`aspect-video overflow-hidden rounded-xl border border-border bg-gradient-to-br ${active.accent}`}
-                  >
-                    <div className="flex h-full items-center justify-center">
-                      <div className="rounded-lg border border-border bg-background/90 px-3 py-1.5 text-xs font-semibold text-ink shadow-soft backdrop-blur">
-                        {active.name} · Screen {i + 1}
+                {active.screenshots && active.screenshots.length > 0
+                  ? active.screenshots.map((s) => (
+                      <div key={s.src} className="group overflow-hidden rounded-xl border border-border bg-surface">
+                        <div className="aspect-video overflow-hidden">
+                          <img
+                            src={s.src}
+                            alt={s.caption}
+                            className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                          />
+                        </div>
+                        <p className="px-3 py-2 text-[11px] font-medium text-ink-muted">{s.caption}</p>
                       </div>
-                    </div>
-                  </div>
-                ))}
+                    ))
+                  : [0, 1, 2].map((i) => (
+                      <div
+                        key={i}
+                        className={`aspect-video overflow-hidden rounded-xl border border-border bg-gradient-to-br ${active.accent}`}
+                      >
+                        <div className="flex h-full items-center justify-center">
+                          <div className="rounded-lg border border-border bg-background/90 px-3 py-1.5 text-xs font-semibold text-ink shadow-soft backdrop-blur">
+                            {active.name} · Screen {i + 1}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
               </div>
             </div>
 

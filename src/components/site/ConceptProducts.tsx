@@ -14,6 +14,7 @@ type Product = {
   stack: string[];
   results: { value: string; label: string }[];
   accent: string;
+  screenshots?: { src: string; caption: string }[];
 };
 
 export const conceptProducts: Product[] = [
@@ -29,6 +30,11 @@ export const conceptProducts: Product[] = [
     stack: ["React", "Node.js", "PostgreSQL", "AWS", "HL7 / FHIR"],
     results: [{ value: "−42%", label: "Patient triage time" }, { value: "+31%", label: "Billing accuracy" }, { value: "3.1x", label: "Faster admin workflows" }],
     accent: "from-accent/20 to-success/10",
+    screenshots: [
+      { src: "/medicare-hms-dashboard.png", caption: "Admin Dashboard — live patient flow & KPIs" },
+      { src: "/medicare-hms-patients.png", caption: "Patient Records — EMR & appointment history" },
+      { src: "/medicare-hms-billing.png", caption: "Billing & Claims — revenue tracking & insurance" },
+    ],
   },
   {
     slug: "finbud",
@@ -171,6 +177,27 @@ export function ConceptProductsShowcase() {
                 ))}
               </ul>
             </div>
+
+            {/* Screenshots — only shown when available */}
+            {active.screenshots && active.screenshots.length > 0 && (
+              <div>
+                <p className="eyebrow">Product screenshots</p>
+                <div className="mt-3 grid gap-3 sm:grid-cols-3">
+                  {active.screenshots.map((s) => (
+                    <div key={s.src} className="group overflow-hidden rounded-xl border border-border bg-surface">
+                      <div className="aspect-video overflow-hidden">
+                        <img
+                          src={s.src}
+                          alt={s.caption}
+                          className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                        />
+                      </div>
+                      <p className="px-3 py-2 text-[11px] font-medium text-ink-muted">{s.caption}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
 
             <div>
               <p className="eyebrow">Technology</p>
