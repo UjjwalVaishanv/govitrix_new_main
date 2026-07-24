@@ -1,8 +1,7 @@
 import { useEffect, useState, type ReactNode } from "react";
-import { X, CalendarIcon, Check } from "lucide-react";
+import { X, CalendarIcon, Check, ChevronDown } from "lucide-react";
 import { format } from "date-fns";
 import { Calendar } from "@/components/ui/calendar";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 
 export function Modal({
@@ -96,7 +95,7 @@ export function DiscoveryDialog({ open, onClose }: { open: boolean; onClose: () 
   });
   const [date, setDate] = useState<Date | undefined>(undefined);
   const [time, setTime] = useState<string>("");
-  const [datePopoverOpen, setDatePopoverOpen] = useState(false);
+  const [calOpen, setCalOpen] = useState(false);
   const [sent, setSent] = useState(false);
 
   const today = new Date();
@@ -110,6 +109,7 @@ export function DiscoveryDialog({ open, onClose }: { open: boolean; onClose: () 
     setForm({ name: "", company: "", email: "", phone: "", country: "", service: "", notes: "" });
     setDate(undefined);
     setTime("");
+    setCalOpen(false);
     setSent(false);
   };
 
@@ -163,11 +163,11 @@ export function DiscoveryDialog({ open, onClose }: { open: boolean; onClose: () 
       ) : (
         <form onSubmit={submit} className="grid gap-6">
           <div className="grid gap-4 sm:grid-cols-2">
-            <Field label="Full name" required value={form.name} onChange={(v) => setForm({ ...form, name: v })} />
-            <Field label="Company name" required value={form.company} onChange={(v) => setForm({ ...form, company: v })} />
-            <Field label="Work email" required type="email" value={form.email} onChange={(v) => setForm({ ...form, email: v })} />
-            <Field label="Phone number" required type="tel" value={form.phone} onChange={(v) => setForm({ ...form, phone: v })} />
-            <Field label="Country" required value={form.country} onChange={(v) => setForm({ ...form, country: v })} />
+            <Field label="Full name" required placeholder="e.g. Priya Sharma" value={form.name} onChange={(v) => setForm({ ...form, name: v })} />
+            <Field label="Company name" required placeholder="e.g. Acme Pvt. Ltd." value={form.company} onChange={(v) => setForm({ ...form, company: v })} />
+            <Field label="Work email" required type="email" placeholder="you@company.com" value={form.email} onChange={(v) => setForm({ ...form, email: v })} />
+            <Field label="Phone number" required type="tel" placeholder="+91 98765 43210" value={form.phone} onChange={(v) => setForm({ ...form, phone: v })} />
+            <Field label="Country" required placeholder="e.g. India" value={form.country} onChange={(v) => setForm({ ...form, country: v })} />
             <div>
               <label className="text-sm font-medium text-ink">Service interest <span className="text-destructive">*</span></label>
               <select
@@ -183,32 +183,33 @@ export function DiscoveryDialog({ open, onClose }: { open: boolean; onClose: () 
           </div>
 
           <div className="grid gap-4 sm:grid-cols-2">
+            {/* ── Inline date picker (no popover – avoids modal overflow clipping) ── */}
             <div>
               <label className="text-sm font-medium text-ink">Preferred date <span className="text-destructive">*</span></label>
-              <Popover open={datePopoverOpen} onOpenChange={setDatePopoverOpen}>
-                <PopoverTrigger asChild>
-                  <button
-                    type="button"
-                    className={cn(
-                      "mt-1.5 flex w-full items-center gap-2 rounded-xl border border-border bg-background px-3.5 py-2.5 text-left text-sm transition-all hover:border-border-strong focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20",
-                      !date && "text-ink-muted",
-                    )}
-                  >
-                    <CalendarIcon className="size-4 text-ink-soft" />
-                    {date ? format(date, "EEEE, MMMM d, yyyy") : "Select a date"}
-                  </button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0 pointer-events-auto" align="start">
+              <button
+                type="button"
+                onClick={() => setCalOpen((o) => !o)}
+                className={cn(
+                  "mt-1.5 flex w-full items-center gap-2 rounded-xl border border-border bg-background px-3.5 py-2.5 text-left text-sm transition-all hover:border-border-strong focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20",
+                  !date && "text-ink-muted",
+                )}
+              >
+                <CalendarIcon className="size-4 text-ink-soft shrink-0" />
+                <span className="flex-1">{date ? format(date, "EEE, MMM d, yyyy") : "Pick a date"}</span>
+                <ChevronDown className={cn("size-4 text-ink-soft transition-transform", calOpen && "rotate-180")} />
+              </button>
+              {calOpen && (
+                <div className="mt-1 rounded-xl border border-border bg-background shadow-elevated">
                   <Calendar
                     mode="single"
                     selected={date}
-                    onSelect={(d) => { setDate(d); setDatePopoverOpen(false); }}
+                    onSelect={(d) => { setDate(d); setCalOpen(false); }}
                     disabled={(d) => d < today}
                     initialFocus
-                    className={cn("p-3 pointer-events-auto")}
+                    className="p-3"
                   />
-                </PopoverContent>
-              </Popover>
+                </div>
+              )}
             </div>
             <div>
               <label className="text-sm font-medium text-ink">Preferred time <span className="text-destructive">*</span></label>
@@ -297,11 +298,11 @@ export function ProposalDialog({ open, onClose }: { open: boolean; onClose: () =
 
           {step === 1 && (
             <div className="grid gap-4 sm:grid-cols-2">
-              <Field label="Full name" required value={form.name} onChange={(v) => setForm({ ...form, name: v })} />
-              <Field label="Company" required value={form.company} onChange={(v) => setForm({ ...form, company: v })} />
-              <Field label="Work email" required type="email" value={form.email} onChange={(v) => setForm({ ...form, email: v })} />
-              <Field label="Phone" type="tel" value={form.phone} onChange={(v) => setForm({ ...form, phone: v })} />
-              <Field label="Country" value={form.country} onChange={(v) => setForm({ ...form, country: v })} />
+              <Field label="Full name" required placeholder="e.g. Rahul Verma" value={form.name} onChange={(v) => setForm({ ...form, name: v })} />
+              <Field label="Company" required placeholder="e.g. Nexus Solutions" value={form.company} onChange={(v) => setForm({ ...form, company: v })} />
+              <Field label="Work email" required type="email" placeholder="you@company.com" value={form.email} onChange={(v) => setForm({ ...form, email: v })} />
+              <Field label="Phone" type="tel" placeholder="+91 98765 43210" value={form.phone} onChange={(v) => setForm({ ...form, phone: v })} />
+              <Field label="Country" placeholder="e.g. India" value={form.country} onChange={(v) => setForm({ ...form, country: v })} />
               <div>
                 <label className="text-sm font-medium text-ink">Industry</label>
                 <select
@@ -359,7 +360,7 @@ export function ProposalDialog({ open, onClose }: { open: boolean; onClose: () =
   );
 }
 
-function Field({ label, value, onChange, required, type = "text" }: { label: string; value: string; onChange: (v: string) => void; required?: boolean; type?: string }) {
+function Field({ label, value, onChange, required, type = "text", placeholder }: { label: string; value: string; onChange: (v: string) => void; required?: boolean; type?: string; placeholder?: string }) {
   return (
     <label className="block">
       <span className="text-sm font-medium text-ink">{label}{required && <span className="text-destructive"> *</span>}</span>
@@ -367,6 +368,7 @@ function Field({ label, value, onChange, required, type = "text" }: { label: str
         type={type}
         required={required}
         value={value}
+        placeholder={placeholder}
         onChange={(e) => onChange(e.target.value)}
         className="mt-1.5 w-full rounded-xl border border-border bg-background px-3.5 py-2.5 text-sm text-ink placeholder:text-ink-muted focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20"
       />
