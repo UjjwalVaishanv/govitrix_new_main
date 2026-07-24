@@ -72,12 +72,12 @@ export function PageHero({
         <>
           <div
             aria-hidden
-            className="absolute inset-0 bg-cover bg-center brightness-110"
+            className="absolute inset-0 bg-cover bg-top brightness-105"
             style={{ backgroundImage: `url(${image})` }}
           />
           <div
             aria-hidden
-            className="absolute inset-0 bg-gradient-to-r from-surface/65 via-surface/35 to-surface/10"
+            className="absolute inset-0 bg-gradient-to-r from-surface/75 via-surface/40 to-surface/10"
           />
         </>
       )}

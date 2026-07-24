@@ -47,7 +47,7 @@ function PortfolioPage() {
         eyebrow="Portfolio"
         title="Products and platforms we've engineered."
         description="A selection of recent work across SaaS, mobile, AI, and enterprise systems."
-        image="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1920&q=70&auto=format&fit=crop"
+        image="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=1920&q=80&auto=format&fit=crop&crop=top"
       />
 
       <Section>
