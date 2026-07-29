@@ -1,21 +1,21 @@
 const partners = [
-  { name: "AWS", slug: "amazonwebservices" },
-  { name: "Microsoft Azure", slug: "microsoftazure" },
-  { name: "Google Cloud", slug: "googlecloud" },
-  { name: "OpenAI", slug: "openai" },
-  { name: "Anthropic", slug: "anthropic" },
-  { name: "GitHub", slug: "github" },
-  { name: "Docker", slug: "docker" },
-  { name: "Kubernetes", slug: "kubernetes" },
-  { name: "Razorpay", slug: "razorpay" },
-  { name: "Easebuzz", slug: null },
-  { name: "PostgreSQL", slug: "postgresql" },
-  { name: "MongoDB", slug: "mongodb" },
-  { name: "Stripe", slug: "stripe" },
-  { name: "Flutter", slug: "flutter" },
-  { name: "React", slug: "react" },
-  { name: "Next.js", slug: "nextdotjs" },
-  { name: "Node.js", slug: "nodedotjs" },
+  { name: "AWS", slug: "amazonaws", color: "#FF9900" },
+  { name: "Microsoft Azure", slug: "microsoftazure", color: "#0089D6" },
+  { name: "Google Cloud", slug: "googlecloud", color: "#4285F4" },
+  { name: "OpenAI", slug: "openai", color: "#10A37F" },
+  { name: "Anthropic", slug: "anthropic", color: "#D97757" },
+  { name: "GitHub", slug: "github", color: "#24292F" },
+  { name: "Docker", slug: "docker", color: "#2496ED" },
+  { name: "Kubernetes", slug: "kubernetes", color: "#326CE5" },
+  { name: "Razorpay", slug: "razorpay", color: "#072654" },
+  { name: "Easebuzz", slug: null, color: "#6366F1" },
+  { name: "PostgreSQL", slug: "postgresql", color: "#4169E1" },
+  { name: "MongoDB", slug: "mongodb", color: "#47A248" },
+  { name: "Stripe", slug: "stripe", color: "#635BFF" },
+  { name: "Flutter", slug: "flutter", color: "#02569B" },
+  { name: "React", slug: "react", color: "#00D8FF" },
+  { name: "Next.js", slug: "nextdotjs", color: "#000000" },
+  { name: "Node.js", slug: "nodedotjs", color: "#5FA04E" },
 ];
 
 const standards = [
@@ -28,28 +28,37 @@ const standards = [
 export function TechPartners() {
   return (
     <>
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
+      <div className="grid grid-cols-2 gap-3.5 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
         {partners.map((p) => (
           <div
             key={p.name}
-            className="group relative flex h-24 flex-col items-center justify-center gap-2 rounded-2xl border border-border bg-background p-4 text-center transition-all hover:-translate-y-1 hover:border-border-strong hover:shadow-card"
+            className="group relative flex h-28 flex-col items-center justify-center gap-2.5 rounded-2xl border border-border/80 bg-background p-4 text-center shadow-soft transition-all duration-300 hover:-translate-y-1 hover:border-accent/40 hover:shadow-card"
             title={p.name}
           >
             {p.slug ? (
-              <img
-                src={`https://cdn.simpleicons.org/${p.slug}`}
-                alt={`${p.name} logo`}
-                loading="lazy"
-                className="h-8 w-8 grayscale opacity-70 transition-all duration-300 group-hover:grayscale-0 group-hover:opacity-100"
+              <span
+                aria-label={`${p.name} logo`}
+                className="h-9 w-9 transition-transform duration-300 group-hover:scale-110"
+                style={{
+                  backgroundColor: p.color,
+                  maskImage: `url(https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/${p.slug}.svg)`,
+                  WebkitMaskImage: `url(https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/${p.slug}.svg)`,
+                  maskRepeat: "no-repeat",
+                  WebkitMaskRepeat: "no-repeat",
+                  maskPosition: "center",
+                  WebkitMaskPosition: "center",
+                  maskSize: "contain",
+                  WebkitMaskSize: "contain",
+                }}
               />
             ) : (
-              <div className="flex h-8 items-center justify-center">
-                <span className="font-display text-base font-bold text-ink-soft transition-colors group-hover:text-ink">
+              <div className="flex h-9 items-center justify-center">
+                <span className="font-display text-base font-bold text-accent transition-colors">
                   {p.name}
                 </span>
               </div>
             )}
-            <span className="text-[11px] font-semibold text-ink-muted transition-colors group-hover:text-ink">
+            <span className="text-xs font-semibold text-ink-soft transition-colors group-hover:text-ink">
               {p.name}
             </span>
           </div>
