@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
-import { ArrowUpRight, FileText } from "lucide-react";
-import type { ReactNode } from "react";
+import { ArrowUpRight, FileText, Send } from "lucide-react";
+import { useState, type ReactNode } from "react";
 
 export function Section({
   id,
@@ -23,31 +23,26 @@ export function Section({
     tone === "surface"
       ? "bg-surface"
       : tone === "dark"
-        ? "bg-primary text-primary-foreground"
-        : "bg-background";
+      ? "bg-ink text-background"
+      : "bg-background";
+
   return (
-    <section id={id} className={`relative py-20 md:py-28 ${toneCls} ${className}`}>
+    <section id={id} className={`py-16 md:py-24 ${toneCls} ${className}`}>
       <div className="container-page">
         {(eyebrow || title || description) && (
-          <div className="mx-auto max-w-3xl text-center">
-            {eyebrow && <p className="eyebrow justify-center">{eyebrow}</p>}
+          <div className="mb-12 max-w-3xl">
+            {eyebrow && <p className="eyebrow">{eyebrow}</p>}
             {title && (
-              <h2
-                className={`mt-4 text-balance font-display text-4xl font-semibold tracking-tight md:text-5xl md:leading-[1.05] ${tone === "dark" ? "text-primary-foreground" : "text-ink"}`}
-              >
+              <h2 className="mt-3 text-balance font-display text-3xl font-bold tracking-tight md:text-5xl md:leading-[1.1]">
                 {title}
               </h2>
             )}
             {description && (
-              <p
-                className={`mt-5 text-pretty text-base md:text-lg ${tone === "dark" ? "text-primary-foreground/75" : "text-ink-soft"}`}
-              >
-                {description}
-              </p>
+              <p className="mt-4 text-pretty text-base text-ink-soft md:text-lg">{description}</p>
             )}
           </div>
         )}
-        <div className={eyebrow || title || description ? "mt-14" : ""}>{children}</div>
+        {children}
       </div>
     </section>
   );
@@ -104,12 +99,52 @@ export function CTASection({
   description = "Book a free 30-minute discovery call — or if you prefer, share your requirements directly through our contact form. We respond within one business day.",
   primary = { label: "Book Discovery Call", to: "/contact" as const },
   secondary = { label: "Share Requirements", to: "/contact" as const },
+  showNewsletter = false,
 }: {
   title?: string;
   description?: string;
   primary?: { label: string; to: "/contact" | "/portfolio" | "/services" | "/about" };
   secondary?: { label: string; to: "/contact" | "/portfolio" | "/services" | "/about" };
+  showNewsletter?: boolean;
 }) {
+  const [email, setEmail] = useState("");
+  const [status, setStatus] = useState<"idle" | "ok">("idle");
+  const [subscribedEmail, setSubscribedEmail] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleSubscribe = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email.trim()) return;
+
+    setLoading(true);
+    const targetEmail = email.trim();
+
+    try {
+      await fetch("https://formsubmit.co/ajax/sales@govitrix.com", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          _subject: "new user subscribed",
+          message: `you have subscripteded with govitrix: ${targetEmail}`,
+          email: targetEmail,
+          _captcha: "false",
+        }),
+      });
+    } catch {
+      const subject = encodeURIComponent("new user subscribed");
+      const body = encodeURIComponent(`you have subscripteded with govitrix: ${targetEmail}`);
+      window.location.href = `mailto:sales@govitrix.com?subject=${subject}&body=${body}`;
+    } finally {
+      setSubscribedEmail(targetEmail);
+      setStatus("ok");
+      setEmail("");
+      setLoading(false);
+    }
+  };
+
   return (
     <section className="py-20 md:py-28">
       <div className="container-page">
@@ -120,7 +155,7 @@ export function CTASection({
           <div className="relative grid items-center gap-10 md:grid-cols-2">
             <div>
               <p className="inline-flex items-center gap-2 rounded-full border border-primary-foreground/20 bg-primary-foreground/5 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-success">
-                Let's build
+                {showNewsletter ? "Stay Informed" : "Let's build"}
               </p>
               <h2 className="mt-5 text-balance font-display text-4xl font-semibold tracking-tight text-primary-foreground md:text-5xl md:leading-[1.05]">
                 {title}
@@ -129,25 +164,58 @@ export function CTASection({
                 {description}
               </p>
             </div>
-            <div className="flex flex-col items-start gap-3 md:items-end">
-              <Link
-                to={primary.to}
-                className="group inline-flex items-center gap-2 rounded-xl bg-background px-6 py-3.5 text-sm font-semibold text-primary shadow-soft transition-all hover:-translate-y-0.5 hover:shadow-elevated"
-              >
-                {primary.label}
-                <ArrowUpRight className="size-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-              </Link>
-              <Link
-                to={secondary.to}
-                className="group inline-flex items-center gap-2 rounded-xl border border-primary-foreground/30 bg-primary-foreground/5 px-6 py-3.5 text-sm font-semibold text-primary-foreground transition-all hover:-translate-y-0.5 hover:bg-primary-foreground/10"
-              >
-                <FileText className="size-4" strokeWidth={1.75} />
-                {secondary.label}
-              </Link>
-              <p className="mt-1 text-xs text-primary-foreground/80 md:text-right">
-                Prefer sharing details? Submit through our contact form.
-              </p>
-            </div>
+            {showNewsletter ? (
+              <div className="flex flex-col items-start gap-3 md:items-end">
+                <form onSubmit={handleSubscribe} className="w-full max-w-md">
+                  <label htmlFor="cta-newsletter" className="text-xs font-semibold uppercase tracking-wider text-primary-foreground/80">
+                    Subscribe to Insights
+                  </label>
+                  <div className="mt-2 flex items-center gap-2 rounded-xl bg-background p-1.5 shadow-soft">
+                    <input
+                      id="cta-newsletter"
+                      type="email"
+                      required
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="you@company.com"
+                      className="flex-1 bg-transparent px-3 py-2 text-sm text-ink placeholder:text-ink-muted focus:outline-none"
+                    />
+                    <button
+                      type="submit"
+                      disabled={loading}
+                      className="inline-flex items-center gap-1.5 rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-accent-foreground transition-opacity hover:opacity-90 disabled:opacity-50"
+                    >
+                      {loading ? "Subscribing..." : "Subscribe"} <Send className="size-3.5" />
+                    </button>
+                  </div>
+                  {status === "ok" && (
+                    <p className="mt-2 text-xs font-semibold text-success">
+                      You have subscribed with Govitrix
+                    </p>
+                  )}
+                </form>
+              </div>
+            ) : (
+              <div className="flex flex-col items-start gap-3 md:items-end">
+                <Link
+                  to={primary.to}
+                  className="group inline-flex items-center gap-2 rounded-xl bg-background px-6 py-3.5 text-sm font-semibold text-primary shadow-soft transition-all hover:-translate-y-0.5 hover:shadow-elevated"
+                >
+                  {primary.label}
+                  <ArrowUpRight className="size-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                </Link>
+                <Link
+                  to={secondary.to}
+                  className="group inline-flex items-center gap-2 rounded-xl border border-primary-foreground/30 bg-primary-foreground/5 px-6 py-3.5 text-sm font-semibold text-primary-foreground transition-all hover:-translate-y-0.5 hover:bg-primary-foreground/10"
+                >
+                  <FileText className="size-4" strokeWidth={1.75} />
+                  {secondary.label}
+                </Link>
+                <p className="mt-1 text-xs text-primary-foreground/80 md:text-right">
+                  Prefer sharing details? Submit through our contact form.
+                </p>
+              </div>
+            )}
           </div>
         </div>
       </div>

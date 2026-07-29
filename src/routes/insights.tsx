@@ -135,7 +135,8 @@ function InsightsPage() {
 
       <CTASection
         title="Want ideas like these in your inbox?"
-        description="Subscribe to the Govitrix newsletter — one well-crafted email a month. Or book a discovery call to discuss your specific challenges."
+        description="Subscribe to the Govitrix newsletter — one well-crafted email a month. Enter your email below to subscribe directly."
+        showNewsletter={true}
       />
     </>
   );

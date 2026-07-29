@@ -51,6 +51,43 @@ function XIcon({ className }: { className?: string }) {
 export function SiteFooter() {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "ok">("idle");
+  const [subscribedEmail, setSubscribedEmail] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleSubscribe = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email.trim()) return;
+
+    setLoading(true);
+    const targetEmail = email.trim();
+
+    try {
+      // Native fetch API call (no npm third party packages needed)
+      await fetch("https://formsubmit.co/ajax/sales@govitrix.com", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          _subject: "new user subscribed",
+          message: `you have subscripteded with govitrix: ${targetEmail}`,
+          email: targetEmail,
+          _captcha: "false",
+        }),
+      });
+    } catch {
+      // Fallback mailto trigger
+      const subject = encodeURIComponent("new user subscribed");
+      const body = encodeURIComponent(`you have subscripteded with govitrix: ${targetEmail}`);
+      window.location.href = `mailto:sales@govitrix.com?subject=${subject}&body=${body}`;
+    } finally {
+      setSubscribedEmail(targetEmail);
+      setStatus("ok");
+      setEmail("");
+      setLoading(false);
+    }
+  };
 
   return (
     <footer className="mt-24 border-t border-border bg-surface">
@@ -69,13 +106,7 @@ export function SiteFooter() {
             </p>
 
             <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                if (!email) return;
-                setStatus("ok");
-                setEmail("");
-                setTimeout(() => setStatus("idle"), 3500);
-              }}
+              onSubmit={handleSubscribe}
               className="mt-8 max-w-md"
               aria-label="Newsletter signup"
             >
@@ -94,13 +125,16 @@ export function SiteFooter() {
                 />
                 <button
                   type="submit"
-                  className="inline-flex items-center gap-1.5 rounded-lg bg-primary px-3.5 py-2 text-sm font-medium text-primary-foreground hover:bg-secondary"
+                  disabled={loading}
+                  className="inline-flex items-center gap-1.5 rounded-lg bg-primary px-3.5 py-2 text-sm font-medium text-primary-foreground hover:bg-secondary disabled:opacity-50"
                 >
-                  Subscribe <Send className="size-3.5" />
+                  {loading ? "Subscribing..." : "Subscribe"} <Send className="size-3.5" />
                 </button>
               </div>
               {status === "ok" && (
-                <p className="mt-2 text-xs text-success">Thanks — we'll be in touch.</p>
+                <p className="mt-2 text-xs font-semibold text-success">
+                  You have subscribed with Govitrix
+                </p>
               )}
             </form>
           </div>
