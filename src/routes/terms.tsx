@@ -25,9 +25,15 @@ function TermsPage() {
         eyebrow="Legal"
         title="Terms & Conditions"
         description="These Terms govern your access to and use of the Govitrix website, services, and all related deliverables."
+        image="/legal-bg.png"
       />
-      <Section>
-        <div className="prose-doc">
+      <Section className="relative overflow-hidden">
+        <div
+          aria-hidden
+          className="absolute inset-0 bg-cover bg-center opacity-[0.08] pointer-events-none"
+          style={{ backgroundImage: `url('/legal-bg.png')` }}
+        />
+        <div className="prose-doc relative z-10">
           <p className="text-xs text-ink-muted">Last updated: July 2026</p>
 
           {/* 1 */}
@@ -385,7 +391,7 @@ function TermsPage() {
           margin-top: 2.5rem;
           margin-bottom: 0.75rem;
           padding-bottom: 0.4rem;
-          border-bottom: 1px solid rgba(255,255,255,0.08);
+          border-bottom: 1px solid var(--color-border);
         }
         .policy-section-number {
           font-family: var(--font-display, sans-serif);
@@ -400,7 +406,7 @@ function TermsPage() {
         }
         .policy-section-title {
           font-family: var(--font-display, sans-serif);
-          color: var(--color-ink, #fff);
+          color: var(--color-ink);
           font-size: 1.05rem;
           font-weight: 700;
           letter-spacing: 0.03em;
@@ -410,7 +416,7 @@ function TermsPage() {
         /* Sub-headings */
         .policy-sub-heading {
           font-family: var(--font-display, sans-serif);
-          color: var(--color-ink, #fff);
+          color: var(--color-ink);
           font-size: 0.92rem;
           font-weight: 600;
           margin-top: 1.5rem;
@@ -429,6 +435,7 @@ function TermsPage() {
           margin-bottom: 0.35rem;
           line-height: 1.7;
           font-size: 0.95rem;
+          color: var(--color-ink-soft);
         }
         .policy-list li::before {
           content: "–";
@@ -440,7 +447,7 @@ function TermsPage() {
 
         /* Definition list style (bold term inline) */
         .definition-list li strong {
-          color: var(--color-ink, #fff);
+          color: var(--color-ink);
         }
 
         /* Links */

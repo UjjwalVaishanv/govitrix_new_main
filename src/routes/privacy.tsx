@@ -25,9 +25,15 @@ function PrivacyPage() {
         eyebrow="Legal"
         title="Privacy Policy"
         description="Govitrix Corporation is committed to protecting the privacy, confidentiality, and security of personal information entrusted to us."
+        image="/legal-bg.png"
       />
-      <Section>
-        <div className="prose-doc">
+      <Section className="relative overflow-hidden">
+        <div
+          aria-hidden
+          className="absolute inset-0 bg-cover bg-center opacity-[0.08] pointer-events-none"
+          style={{ backgroundImage: `url('/legal-bg.png')` }}
+        />
+        <div className="prose-doc relative z-10">
           <p className="text-xs text-ink-muted">Last updated: July 2026</p>
 
           {/* Intro */}
@@ -431,7 +437,7 @@ function PrivacyPage() {
           margin-top: 2.5rem;
           margin-bottom: 0.75rem;
           padding-bottom: 0.4rem;
-          border-bottom: 1px solid rgba(255,255,255,0.08);
+          border-bottom: 1px solid var(--color-border);
         }
         .policy-section-number {
           font-family: var(--font-display, sans-serif);
@@ -446,7 +452,7 @@ function PrivacyPage() {
         }
         .policy-section-title {
           font-family: var(--font-display, sans-serif);
-          color: var(--color-ink, #fff);
+          color: var(--color-ink);
           font-size: 1.05rem;
           font-weight: 700;
           letter-spacing: 0.03em;
@@ -456,7 +462,7 @@ function PrivacyPage() {
         /* Sub-headings (2.1, 3.2, etc.) */
         .policy-sub-heading {
           font-family: var(--font-display, sans-serif);
-          color: var(--color-ink, #fff);
+          color: var(--color-ink);
           font-size: 0.92rem;
           font-weight: 600;
           margin-top: 1.5rem;
@@ -475,6 +481,7 @@ function PrivacyPage() {
           margin-bottom: 0.35rem;
           line-height: 1.7;
           font-size: 0.95rem;
+          color: var(--color-ink-soft);
         }
         .policy-list li::before {
           content: "–";
@@ -498,7 +505,7 @@ function PrivacyPage() {
           margin-top: 1rem;
           border-radius: 10px;
           overflow: hidden;
-          border: 1px solid rgba(255,255,255,0.08);
+          border: 1px solid var(--color-border);
         }
         .retention-table {
           width: 100%;
@@ -506,22 +513,23 @@ function PrivacyPage() {
           font-size: 0.9rem;
         }
         .retention-table th {
-          background: rgba(99,102,241,0.15);
-          color: var(--color-ink, #fff);
+          background: var(--color-surface);
+          color: var(--color-ink);
           font-weight: 600;
           text-align: left;
           padding: 0.7rem 1.1rem;
           font-family: var(--font-display, sans-serif);
           letter-spacing: 0.03em;
+          border-bottom: 1px solid var(--color-border);
         }
         .retention-table td {
           padding: 0.65rem 1.1rem;
-          border-top: 1px solid rgba(255,255,255,0.06);
+          border-top: 1px solid var(--color-border);
           color: var(--color-ink-soft);
           line-height: 1.5;
         }
         .retention-table tr:hover td {
-          background: rgba(255,255,255,0.03);
+          background: var(--color-surface);
         }
 
         /* Rights grid */
@@ -532,10 +540,10 @@ function PrivacyPage() {
           margin-top: 1rem;
         }
         .rights-card {
-          border: 1px solid rgba(255,255,255,0.08);
+          border: 1px solid var(--color-border);
           border-radius: 10px;
           padding: 1rem 1.1rem 1.1rem;
-          background: rgba(255,255,255,0.03);
+          background: var(--color-surface);
         }
         .rights-badge {
           display: inline-block;
@@ -546,9 +554,9 @@ function PrivacyPage() {
           padding: 3px 9px;
           margin-bottom: 0.25rem;
         }
-        .rights-badge.gdpr  { background: rgba(99,102,241,0.18); color: #a5b4fc; }
-        .rights-badge.ccpa  { background: rgba(20,184,166,0.18); color: #5eead4; }
-        .rights-badge.dpdp  { background: rgba(249,115,22,0.18); color: #fdba74; }
+        .rights-badge.gdpr  { background: rgba(99,102,241,0.18); color: var(--color-accent, #6366f1); }
+        .rights-badge.ccpa  { background: rgba(20,184,166,0.18); color: #0d9488; }
+        .rights-badge.dpdp  { background: rgba(249,115,22,0.18); color: #ea580c; }
       `}</style>
     </>
   );

@@ -120,8 +120,17 @@ function HomePage() {
 
       {/* HERO */}
       <section className="relative overflow-hidden border-b border-border bg-background">
-        <div aria-hidden className="absolute inset-0 hairline-grid opacity-[0.45]" />
-        <div aria-hidden className="soft-blur-orb left-1/2 top-0 h-[420px] w-[420px] -translate-x-1/2 bg-accent/15" />
+        <div
+          aria-hidden
+          className="absolute inset-0 bg-cover bg-center opacity-60 pointer-events-none"
+          style={{ backgroundImage: `url('/hero-bg.png')` }}
+        />
+        <div
+          aria-hidden
+          className="absolute inset-0 bg-gradient-to-r from-background via-background/80 to-transparent pointer-events-none"
+        />
+        <div aria-hidden className="absolute inset-0 hairline-grid opacity-[0.40] pointer-events-none" />
+        <div aria-hidden className="soft-blur-orb left-1/2 top-0 h-[420px] w-[420px] -translate-x-1/2 bg-accent/15 pointer-events-none" />
         <div className="container-page relative grid items-center gap-14 py-20 md:py-28 lg:grid-cols-12">
           <div className="lg:col-span-7 fade-in-up">
             <h1 className="mt-6 text-balance text-4xl font-semibold tracking-tight text-ink md:text-6xl md:leading-[1.05] lg:text-[68px]">
