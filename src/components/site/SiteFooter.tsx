@@ -57,9 +57,9 @@ export function SiteFooter() {
       <div className="container-page py-16">
         <div className="grid gap-12 lg:grid-cols-12">
           <div className="lg:col-span-5">
-            <Link to="/" className="flex items-center gap-2.5">
-              <Logo className="h-9 w-9" />
-              <span className="font-display text-lg font-bold tracking-tight text-ink">
+            <Link to="/" className="flex items-center gap-3">
+              <Logo className="h-11 w-11 md:h-12 md:w-12" />
+              <span className="font-display text-xl font-bold tracking-tight text-ink md:text-2xl">
                 Govitrix Corporation
               </span>
             </Link>

@@ -61,9 +61,9 @@ export function SiteHeader() {
         }`}
       >
         <div className="container-page flex h-20 items-center justify-between gap-6 md:h-24">
-          <Link to="/" className="flex items-center gap-3" aria-label="Govitrix Corporation home">
-            <Logo className="h-10 w-10 md:h-11 md:w-11" />
-            <span className="font-display text-lg font-bold tracking-tight text-ink md:text-xl">
+          <Link to="/" className="flex items-center gap-3.5" aria-label="Govitrix Corporation home">
+            <Logo className="h-12 w-12 md:h-14 md:w-14" />
+            <span className="font-display text-xl font-bold tracking-tight text-ink md:text-2xl">
               Govitrix
             </span>
           </Link>
