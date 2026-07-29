@@ -187,7 +187,7 @@ function HomePage() {
       {/* LOGO MARQUEE */}
       <section aria-label="Products" className="border-b border-border bg-surface py-10">
         <div className="container-page">
-          <p className="text-center text-xs font-extrabold uppercase tracking-[0.22em] text-accent">
+          <p className="text-center text-sm md:text-base font-extrabold uppercase tracking-[0.22em] text-accent">
             Our Work
           </p>
           <div className="relative mt-6 overflow-hidden">
