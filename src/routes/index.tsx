@@ -187,16 +187,19 @@ function HomePage() {
       {/* LOGO MARQUEE */}
       <section aria-label="Products" className="border-b border-border bg-surface py-10">
         <div className="container-page">
-          <p className="text-center text-xs font-semibold uppercase tracking-[0.18em] text-ink-muted">
+          <p className="text-center text-xs font-extrabold uppercase tracking-[0.22em] text-accent">
             Our Work
           </p>
           <div className="relative mt-6 overflow-hidden">
-            <div className="marquee-track flex w-max items-center gap-12 whitespace-nowrap">
-              {[...Array(2)].flatMap((_, i) =>
+            <div className="marquee-track flex w-max items-center gap-14 whitespace-nowrap">
+              {[...Array(4)].flatMap((_, i) =>
                 ["MEDICARE HMS", "FINBUD", "APEXSCORE", "SELLMATE", "ANAHATA AI"].map((name) => (
-                  <span key={`${i}-${name}`} className="font-display text-xl font-bold tracking-widest text-ink-muted/70">
-                    {name}
-                  </span>
+                  <div key={`${i}-${name}`} className="flex items-center gap-14">
+                    <span className="font-display text-2xl font-black tracking-wider text-ink transition-colors hover:text-accent">
+                      {name}
+                    </span>
+                    <span className="size-2 rounded-full bg-accent" />
+                  </div>
                 )),
               )}
             </div>
