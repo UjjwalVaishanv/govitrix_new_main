@@ -25,7 +25,6 @@ import {
   Plane,
 } from "lucide-react";
 import { useState } from "react";
-import { HeroVisual } from "../components/site/HeroVisual";
 import { Section, CTASection } from "../components/site/Section";
 import { DiscoveryDialog, ProposalDialog } from "../components/site/CTADialogs";
 import { ConceptProductsShowcase } from "../components/site/ConceptProducts";
@@ -208,44 +207,44 @@ function HomePage() {
         />
         <div aria-hidden className="absolute inset-0 hairline-grid opacity-[0.40] pointer-events-none" />
         <div aria-hidden className="soft-blur-orb left-1/2 top-0 h-[420px] w-[420px] -translate-x-1/2 bg-accent/15 pointer-events-none" />
-        <div className="container-page relative grid items-center gap-14 py-20 md:py-28 lg:grid-cols-12">
-          <div className="lg:col-span-7 fade-in-up">
-            <h1 className="mt-6 text-balance text-4xl font-semibold tracking-tight text-ink md:text-6xl md:leading-[1.05] lg:text-[68px]">
+        <div className="container-page relative py-20 md:py-32">
+          <div className="mx-auto max-w-4xl text-center fade-in-up">
+            <h1 className="mt-4 text-balance text-4xl font-semibold tracking-tight text-ink md:text-6xl md:leading-[1.05] lg:text-[68px]">
               Transforming Businesses.{" "}
               <span className="relative whitespace-nowrap">
                 <span className="relative z-10 bg-gradient-to-r from-accent to-success bg-clip-text text-transparent">Intelligently.</span>
               </span>
             </h1>
-            <p className="mt-6 max-w-2xl text-pretty text-lg text-ink-soft">
+            <p className="mt-6 mx-auto max-w-2xl text-pretty text-lg text-ink-soft">
               We build intelligent digital products, AI-powered solutions, and scalable enterprise
               platforms that help organizations innovate, grow, and lead in the digital era.
             </p>
 
-            <div className="mt-8 flex flex-wrap items-center gap-3">
+            <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
               <button
                 type="button"
                 onClick={() => setDiscoveryOpen(true)}
-                className="group inline-flex items-center gap-1.5 rounded-xl bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground shadow-soft transition-all hover:-translate-y-0.5 hover:bg-secondary hover:shadow-elevated"
+                className="group inline-flex items-center gap-1.5 rounded-xl bg-primary px-6 py-3.5 text-sm font-semibold text-primary-foreground shadow-soft transition-all hover:-translate-y-0.5 hover:bg-secondary hover:shadow-elevated"
               >
                 Book Discovery Call
                 <ArrowUpRight className="size-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
               </button>
               <Link
                 to="/contact"
-                className="inline-flex items-center gap-1.5 rounded-xl bg-accent px-5 py-3 text-sm font-semibold text-accent-foreground shadow-soft transition-all hover:-translate-y-0.5 hover:opacity-90"
+                className="inline-flex items-center gap-1.5 rounded-xl bg-accent px-6 py-3.5 text-sm font-semibold text-accent-foreground shadow-soft transition-all hover:-translate-y-0.5 hover:opacity-90"
               >
                 Start a Project <ArrowRight className="size-4" />
               </Link>
               <button
                 type="button"
                 onClick={() => scrollTo("products")}
-                className="inline-flex items-center gap-1.5 rounded-xl border border-border bg-background px-5 py-3 text-sm font-semibold text-ink transition-all hover:-translate-y-0.5 hover:bg-surface"
+                className="inline-flex items-center gap-1.5 rounded-xl border border-border bg-background px-6 py-3.5 text-sm font-semibold text-ink transition-all hover:-translate-y-0.5 hover:bg-surface"
               >
                 Explore Portfolio <ArrowRight className="size-4" />
               </button>
             </div>
 
-            <div className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-3 text-xs font-medium text-ink-muted">
+            <div className="mt-12 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-xs font-medium text-ink-muted">
               {trustChips.map((c) => (
                 <span key={c} className="inline-flex items-center gap-2">
                   <Check className="size-3.5 text-success" />
@@ -253,10 +252,6 @@ function HomePage() {
                 </span>
               ))}
             </div>
-          </div>
-
-          <div className="lg:col-span-5">
-            <HeroVisual />
           </div>
         </div>
       </section>

@@ -61,14 +61,12 @@ export function AICapabilities() {
       <div className="relative mt-12 overflow-hidden rounded-3xl border border-border/80 bg-surface p-6 shadow-soft md:p-10">
         <div aria-hidden className="absolute inset-0 hairline-grid opacity-30 pointer-events-none" />
         <div aria-hidden className="soft-blur-orb -right-20 -top-20 h-72 w-72 bg-accent/10 pointer-events-none" />
-        <div className="relative flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
-          <div>
-            <p className="eyebrow">Reference AI Architecture</p>
-            <h3 className="mt-2.5 font-display text-xl font-bold text-ink md:text-2xl">
-              How we ship production-grade AI systems
-            </h3>
-          </div>
-          <span className="inline-flex items-center gap-2 rounded-full border border-success/30 bg-success/10 px-3.5 py-1.5 text-xs font-bold uppercase tracking-wider text-success">
+        <div className="relative mx-auto max-w-2xl text-center flex flex-col items-center justify-center">
+          <p className="eyebrow justify-center">Reference AI Architecture</p>
+          <h3 className="mt-2.5 text-balance font-display text-xl font-bold text-ink md:text-2xl">
+            How we ship production-grade AI systems
+          </h3>
+          <span className="mt-3.5 inline-flex items-center gap-2 rounded-full border border-success/30 bg-success/10 px-3.5 py-1.5 text-xs font-bold uppercase tracking-wider text-success">
             <ShieldCheck className="size-4" /> Enterprise Guardrails
           </span>
         </div>
