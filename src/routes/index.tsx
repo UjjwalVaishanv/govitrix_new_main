@@ -70,12 +70,12 @@ const trustChips = [
 ];
 
 const credibility = [
-  { icon: Users, title: "Founder-led execution", body: "Senior engineers and designers on every engagement." },
-  { icon: Workflow, title: "Agile delivery", body: "Two-week sprints with transparent demos and metrics." },
-  { icon: Globe2, title: "Global standards", body: "Quality and process aligned with enterprise expectations." },
-  { icon: ShieldCheck, title: "Secure architecture", body: "Security and privacy designed into every layer." },
-  { icon: Gauge, title: "Scalable solutions", body: "Built to grow from your first customer to your millionth." },
-  { icon: LineChart, title: "High-performance", body: "Sub-second experiences across web and mobile." },
+  { icon: Users, title: "Founder-led execution", body: "Senior engineers and designers on every engagement. No junior handoffs.", badge: "Senior Craft" },
+  { icon: Workflow, title: "Agile delivery", body: "Two-week sprints with transparent live demos, clear metrics, and continuous feedback.", badge: "2-Wk Sprints" },
+  { icon: Globe2, title: "Global standards", body: "Quality and process architecture aligned with enterprise expectations globally.", badge: "Enterprise Grade" },
+  { icon: ShieldCheck, title: "Secure architecture", body: "Security, privacy, and zero-trust principles engineered into every layer.", badge: "SOC2 & GDPR" },
+  { icon: Gauge, title: "Scalable solutions", body: "Cloud-native architectures built to scale from your first user to your millionth.", badge: "High Scalability" },
+  { icon: LineChart, title: "High-performance", body: "Sub-second load times and fluid experiences across web and mobile platforms.", badge: "< 100ms Latency" },
 ];
 
 const services = [
@@ -242,14 +242,27 @@ function HomePage() {
         title="A trusted product engineering partner"
         description="We combine senior craft with disciplined delivery — the way mature technology partners should operate."
       >
-        <div className="grid gap-px overflow-hidden rounded-3xl border border-border bg-border sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {credibility.map((c) => (
-            <div key={c.title} className="group bg-background p-7 transition-colors hover:bg-surface">
-              <span className="inline-flex size-11 items-center justify-center rounded-xl bg-accent/10 text-accent transition-transform group-hover:scale-110">
-                <c.icon className="size-5" strokeWidth={1.75} />
-              </span>
-              <h3 className="mt-5 font-display text-lg font-semibold text-ink">{c.title}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-ink-soft">{c.body}</p>
+            <div
+              key={c.title}
+              className="group relative overflow-hidden rounded-2xl border border-border/80 bg-background p-7 shadow-soft transition-all duration-300 hover:-translate-y-1.5 hover:border-accent/40 hover:shadow-card"
+            >
+              <div aria-hidden className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-accent via-success to-accent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+              <div className="flex items-center justify-between gap-4">
+                <span className="inline-flex size-12 items-center justify-center rounded-xl border border-accent/20 bg-accent/10 text-accent transition-all duration-300 group-hover:scale-110 group-hover:bg-primary group-hover:text-primary-foreground group-hover:shadow-soft">
+                  <c.icon className="size-5" strokeWidth={2} />
+                </span>
+                <span className="rounded-full border border-accent/20 bg-accent/10 px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-accent">
+                  {c.badge}
+                </span>
+              </div>
+              <h3 className="mt-6 font-display text-lg font-bold text-ink transition-colors group-hover:text-accent">
+                {c.title}
+              </h3>
+              <p className="mt-2.5 text-sm leading-relaxed text-ink-soft">
+                {c.body}
+              </p>
             </div>
           ))}
         </div>
