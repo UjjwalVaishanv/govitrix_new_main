@@ -88,14 +88,94 @@ const services = [
 ];
 
 const industries = [
-  { icon: Heart, name: "Healthcare" },
-  { icon: Banknote, name: "FinTech" },
-  { icon: Cpu, name: "SaaS" },
-  { icon: ShoppingBag, name: "Retail" },
-  { icon: Truck, name: "Logistics" },
-  { icon: GraduationCap, name: "Education" },
-  { icon: Building2, name: "Manufacturing" },
-  { icon: Plane, name: "Insurance" },
+  {
+    icon: Heart,
+    name: "Healthcare",
+    tagline: "Telehealth, Hospital MS & Clinical AI",
+    badge: "HIPAA Ready",
+    gradient: "from-rose-500 via-pink-500 to-emerald-500",
+    bgGradient: "from-rose-500/15 to-pink-500/10",
+    borderColor: "border-rose-500/20",
+    textColor: "text-rose-500",
+    badgeBg: "bg-rose-500/10 border-rose-500/20 text-rose-500",
+  },
+  {
+    icon: Banknote,
+    name: "FinTech",
+    tagline: "Payment Gateways, Fraud AI & Wealth Tech",
+    badge: "PCI-DSS Aligned",
+    gradient: "from-emerald-500 via-teal-500 to-cyan-500",
+    bgGradient: "from-emerald-500/15 to-teal-500/10",
+    borderColor: "border-emerald-500/20",
+    textColor: "text-emerald-500",
+    badgeBg: "bg-emerald-500/10 border-emerald-500/20 text-emerald-500",
+  },
+  {
+    icon: Cpu,
+    name: "SaaS & Tech",
+    tagline: "Multi-Tenant SaaS, APIs & Cloud Platforms",
+    badge: "High Scale",
+    gradient: "from-indigo-500 via-purple-500 to-blue-500",
+    bgGradient: "from-indigo-500/15 to-purple-500/10",
+    borderColor: "border-indigo-500/20",
+    textColor: "text-indigo-500",
+    badgeBg: "bg-indigo-500/10 border-indigo-500/20 text-indigo-500",
+  },
+  {
+    icon: ShoppingBag,
+    name: "Retail & E-Commerce",
+    tagline: "Omnichannel Commerce, AI Search & Loyalty",
+    badge: "Real-time AI",
+    gradient: "from-amber-500 via-orange-500 to-rose-500",
+    bgGradient: "from-amber-500/15 to-orange-500/10",
+    borderColor: "border-amber-500/20",
+    textColor: "text-amber-500",
+    badgeBg: "bg-amber-500/10 border-amber-500/20 text-amber-500",
+  },
+  {
+    icon: Truck,
+    name: "Logistics & Supply Chain",
+    tagline: "Fleet Tracking, Dispatch AI & Warehouse Tech",
+    badge: "IoT & Fleet",
+    gradient: "from-blue-500 via-cyan-500 to-sky-500",
+    bgGradient: "from-blue-500/15 to-cyan-500/10",
+    borderColor: "border-blue-500/20",
+    textColor: "text-blue-500",
+    badgeBg: "bg-blue-500/10 border-blue-500/20 text-blue-500",
+  },
+  {
+    icon: GraduationCap,
+    name: "Education & EdTech",
+    tagline: "LMS Platforms, AI Tutors & Virtual Classrooms",
+    badge: "AI Learning",
+    gradient: "from-purple-500 via-pink-500 to-indigo-500",
+    bgGradient: "from-purple-500/15 to-pink-500/10",
+    borderColor: "border-purple-500/20",
+    textColor: "text-purple-500",
+    badgeBg: "bg-purple-500/10 border-purple-500/20 text-purple-500",
+  },
+  {
+    icon: Building2,
+    name: "Manufacturing",
+    tagline: "Smart Factories, Predictive Maintenance & IoT",
+    badge: "Industry 4.0",
+    gradient: "from-cyan-500 via-blue-500 to-teal-500",
+    bgGradient: "from-cyan-500/15 to-blue-500/10",
+    borderColor: "border-cyan-500/20",
+    textColor: "text-cyan-500",
+    badgeBg: "bg-cyan-500/10 border-cyan-500/20 text-cyan-500",
+  },
+  {
+    icon: Plane,
+    name: "Insurance & InsurTech",
+    tagline: "Claims Automation, Risk Scoring & Portals",
+    badge: "Automated Claims",
+    gradient: "from-violet-500 via-fuchsia-500 to-purple-500",
+    bgGradient: "from-violet-500/15 to-fuchsia-500/10",
+    borderColor: "border-violet-500/20",
+    textColor: "text-violet-500",
+    badgeBg: "bg-violet-500/10 border-violet-500/20 text-violet-500",
+  },
 ];
 
 const insights = [
@@ -317,19 +397,38 @@ function HomePage() {
         tone="surface"
         eyebrow="Industries"
         title="Deep expertise across regulated and fast-moving markets"
+        description="We design and engineer specialized software tailored to industry-specific regulations, workflows, and performance demands."
       >
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {industries.map((i) => (
             <Link
               key={i.name}
               to="/industries"
-              className="group flex items-center gap-3 rounded-2xl border border-border bg-background p-5 transition-all hover:-translate-y-0.5 hover:border-border-strong hover:shadow-card"
+              className="group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-border/80 bg-background p-6 shadow-soft transition-all duration-300 hover:-translate-y-2 hover:border-accent/40 hover:shadow-card"
             >
-              <span className="inline-flex size-10 items-center justify-center rounded-xl bg-accent/10 text-accent">
-                <i.icon className="size-5" strokeWidth={1.75} />
-              </span>
-              <span className="font-medium text-ink">{i.name}</span>
-              <ArrowUpRight className="ml-auto size-4 text-ink-muted transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-ink" />
+              <div aria-hidden className={`absolute inset-x-0 top-0 h-1 bg-gradient-to-r ${i.gradient} opacity-80 transition-opacity duration-300 group-hover:opacity-100`} />
+              <div>
+                <div className="flex items-center justify-between gap-3">
+                  <span className={`inline-flex size-12 items-center justify-center rounded-xl border ${i.borderColor} bg-gradient-to-br ${i.bgGradient} ${i.textColor} transition-transform duration-300 group-hover:scale-110`}>
+                    <i.icon className="size-6" strokeWidth={2} />
+                  </span>
+                  <span className={`rounded-full border px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider ${i.badgeBg}`}>
+                    {i.badge}
+                  </span>
+                </div>
+                <h3 className="mt-5 font-display text-lg font-bold text-ink transition-colors group-hover:text-accent">
+                  {i.name}
+                </h3>
+                <p className="mt-2 text-xs leading-relaxed text-ink-soft">
+                  {i.tagline}
+                </p>
+              </div>
+              <div className="mt-6 flex items-center justify-between border-t border-border/60 pt-4">
+                <span className="text-xs font-semibold text-accent group-hover:underline">Explore Solutions</span>
+                <div className="flex size-7 items-center justify-center rounded-full bg-accent/10 text-accent transition-all duration-300 group-hover:bg-primary group-hover:text-primary-foreground group-hover:scale-110">
+                  <ArrowUpRight className="size-3.5" />
+                </div>
+              </div>
             </Link>
           ))}
         </div>
