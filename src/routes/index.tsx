@@ -37,6 +37,7 @@ import { TechPartners } from "../components/site/TechPartners";
 import { TestimonialSlider } from "../components/site/TestimonialSlider";
 import { FAQ } from "../components/site/FAQ";
 import { RoadmapProcess } from "../components/site/RoadmapProcess";
+import { posts } from "../data/insights";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -178,11 +179,7 @@ const industries = [
   },
 ];
 
-const insights = [
-  { tag: "Cost", title: "How much does it cost to build a mobile app?", excerpt: "A pragmatic breakdown of cost drivers, ranges, and how to budget responsibly.", read: "8 min read" },
-  { tag: "AI", title: "AI adoption in modern businesses", excerpt: "Where AI delivers measurable ROI, and the patterns that consistently fail.", read: "11 min read" },
-  { tag: "Strategy", title: "MVP vs full product development", excerpt: "Choosing the right scope for your stage — and avoiding the most expensive mistakes.", read: "6 min read" },
-];
+
 
 function HomePage() {
   const [discoveryOpen, setDiscoveryOpen] = useState(false);
@@ -486,32 +483,40 @@ function HomePage() {
         tone="surface"
         eyebrow="Insights"
         title="Ideas worth reading"
-        description="Field notes on product strategy, AI, engineering, and modern delivery."
+        description="Field notes on AI, healthcare technology, product strategy, SaaS, and modern software engineering."
       >
         <div className="grid gap-6 md:grid-cols-3">
-          {insights.map((p) => (
+          {posts.slice(0, 3).map((p) => (
             <Link
-              key={p.title}
+              key={p.id}
               to="/insights"
-              className="group flex flex-col overflow-hidden rounded-2xl border border-border bg-background transition-all hover:-translate-y-1 hover:shadow-card"
+              className="group flex flex-col overflow-hidden rounded-2xl border border-border/80 bg-background transition-all duration-300 hover:-translate-y-1.5 hover:border-accent/40 hover:shadow-card"
             >
-              <div className="relative h-44 overflow-hidden bg-gradient-to-br from-surface to-background">
-                <div aria-hidden className="absolute inset-0 hairline-grid opacity-50" />
-                <div className="absolute left-5 top-5">
-                  <span className="rounded-full border border-border bg-background px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-accent">
-                    {p.tag}
-                  </span>
-                </div>
+              <div className="relative h-48 overflow-hidden">
+                <img
+                  src={p.image}
+                  alt={p.title}
+                  loading="lazy"
+                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                />
+                <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-background/70 via-transparent" />
+                <span className="absolute left-4 top-4 rounded-full border border-border bg-background/90 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-accent backdrop-blur">
+                  {p.tag}
+                </span>
               </div>
               <div className="flex flex-1 flex-col p-6">
-                <h3 className="font-display text-lg font-semibold leading-snug text-ink group-hover:text-accent">
+                <h3 className="font-display text-lg font-bold leading-snug text-ink transition-colors group-hover:text-accent">
                   {p.title}
                 </h3>
-                <p className="mt-2 line-clamp-2 text-sm text-ink-soft">{p.excerpt}</p>
-                <div className="mt-5 flex items-center justify-between text-xs text-ink-muted">
-                  <span>{p.read}</span>
-                  <span className="inline-flex items-center gap-1 font-semibold text-ink group-hover:text-accent">
-                    Read <ArrowUpRight className="size-3.5" />
+                <p className="mt-2.5 line-clamp-3 text-sm leading-relaxed text-ink-soft">{p.excerpt}</p>
+                <div className="mt-6 flex items-center justify-between border-t border-border/60 pt-4 text-xs text-ink-muted">
+                  <span className="inline-flex items-center gap-2">
+                    <span className="font-medium text-ink-soft">{p.date}</span>
+                    <span>·</span>
+                    <span>{p.read}</span>
+                  </span>
+                  <span className="inline-flex items-center gap-1 font-bold text-accent group-hover:underline">
+                    Read article <ArrowUpRight className="size-3.5" />
                   </span>
                 </div>
               </div>
