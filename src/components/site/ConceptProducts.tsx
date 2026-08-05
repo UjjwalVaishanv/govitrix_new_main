@@ -238,16 +238,6 @@ export function ConceptProductsShowcase() {
                 <p className="text-xs font-bold uppercase tracking-wider text-accent">{featured.tagline}</p>
                 <h3 className="mt-2 font-display text-3xl font-bold text-ink md:text-4xl">{featured.name}</h3>
                 <p className="mt-4 text-sm leading-relaxed text-ink-soft">{featured.description}</p>
-
-                {/* Metric Pills */}
-                <div className="mt-6 grid grid-cols-3 gap-2">
-                  {featured.results.map((r) => (
-                    <div key={r.label} className="rounded-xl border border-border bg-surface/80 p-3 backdrop-blur">
-                      <p className="font-display text-lg font-bold text-ink">{r.value}</p>
-                      <p className="mt-0.5 text-[10px] font-medium text-ink-muted leading-tight">{r.label}</p>
-                    </div>
-                  ))}
-                </div>
               </div>
 
               <div className="mt-8 flex items-center justify-between gap-4 pt-6 border-t border-border">
@@ -288,16 +278,6 @@ export function ConceptProductsShowcase() {
                   <span className={`inline-flex items-center gap-1 rounded-full border px-2.5 py-0.5 text-[11px] font-bold backdrop-blur-md ${p.badgeColor}`}>
                     {p.category}
                   </span>
-                </div>
-
-                {/* Floating Stats */}
-                <div className="absolute bottom-3 inset-x-3 grid grid-cols-3 gap-1.5">
-                  {p.results.map((r) => (
-                    <div key={r.label} className="rounded-lg border border-border/50 bg-background/90 p-2 text-center backdrop-blur-md">
-                      <p className="font-display text-sm font-bold text-ink leading-none">{r.value}</p>
-                      <p className="mt-1 text-[9px] font-medium text-ink-muted truncate">{r.label}</p>
-                    </div>
-                  ))}
                 </div>
               </div>
 
