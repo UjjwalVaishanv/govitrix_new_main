@@ -211,90 +211,111 @@ Attached File: ${form.file || "None"}
 
           {/* RIGHT: form + FAQ */}
           <div className="lg:col-span-7">
-            <form
-              noValidate
-              onSubmit={submit}
-              className="rounded-3xl border border-border bg-background p-8 shadow-soft"
-            >
-              <div className="grid gap-5 sm:grid-cols-2">
-                <Field label="Full Name*" error={errors.name}>
-                  <input
-                    className="input"
-                    value={form.name}
-                    onChange={(e) => setForm({ ...form, name: e.target.value })}
-                    placeholder="e.g. Anika Sharma"
-                  />
-                </Field>
-                <Field label="Email Address*" error={errors.email}>
-                  <input
-                    type="email"
-                    className="input"
-                    value={form.email}
-                    onChange={(e) => setForm({ ...form, email: e.target.value })}
-                    placeholder="you@company.com"
-                  />
-                </Field>
-                <Field label="Contact Number*" error={errors.phone}>
-                  <input
-                    type="tel"
-                    className="input"
-                    value={form.phone}
-                    onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                    placeholder="+91 98XXXXXX00"
-                  />
-                </Field>
-                <Field label="Company">
-                  <input
-                    className="input"
-                    value={form.company}
-                    onChange={(e) => setForm({ ...form, company: e.target.value })}
-                    placeholder="Company name (optional)"
-                  />
-                </Field>
-                <Field label="Message*" error={errors.message} className="sm:col-span-2">
-                  <textarea
-                    rows={6}
-                    className="input resize-y"
-                    placeholder="Tell us about your goals, scope, timelines, or anything we should know."
-                    value={form.message}
-                    onChange={(e) => setForm({ ...form, message: e.target.value })}
-                  />
-                </Field>
-                <Field label="Upload File" className="sm:col-span-2">
-                  <label className="flex cursor-pointer items-center justify-between gap-3 rounded-xl border border-dashed border-border bg-surface px-4 py-3 text-sm text-ink-soft hover:border-border-strong hover:bg-background">
-                    <span className="inline-flex items-center gap-2">
-                      <Upload className="size-4" strokeWidth={1.75} />
-                      {form.file || "Attach a brief, spec, or reference (optional)"}
-                    </span>
-                    <span className="rounded-lg border border-border bg-background px-2.5 py-1 text-xs font-semibold text-ink">
-                      Browse
-                    </span>
-                    <input
-                      type="file"
-                      className="sr-only"
-                      onChange={(e) => setForm({ ...form, file: e.target.files?.[0]?.name || "" })}
-                    />
-                  </label>
-                </Field>
-              </div>
-
-              <div className="mt-6 flex flex-wrap items-center justify-between gap-4">
-                <p className="text-xs text-ink-muted">
-                  By submitting you agree to our{" "}
-                  <a href="/privacy" className="text-accent hover:underline">
-                    Privacy Policy
-                  </a>
-                  .
+            {confirm ? (
+              <div className="rounded-3xl border border-border bg-background p-8 py-16 text-center shadow-soft animate-fade-in">
+                <div className="mx-auto inline-flex size-16 items-center justify-center rounded-full bg-success/15 text-success animate-scale-in">
+                  <CheckCircle2 className="size-8" strokeWidth={2} />
+                </div>
+                <h3 className="mt-6 font-display text-2xl font-semibold text-ink md:text-3xl">
+                  Thank you for reaching out to Govitrix
+                </h3>
+                <p className="mx-auto mt-4 max-w-lg text-sm leading-relaxed text-ink-soft md:text-base">
+                  Your message has been successfully submitted. Our team will review your inquiry and get back to you within one business day.
                 </p>
                 <button
-                  type="submit"
-                  disabled={loading}
-                  className="group inline-flex items-center gap-1.5 rounded-xl bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground transition-all hover:-translate-y-0.5 hover:bg-secondary disabled:opacity-50"
+                  type="button"
+                  onClick={() => setConfirm(false)}
+                  className="mt-8 inline-flex items-center gap-1.5 rounded-xl bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-soft transition-all hover:-translate-y-0.5 hover:bg-secondary"
                 >
-                  {loading ? "Sending..." : "Send message"} <ArrowUpRight className="size-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                  Send another message
                 </button>
               </div>
-            </form>
+            ) : (
+              <form
+                noValidate
+                onSubmit={submit}
+                className="rounded-3xl border border-border bg-background p-8 shadow-soft"
+              >
+                <div className="grid gap-5 sm:grid-cols-2">
+                  <Field label="Full Name*" error={errors.name}>
+                    <input
+                      className="input"
+                      value={form.name}
+                      onChange={(e) => setForm({ ...form, name: e.target.value })}
+                      placeholder="e.g. Anika Sharma"
+                    />
+                  </Field>
+                  <Field label="Email Address*" error={errors.email}>
+                    <input
+                      type="email"
+                      className="input"
+                      value={form.email}
+                      onChange={(e) => setForm({ ...form, email: e.target.value })}
+                      placeholder="you@company.com"
+                    />
+                  </Field>
+                  <Field label="Contact Number*" error={errors.phone}>
+                    <input
+                      type="tel"
+                      className="input"
+                      value={form.phone}
+                      onChange={(e) => setForm({ ...form, phone: e.target.value })}
+                      placeholder="+91 98XXXXXX00"
+                    />
+                  </Field>
+                  <Field label="Company">
+                    <input
+                      className="input"
+                      value={form.company}
+                      onChange={(e) => setForm({ ...form, company: e.target.value })}
+                      placeholder="Company name (optional)"
+                    />
+                  </Field>
+                  <Field label="Message*" error={errors.message} className="sm:col-span-2">
+                    <textarea
+                      rows={6}
+                      className="input resize-y"
+                      placeholder="Tell us about your goals, scope, timelines, or anything we should know."
+                      value={form.message}
+                      onChange={(e) => setForm({ ...form, message: e.target.value })}
+                    />
+                  </Field>
+                  <Field label="Upload File" className="sm:col-span-2">
+                    <label className="flex cursor-pointer items-center justify-between gap-3 rounded-xl border border-dashed border-border bg-surface px-4 py-3 text-sm text-ink-soft hover:border-border-strong hover:bg-background">
+                      <span className="inline-flex items-center gap-2">
+                        <Upload className="size-4" strokeWidth={1.75} />
+                        {form.file || "Attach a brief, spec, or reference (optional)"}
+                      </span>
+                      <span className="rounded-lg border border-border bg-background px-2.5 py-1 text-xs font-semibold text-ink">
+                        Browse
+                      </span>
+                      <input
+                        type="file"
+                        className="sr-only"
+                        onChange={(e) => setForm({ ...form, file: e.target.files?.[0]?.name || "" })}
+                      />
+                    </label>
+                  </Field>
+                </div>
+
+                <div className="mt-6 flex flex-wrap items-center justify-between gap-4">
+                  <p className="text-xs text-ink-muted">
+                    By submitting you agree to our{" "}
+                    <a href="/privacy" className="text-accent hover:underline">
+                      Privacy Policy
+                    </a>
+                    .
+                  </p>
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    className="group inline-flex items-center gap-1.5 rounded-xl bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground transition-all hover:-translate-y-0.5 hover:bg-secondary disabled:opacity-50"
+                  >
+                    {loading ? "Sending..." : "Send message"} <ArrowUpRight className="size-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                  </button>
+                </div>
+              </form>
+            )}
 
             <div className="mt-14">
               <h3 className="font-display text-3xl font-semibold text-ink md:text-4xl">
@@ -331,30 +352,7 @@ Attached File: ${form.file || "None"}
         </div>
       </Section>
 
-      {/* CONFIRMATION MODAL */}
-      <Modal
-        open={confirm}
-        onClose={() => setConfirm(false)}
-        title="Message received"
-        size="md"
-      >
-        <div className="grid gap-5 text-center">
-          <div className="mx-auto inline-flex size-16 items-center justify-center rounded-full bg-success/10 text-success">
-            <CheckCircle2 className="size-8" strokeWidth={1.75} />
-          </div>
-          <p className="text-base leading-relaxed text-ink">
-            Thank you for contacting Govitrix. We have successfully received your inquiry. Our team
-            will review your requirements and get back to you shortly.
-          </p>
-          <button
-            type="button"
-            onClick={() => setConfirm(false)}
-            className="mx-auto inline-flex items-center gap-1.5 rounded-xl bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground hover:bg-secondary"
-          >
-            Close
-          </button>
-        </div>
-      </Modal>
+
 
       <style>{`
         .input {
