@@ -106,7 +106,7 @@ export function CostCalculator({ onRequestProposal }: { onRequestProposal?: () =
           </p>
           <button
             type="button"
-            onClick={onRequestProposal}
+            onClick={onRequestProposal || (() => window.dispatchEvent(new Event("govitrix:open-proposal")))}
             className="mt-6 inline-flex w-full items-center justify-center gap-1.5 rounded-xl bg-background px-4 py-3 text-sm font-semibold text-primary shadow-soft transition-all hover:shadow-elevated"
           >
             Get a detailed proposal <ArrowRight className="size-4" />
