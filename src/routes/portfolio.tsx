@@ -116,7 +116,7 @@ function PortfolioPage() {
         )}
       </Section>
 
-      <CTASection title="See a project you'd like to learn more about?" />
+      <CTASection />
     </>
   );
 }

@@ -133,11 +133,7 @@ function InsightsPage() {
         )}
       </Modal>
 
-      <CTASection
-        title="Want ideas like these in your inbox?"
-        description="Subscribe to the Govitrix newsletter — one well-crafted email a month. Enter your email below to subscribe directly."
-        showNewsletter={true}
-      />
+      <CTASection />
     </>
   );
 }

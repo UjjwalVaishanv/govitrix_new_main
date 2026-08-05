@@ -119,6 +119,23 @@ export function CTASection({
   const [subscribedEmail, setSubscribedEmail] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const handlePrimaryClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (primary.label.toLowerCase().includes("discovery call")) {
+      e.preventDefault();
+      window.dispatchEvent(new Event("govitrix:open-discovery"));
+    }
+  };
+
+  const handleSecondaryClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (
+      secondary.label.toLowerCase().includes("requirements") ||
+      secondary.label.toLowerCase().includes("proposal")
+    ) {
+      e.preventDefault();
+      window.dispatchEvent(new Event("govitrix:open-proposal"));
+    }
+  };
+
   const handleSubscribe = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email.trim()) return;
@@ -206,6 +223,7 @@ export function CTASection({
               <div className="flex flex-col items-start gap-3 md:items-end">
                 <Link
                   to={primary.to}
+                  onClick={handlePrimaryClick}
                   className="group inline-flex items-center gap-2 rounded-xl bg-background px-6 py-3.5 text-sm font-semibold text-primary shadow-soft transition-all hover:-translate-y-0.5 hover:shadow-elevated"
                 >
                   {primary.label}
@@ -213,13 +231,17 @@ export function CTASection({
                 </Link>
                 <Link
                   to={secondary.to}
+                  onClick={handleSecondaryClick}
                   className="group inline-flex items-center gap-2 rounded-xl border border-primary-foreground/30 bg-primary-foreground/5 px-6 py-3.5 text-sm font-semibold text-primary-foreground transition-all hover:-translate-y-0.5 hover:bg-primary-foreground/10"
                 >
                   <FileText className="size-4" strokeWidth={1.75} />
                   {secondary.label}
                 </Link>
                 <p className="mt-1 text-xs text-primary-foreground/80 md:text-right">
-                  Prefer sharing details? Submit through our contact form.
+                  Prefer sharing details?{" "}
+                  <Link to="/contact" className="font-semibold text-primary-foreground underline transition-colors hover:text-success">
+                    Submit through our contact form.
+                  </Link>
                 </p>
               </div>
             )}

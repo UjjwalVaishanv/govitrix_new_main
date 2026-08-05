@@ -138,10 +138,7 @@ function ServicesPage() {
         </div>
       </Section>
 
-      <CTASection
-        title="Not sure where to start?"
-        description="Book a free 30-minute discovery call and we'll help map the right approach for your goals. Prefer to share requirements first? Use our contact form."
-      />
+      <CTASection />
     </>
   );
 }

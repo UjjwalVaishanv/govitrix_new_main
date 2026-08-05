@@ -196,10 +196,7 @@ function AboutPage() {
         </div>
       </Section>
 
-      <CTASection
-        title="Like how we think? Let's build together."
-        description="Book a free 30-minute discovery call to explore how Govitrix can help — or share your requirements through our contact form and we'll respond within one business day."
-      />
+      <CTASection />
     </>
   );
 }
