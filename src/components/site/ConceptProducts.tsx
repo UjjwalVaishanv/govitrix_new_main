@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ArrowRight, Sparkles, Check, ExternalLink, Filter, Layers, Zap } from "lucide-react";
+import { ArrowRight, Sparkles, Check, ExternalLink, Filter, Layers, Zap, ChevronLeft, ChevronRight } from "lucide-react";
 import { Modal } from "./CTADialogs";
 
 type Product = {
@@ -260,31 +260,8 @@ export function ConceptProductsShowcase() {
       <Modal open={!!active} onClose={() => setActive(null)} title={active?.name || ""} description={active?.tagline} size="xl">
         {active && (
           <div className="grid gap-8">
-            {/* Header Screenshot */}
-            <div className="relative overflow-hidden rounded-2xl border border-border bg-surface">
-              <img
-                src={active.screenshots[0]}
-                alt={active.name}
-                className="max-h-80 w-full object-cover object-top"
-              />
-            </div>
-
-            {/* Screenshots Gallery if available */}
-            {active.screenshots.length > 1 && (
-              <div>
-                <p className="eyebrow mb-3">Product Screens</p>
-                <div className="grid grid-cols-2 gap-3">
-                  {active.screenshots.map((src, i) => (
-                    <img
-                      key={i}
-                      src={src}
-                      alt={`${active.name} screen ${i + 1}`}
-                      className="h-40 w-full rounded-xl border border-border object-cover object-top shadow-soft"
-                    />
-                  ))}
-                </div>
-              </div>
-            )}
+            {/* Interactive Image Slider */}
+            <ImageSlider screenshots={active.screenshots} title={active.name} />
 
             {/* Business Challenge & Solution */}
             <div className="grid gap-6 md:grid-cols-2">
@@ -343,6 +320,80 @@ export function ConceptProductsShowcase() {
           </div>
         )}
       </Modal>
+    </div>
+  );
+}
+
+function ImageSlider({ screenshots, title }: { screenshots: string[]; title: string }) {
+  const [activeIdx, setActiveIdx] = useState(0);
+
+  if (!screenshots || screenshots.length === 0) return null;
+
+  const prev = () => setActiveIdx((i) => (i === 0 ? screenshots.length - 1 : i - 1));
+  const next = () => setActiveIdx((i) => (i === screenshots.length - 1 ? 0 : i + 1));
+
+  return (
+    <div className="space-y-3">
+      <div className="group relative overflow-hidden rounded-2xl border border-border bg-surface shadow-soft">
+        <img
+          src={screenshots[activeIdx]}
+          alt={`${title} screenshot ${activeIdx + 1}`}
+          className="h-[300px] md:h-[400px] w-full object-cover object-top transition-all duration-300"
+        />
+
+        {screenshots.length > 1 && (
+          <>
+            {/* Left Arrow */}
+            <button
+              type="button"
+              onClick={prev}
+              aria-label="Previous screenshot"
+              className="absolute left-3 top-1/2 -translate-y-1/2 inline-flex size-10 items-center justify-center rounded-full border border-border bg-background/90 text-ink shadow-elevated transition-all hover:bg-background hover:scale-105 active:scale-95"
+            >
+              <ChevronLeft className="size-5" />
+            </button>
+
+            {/* Right Arrow */}
+            <button
+              type="button"
+              onClick={next}
+              aria-label="Next screenshot"
+              className="absolute right-3 top-1/2 -translate-y-1/2 inline-flex size-10 items-center justify-center rounded-full border border-border bg-background/90 text-ink shadow-elevated transition-all hover:bg-background hover:scale-105 active:scale-95"
+            >
+              <ChevronRight className="size-5" />
+            </button>
+
+            {/* Counter Badge */}
+            <div className="absolute bottom-3 right-3 rounded-full border border-border bg-background/90 px-3 py-1 text-xs font-semibold text-ink backdrop-blur-md">
+              {activeIdx + 1} / {screenshots.length}
+            </div>
+          </>
+        )}
+      </div>
+
+      {/* Thumbnails strip */}
+      {screenshots.length > 1 && (
+        <div className="flex items-center gap-2.5 overflow-x-auto pb-1">
+          {screenshots.map((src, i) => (
+            <button
+              key={i}
+              type="button"
+              onClick={() => setActiveIdx(i)}
+              className={`relative shrink-0 overflow-hidden rounded-xl border transition-all ${
+                activeIdx === i
+                  ? "border-accent ring-2 ring-accent/30 scale-105"
+                  : "border-border opacity-65 hover:opacity-100"
+              }`}
+            >
+              <img
+                src={src}
+                alt={`${title} thumbnail ${i + 1}`}
+                className="h-16 w-28 object-cover object-top"
+              />
+            </button>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
