@@ -14,7 +14,7 @@ type Product = {
   stack: string[];
   results: { value: string; label: string }[];
   accent: string;
-  badgeColor: string;
+  dotColor: string;
   screenshots: string[];
 };
 
@@ -42,7 +42,7 @@ export const conceptProducts: Product[] = [
       { value: "3.1x", label: "Faster admin workflows" },
     ],
     accent: "from-blue-600/20 via-indigo-600/10 to-teal-500/20",
-    badgeColor: "bg-blue-500/10 text-blue-500 border-blue-500/20",
+    dotColor: "bg-blue-500",
     screenshots: [
       "https://iad.microlink.io/0WR0VC9roNYzpfEZ3BhA4hVcuUIQ03MD-EfvhuBFTWFzqz5exTs9_Sek03QywdU2u_aW7a8ckWVg9UPYv0L8ZA.png",
       "https://iad.microlink.io/T6j31wxdE6G3aJiEes61c2cxF_EQpmN4uPw46cZSw6VZhOEhuOH2nuSx4WzicHV6UZCiaZWisnsX2U8StRLy7w.png",
@@ -72,7 +72,7 @@ export const conceptProducts: Product[] = [
       { value: "4.8★", label: "App store rating" },
     ],
     accent: "from-emerald-600/20 via-teal-600/10 to-cyan-500/20",
-    badgeColor: "bg-emerald-500/10 text-emerald-500 border-emerald-500/20",
+    dotColor: "bg-emerald-500",
     screenshots: [
       "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&q=80&auto=format&fit=crop",
       "https://images.unsplash.com/photo-1559526324-4b87b5e36e44?w=1200&q=80&auto=format&fit=crop",
@@ -101,7 +101,7 @@ export const conceptProducts: Product[] = [
       { value: "97%", label: "Grader agreement" },
     ],
     accent: "from-purple-600/20 via-pink-600/10 to-indigo-500/20",
-    badgeColor: "bg-purple-500/10 text-purple-500 border-purple-500/20",
+    dotColor: "bg-purple-500",
     screenshots: [
       "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=1200&q=80&auto=format&fit=crop",
       "https://images.unsplash.com/photo-1501504905252-473c47e087f8?w=1200&q=80&auto=format&fit=crop",
@@ -130,7 +130,7 @@ export const conceptProducts: Product[] = [
       { value: "6h/wk", label: "Saved per rep" },
     ],
     accent: "from-amber-600/20 via-orange-600/10 to-rose-500/20",
-    badgeColor: "bg-amber-500/10 text-amber-500 border-amber-500/20",
+    dotColor: "bg-amber-500",
     screenshots: [
       "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&q=80&auto=format&fit=crop",
       "https://images.unsplash.com/photo-1542744094-3a31727202b3?w=1200&q=80&auto=format&fit=crop",
@@ -159,7 +159,7 @@ export const conceptProducts: Product[] = [
       { value: "100%", label: "Auditable actions" },
     ],
     accent: "from-cyan-600/20 via-blue-600/10 to-indigo-500/20",
-    badgeColor: "bg-cyan-500/10 text-cyan-500 border-cyan-500/20",
+    dotColor: "bg-cyan-500",
     screenshots: [
       "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=1200&q=80&auto=format&fit=crop",
       "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=1200&q=80&auto=format&fit=crop",
@@ -224,7 +224,8 @@ export function ConceptProductsShowcase() {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent" />
                 <div className="absolute top-3 left-3 flex gap-2">
-                  <span className={`inline-flex items-center gap-1 rounded-full border px-2.5 py-0.5 text-[11px] font-bold backdrop-blur-md ${p.badgeColor}`}>
+                  <span className="inline-flex items-center gap-1.5 rounded-full border border-border/80 bg-background/95 px-3 py-1 text-xs font-semibold text-ink shadow-soft backdrop-blur-md">
+                    <span className={`size-2 rounded-full ${p.dotColor}`} />
                     {p.category}
                   </span>
                 </div>
