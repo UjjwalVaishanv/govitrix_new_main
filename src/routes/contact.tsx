@@ -74,6 +74,7 @@ function ContactPage() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [confirm, setConfirm] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [openFaq, setOpenFaq] = useState<number | null>(0);
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
