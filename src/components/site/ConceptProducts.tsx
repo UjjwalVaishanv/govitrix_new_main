@@ -206,60 +206,9 @@ export function ConceptProductsShowcase() {
         })}
       </div>
 
-      {/* Featured Main Project Card */}
-      {featured && (
-        <div
-          onClick={() => setActive(featured)}
-          className="group relative cursor-pointer overflow-hidden rounded-3xl border border-border bg-background shadow-card transition-all hover:-translate-y-1 hover:border-accent/40 hover:shadow-elevated"
-        >
-          <div className="grid lg:grid-cols-12">
-            {/* Left: Image / Visual Preview */}
-            <div className="relative min-h-[300px] overflow-hidden lg:col-span-7">
-              <img
-                src={featured.screenshots[0]}
-                alt={featured.name}
-                className="h-full w-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent lg:bg-gradient-to-r lg:from-transparent lg:via-background/40 lg:to-background" />
-              
-              <div className="absolute top-4 left-4 flex flex-wrap gap-2">
-                <span className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-bold backdrop-blur-md ${featured.badgeColor}`}>
-                  <Zap className="size-3" /> Featured Project
-                </span>
-                <span className="inline-flex items-center gap-1 rounded-full border border-border/60 bg-background/80 px-3 py-1 text-xs font-medium text-ink backdrop-blur-md">
-                  {featured.category}
-                </span>
-              </div>
-            </div>
-
-            {/* Right: Content details */}
-            <div className="flex flex-col justify-between p-8 lg:col-span-5 lg:p-10">
-              <div>
-                <p className="text-xs font-bold uppercase tracking-wider text-accent">{featured.tagline}</p>
-                <h3 className="mt-2 font-display text-3xl font-bold text-ink md:text-4xl">{featured.name}</h3>
-                <p className="mt-4 text-sm leading-relaxed text-ink-soft">{featured.description}</p>
-              </div>
-
-              <div className="mt-8 flex items-center justify-between gap-4 pt-6 border-t border-border">
-                <div className="flex flex-wrap gap-1.5">
-                  {featured.stack.slice(0, 4).map((tech) => (
-                    <span key={tech} className="rounded-md border border-border bg-surface px-2.5 py-1 text-[11px] font-medium text-ink-soft">
-                      {tech}
-                    </span>
-                  ))}
-                </div>
-                <span className="inline-flex items-center gap-1.5 rounded-xl bg-primary px-4 py-2.5 text-xs font-semibold text-primary-foreground transition-all group-hover:bg-secondary">
-                  Case Study <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-1" />
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Grid of Other Projects */}
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-2">
-        {gridProducts.map((p) => (
+      {/* Grid of Projects (Uniform card sizes) */}
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {filteredProducts.map((p) => (
           <div
             key={p.slug}
             onClick={() => setActive(p)}
@@ -267,13 +216,13 @@ export function ConceptProductsShowcase() {
           >
             <div>
               {/* Image Preview */}
-              <div className="relative h-56 overflow-hidden">
+              <div className="relative h-52 overflow-hidden">
                 <img
                   src={p.screenshots[0]}
                   alt={p.name}
                   className="h-full w-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-background via-background/30 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent" />
                 <div className="absolute top-3 left-3 flex gap-2">
                   <span className={`inline-flex items-center gap-1 rounded-full border px-2.5 py-0.5 text-[11px] font-bold backdrop-blur-md ${p.badgeColor}`}>
                     {p.category}
@@ -283,14 +232,14 @@ export function ConceptProductsShowcase() {
 
               {/* Card Body */}
               <div className="p-6">
-                <h4 className="font-display text-2xl font-bold text-ink group-hover:text-accent transition-colors">{p.name}</h4>
+                <h4 className="font-display text-xl font-bold text-ink group-hover:text-accent transition-colors">{p.name}</h4>
                 <p className="mt-1 text-xs font-semibold text-accent">{p.tagline}</p>
                 <p className="mt-3 line-clamp-2 text-sm text-ink-soft leading-relaxed">{p.description}</p>
               </div>
             </div>
 
             {/* Footer */}
-            <div className="px-6 pb-6 pt-2 flex items-center justify-between border-t border-border/50">
+            <div className="px-6 pb-6 pt-3 flex items-center justify-between border-t border-border/50">
               <div className="flex flex-wrap gap-1.5">
                 {p.stack.slice(0, 3).map((t) => (
                   <span key={t} className="rounded-md border border-border bg-surface px-2 py-0.5 text-[10px] font-medium text-ink-soft">
@@ -299,7 +248,7 @@ export function ConceptProductsShowcase() {
                 ))}
               </div>
               <span className="inline-flex items-center gap-1 text-xs font-semibold text-ink group-hover:text-accent transition-colors">
-                View Case Study <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-1" />
+                Case Study <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-1" />
               </span>
             </div>
           </div>
