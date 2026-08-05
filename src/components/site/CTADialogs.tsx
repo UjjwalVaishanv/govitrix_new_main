@@ -93,6 +93,7 @@ function DropdownSelect({
   icon,
   onChange,
   hint,
+  error,
 }: {
   label: string;
   required?: boolean;
@@ -102,6 +103,7 @@ function DropdownSelect({
   icon?: ReactNode;
   onChange: (v: string) => void;
   hint?: string;
+  error?: string;
 }) {
   const [open, setOpen] = useState(false);
   return (
@@ -115,8 +117,9 @@ function DropdownSelect({
           <button
             type="button"
             className={cn(
-              "mt-1.5 flex w-full items-center gap-2 rounded-xl border border-border bg-background px-3.5 py-2.5 text-left text-sm transition-all hover:border-border-strong focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20",
-              !value && "text-ink-muted",
+              "mt-1.5 flex w-full items-center gap-2 rounded-xl border bg-background px-3.5 py-2.5 text-left text-sm transition-all hover:border-border-strong focus:outline-none focus:ring-2 focus:ring-accent/20",
+              error ? "border-destructive focus:border-destructive" : "border-border focus:border-accent",
+              !value && "text-ink-muted"
             )}
           >
             {icon && <span className="shrink-0 text-ink-soft">{icon}</span>}
@@ -138,7 +141,7 @@ function DropdownSelect({
                 "flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm transition-colors",
                 value === opt
                   ? "bg-accent/10 font-medium text-ink"
-                  : "text-ink-soft hover:bg-surface hover:text-ink",
+                  : "text-ink-soft hover:bg-surface hover:text-ink"
               )}
             >
               {value === opt && <Check className="size-3.5 shrink-0 text-accent" />}
@@ -147,7 +150,7 @@ function DropdownSelect({
           ))}
         </PopoverContent>
       </Popover>
-      {hint && <p className="mt-1.5 text-xs text-ink-muted">{hint}</p>}
+      {error ? <p className="mt-1 text-xs font-medium text-destructive">{error}</p> : hint ? <p className="mt-1.5 text-xs text-ink-muted">{hint}</p> : null}
     </div>
   );
 }
@@ -159,12 +162,14 @@ function DatePickerField({
   value,
   onChange,
   disableBefore,
+  error,
 }: {
   label: string;
   required?: boolean;
   value: Date | undefined;
   onChange: (d: Date | undefined) => void;
   disableBefore?: Date;
+  error?: string;
 }) {
   const [open, setOpen] = useState(false);
   return (
@@ -178,8 +183,9 @@ function DatePickerField({
           <button
             type="button"
             className={cn(
-              "mt-1.5 flex w-full items-center gap-2 rounded-xl border border-border bg-background px-3.5 py-2.5 text-left text-sm transition-all hover:border-border-strong focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20",
-              !value && "text-ink-muted",
+              "mt-1.5 flex w-full items-center gap-2 rounded-xl border bg-background px-3.5 py-2.5 text-left text-sm transition-all hover:border-border-strong focus:outline-none focus:ring-2 focus:ring-accent/20",
+              error ? "border-destructive focus:border-destructive" : "border-border focus:border-accent",
+              !value && "text-ink-muted"
             )}
           >
             <CalendarIcon className="size-4 shrink-0 text-ink-soft" />
@@ -202,6 +208,7 @@ function DatePickerField({
           />
         </PopoverContent>
       </Popover>
+      {error && <p className="mt-1 text-xs font-medium text-destructive">{error}</p>}
     </div>
   );
 }
@@ -233,13 +240,29 @@ export function DiscoveryDialog({ open, onClose }: { open: boolean; onClose: () 
   const [time, setTime] = useState<string>("");
   const [sent, setSent] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
-  const canSubmit =
-    form.name.trim() && form.company.trim() && form.email.trim() &&
-    form.phone.trim() && form.country.trim() && form.service && date && time;
+  const validate = () => {
+    const errs: Record<string, string> = {};
+    if (!form.name.trim()) errs.name = "Full name is required";
+    if (!form.company.trim()) errs.company = "Company name is required";
+    if (!form.email.trim()) {
+      errs.email = "Work email is required";
+    } else if (!/\S+@\S+\.\S+/.test(form.email.trim())) {
+      errs.email = "Please enter a valid work email address";
+    }
+    if (!form.phone.trim()) errs.phone = "Phone number is required";
+    if (!form.country.trim()) errs.country = "Country is required";
+    if (!form.service) errs.service = "Please select a service interest";
+    if (!date) errs.date = "Please pick a preferred date";
+    if (!time) errs.time = "Please select a time slot";
+
+    setErrors(errs);
+    return Object.keys(errs).length === 0;
+  };
 
   const reset = () => {
     setForm({ name: "", company: "", email: "", phone: "", country: "", service: "", notes: "" });
@@ -247,6 +270,7 @@ export function DiscoveryDialog({ open, onClose }: { open: boolean; onClose: () 
     setTime("");
     setSent(false);
     setLoading(false);
+    setErrors({});
   };
 
   const handleClose = () => {
@@ -254,9 +278,9 @@ export function DiscoveryDialog({ open, onClose }: { open: boolean; onClose: () 
     setTimeout(reset, 300);
   };
 
-  const submit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!canSubmit || loading) return;
+  const submit = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    if (!validate() || loading) return;
 
     setLoading(true);
     const formattedDate = date ? format(date, "EEEE, MMMM d, yyyy") : "";
@@ -318,9 +342,9 @@ Additional Notes: ${form.notes || "None"}
           <div className="flex items-center justify-between gap-3">
             <p className="text-xs text-ink-muted">We'll confirm your slot by email within a few business hours.</p>
             <button
-              type="submit"
-              form="discovery-form"
-              disabled={!canSubmit || loading}
+              type="button"
+              onClick={() => submit()}
+              disabled={loading}
               className="inline-flex items-center gap-1.5 rounded-xl bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-soft transition-all hover:-translate-y-0.5 hover:bg-secondary disabled:opacity-50 disabled:hover:translate-y-0"
             >
               {loading ? "Booking..." : "Confirm booking"}
@@ -358,13 +382,13 @@ Additional Notes: ${form.notes || "None"}
           </button>
         </div>
       ) : (
-        <form id="discovery-form" onSubmit={submit} className="grid gap-6">
+        <form id="discovery-form" onSubmit={(e) => { e.preventDefault(); submit(); }} className="grid gap-6">
           <div className="grid gap-4 sm:grid-cols-2">
-            <Field label="Full name" required placeholder="e.g. Priya Sharma" value={form.name} onChange={(v) => setForm({ ...form, name: v })} />
-            <Field label="Company name" required placeholder="e.g. Acme Pvt. Ltd." value={form.company} onChange={(v) => setForm({ ...form, company: v })} />
-            <Field label="Work email" required type="email" placeholder="you@company.com" value={form.email} onChange={(v) => setForm({ ...form, email: v })} />
-            <Field label="Phone number" required type="tel" placeholder="+91 98765 43210" value={form.phone} onChange={(v) => setForm({ ...form, phone: v })} />
-            <Field label="Country" required placeholder="e.g. India" value={form.country} onChange={(v) => setForm({ ...form, country: v })} />
+            <Field label="Full name" required placeholder="e.g. Priya Sharma" value={form.name} error={errors.name} onChange={(v) => setForm({ ...form, name: v })} />
+            <Field label="Company name" required placeholder="e.g. Acme Pvt. Ltd." value={form.company} error={errors.company} onChange={(v) => setForm({ ...form, company: v })} />
+            <Field label="Work email" required type="email" placeholder="you@company.com" value={form.email} error={errors.email} onChange={(v) => setForm({ ...form, email: v })} />
+            <Field label="Phone number" required type="tel" placeholder="+91 98765 43210" value={form.phone} error={errors.phone} onChange={(v) => setForm({ ...form, phone: v })} />
+            <Field label="Country" required placeholder="e.g. India" value={form.country} error={errors.country} onChange={(v) => setForm({ ...form, country: v })} />
             <DropdownSelect
               label="Service interest"
               required
@@ -372,6 +396,7 @@ Additional Notes: ${form.notes || "None"}
               value={form.service}
               options={serviceOptions}
               icon={<Briefcase className="size-4" />}
+              error={errors.service}
               onChange={(v) => setForm({ ...form, service: v })}
             />
           </div>
@@ -383,6 +408,7 @@ Additional Notes: ${form.notes || "None"}
               value={date}
               onChange={setDate}
               disableBefore={today}
+              error={errors.date}
             />
             <DropdownSelect
               label="Preferred time"
@@ -391,6 +417,7 @@ Additional Notes: ${form.notes || "None"}
               value={time}
               options={timeSlots}
               icon={<Clock className="size-4" />}
+              error={errors.time}
               onChange={setTime}
               hint="Business hours · your local time"
             />
@@ -424,18 +451,42 @@ export function ProposalDialog({ open, onClose }: { open: boolean; onClose: () =
   const [step, setStep] = useState(1);
   const [sent, setSent] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
   const [form, setForm] = useState({
     name: "", company: "", email: "", phone: "", country: "",
     industry: "", budget: "", type: "", timeline: "",
     requirements: "", fileName: "",
   });
 
-  const canContinueStep1 = Boolean(form.name.trim() && form.company.trim() && form.email.trim());
+  const validateStep1 = () => {
+    const errs: Record<string, string> = {};
+    if (!form.name.trim()) errs.name = "Full name is required";
+    if (!form.company.trim()) errs.company = "Company name is required";
+    if (!form.email.trim()) {
+      errs.email = "Work email is required";
+    } else if (!/\S+@\S+\.\S+/.test(form.email.trim())) {
+      errs.email = "Please enter a valid work email address";
+    }
+    setErrors(errs);
+    return Object.keys(errs).length === 0;
+  };
+
+  const validateStep3 = () => {
+    const errs: Record<string, string> = {};
+    if (!form.requirements.trim()) {
+      errs.requirements = "Please specify your project requirements";
+    } else if (form.requirements.trim().length < 10) {
+      errs.requirements = "Please provide a bit more detail (min 10 characters)";
+    }
+    setErrors(errs);
+    return Object.keys(errs).length === 0;
+  };
 
   const reset = () => {
     setStep(1);
     setSent(false);
     setLoading(false);
+    setErrors({});
     setForm({
       name: "", company: "", email: "", phone: "", country: "",
       industry: "", budget: "", type: "", timeline: "",
@@ -449,19 +500,23 @@ export function ProposalDialog({ open, onClose }: { open: boolean; onClose: () =
   };
 
   const next = () => setStep((s) => Math.min(3, s + 1));
-  const back = () => setStep((s) => Math.max(1, s - 1));
+  const back = () => { setErrors({}); setStep((s) => Math.max(1, s - 1)); };
   
   const handleContinue = () => {
-    if (step === 1 && !canContinueStep1) return;
+    if (step === 1) {
+      if (!validateStep1()) return;
+    }
+    setErrors({});
     next();
   };
 
-  const submit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const submit = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
     if (step < 3) {
       handleContinue();
       return;
     }
+    if (!validateStep3()) return;
     if (loading) return;
 
     setLoading(true);
@@ -527,9 +582,9 @@ Uploaded Brief: ${form.fileName || "None"}
           <div className="flex items-center justify-between gap-3">
             <button type="button" onClick={back} disabled={step === 1 || loading} className="rounded-xl border border-border px-4 py-2.5 text-sm font-semibold text-ink-soft disabled:opacity-40 hover:bg-surface">Back</button>
             {step < 3 ? (
-              <button type="button" onClick={handleContinue} disabled={step === 1 && !canContinueStep1} className="rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground hover:bg-secondary disabled:opacity-50">Continue</button>
+              <button type="button" onClick={handleContinue} className="rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground hover:bg-secondary">Continue</button>
             ) : (
-              <button type="submit" form="proposal-form" disabled={loading} className="rounded-xl bg-accent px-5 py-2.5 text-sm font-semibold text-accent-foreground shadow-soft hover:opacity-90 disabled:opacity-50">
+              <button type="button" onClick={() => submit()} disabled={loading} className="rounded-xl bg-accent px-5 py-2.5 text-sm font-semibold text-accent-foreground shadow-soft hover:opacity-90 disabled:opacity-50">
                 {loading ? "Submitting..." : "Submit request"}
               </button>
             )}
@@ -544,10 +599,10 @@ Uploaded Brief: ${form.fileName || "None"}
           <p className="mt-2 max-w-md mx-auto text-sm text-ink-soft">
             Our team will review your requirements and provide a proposal to <span className="font-medium text-ink">{form.email}</span> within 24–48 hours.
           </p>
-          <button onClick={onClose} className="mt-6 inline-flex rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground hover:bg-secondary">Close</button>
+          <button onClick={handleClose} className="mt-6 inline-flex rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground hover:bg-secondary">Close</button>
         </div>
       ) : (
-        <form id="proposal-form" onSubmit={submit} className="grid gap-6">
+        <form id="proposal-form" onSubmit={(e) => { e.preventDefault(); submit(); }} className="grid gap-6">
           <div className="flex items-center gap-2 text-xs font-medium text-ink-muted">
             {[1, 2, 3].map((n) => (
               <div key={n} className="flex flex-1 items-center gap-2">
@@ -560,11 +615,11 @@ Uploaded Brief: ${form.fileName || "None"}
 
           {step === 1 && (
             <div className="grid gap-4 sm:grid-cols-2">
-              <Field label="Full name" required placeholder="e.g. Rahul Verma" value={form.name} onChange={(v) => setForm({ ...form, name: v })} />
-              <Field label="Company" required placeholder="e.g. Nexus Solutions" value={form.company} onChange={(v) => setForm({ ...form, company: v })} />
-              <Field label="Work email" required type="email" placeholder="you@company.com" value={form.email} onChange={(v) => setForm({ ...form, email: v })} />
-              <Field label="Phone" type="tel" placeholder="+91 98765 43210" value={form.phone} onChange={(v) => setForm({ ...form, phone: v })} />
-              <Field label="Country" placeholder="e.g. India" value={form.country} onChange={(v) => setForm({ ...form, country: v })} />
+              <Field label="Full name" required placeholder="e.g. Rahul Verma" value={form.name} error={errors.name} onChange={(v) => setForm({ ...form, name: v })} />
+              <Field label="Company" required placeholder="e.g. Nexus Solutions" value={form.company} error={errors.company} onChange={(v) => setForm({ ...form, company: v })} />
+              <Field label="Work email" required type="email" placeholder="you@company.com" value={form.email} error={errors.email} onChange={(v) => setForm({ ...form, email: v })} />
+              <Field label="Phone" type="tel" placeholder="+91 98765 43210" value={form.phone} error={errors.phone} onChange={(v) => setForm({ ...form, phone: v })} />
+              <Field label="Country" placeholder="e.g. India" value={form.country} error={errors.country} onChange={(v) => setForm({ ...form, country: v })} />
               <DropdownSelect
                 label="Industry"
                 placeholder="Select industry…"
@@ -584,14 +639,18 @@ Uploaded Brief: ${form.fileName || "None"}
           {step === 3 && (
             <div className="grid gap-4">
               <div>
-                <label className="text-sm font-medium text-ink">Requirements & goals</label>
+                <label className="text-sm font-medium text-ink">Requirements & goals <span className="text-destructive">*</span></label>
                 <textarea
                   value={form.requirements}
                   onChange={(e) => setForm({ ...form, requirements: e.target.value })}
                   rows={5}
                   placeholder="What are you building, who is it for, and what does success look like?"
-                  className="mt-1.5 w-full rounded-xl border border-border bg-background px-3.5 py-2.5 text-sm text-ink placeholder:text-ink-muted focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20"
+                  className={cn(
+                    "mt-1.5 w-full rounded-xl border bg-background px-3.5 py-2.5 text-sm text-ink placeholder:text-ink-muted focus:outline-none focus:ring-2 focus:ring-accent/20 transition-all",
+                    errors.requirements ? "border-destructive focus:border-destructive" : "border-border focus:border-accent"
+                  )}
                 />
+                {errors.requirements && <p className="mt-1 text-xs font-medium text-destructive">{errors.requirements}</p>}
               </div>
               <label className="flex cursor-pointer items-center justify-between gap-4 rounded-xl border border-dashed border-border bg-surface px-4 py-4 text-sm text-ink-soft hover:border-border-strong">
                 <div>
@@ -610,18 +669,40 @@ Uploaded Brief: ${form.fileName || "None"}
   );
 }
 
-function Field({ label, value, onChange, required, type = "text", placeholder }: { label: string; value: string; onChange: (v: string) => void; required?: boolean; type?: string; placeholder?: string }) {
+function Field({
+  label,
+  value,
+  onChange,
+  required,
+  type = "text",
+  placeholder,
+  error,
+}: {
+  label: string;
+  value: string;
+  onChange: (v: string) => void;
+  required?: boolean;
+  type?: string;
+  placeholder?: string;
+  error?: string;
+}) {
   return (
     <label className="block">
-      <span className="text-sm font-medium text-ink">{label}{required && <span className="text-destructive"> *</span>}</span>
+      <span className="text-sm font-medium text-ink">
+        {label}
+        {required && <span className="text-destructive"> *</span>}
+      </span>
       <input
         type={type}
-        required={required}
         value={value}
         placeholder={placeholder}
         onChange={(e) => onChange(e.target.value)}
-        className="mt-1.5 w-full rounded-xl border border-border bg-background px-3.5 py-2.5 text-sm text-ink placeholder:text-ink-muted focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20"
+        className={cn(
+          "mt-1.5 w-full rounded-xl border bg-background px-3.5 py-2.5 text-sm text-ink placeholder:text-ink-muted focus:outline-none focus:ring-2 focus:ring-accent/20 transition-all",
+          error ? "border-destructive focus:border-destructive" : "border-border focus:border-accent"
+        )}
       />
+      {error && <p className="mt-1 text-xs font-medium text-destructive">{error}</p>}
     </label>
   );
 }
