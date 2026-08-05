@@ -44,9 +44,9 @@ export const conceptProducts: Product[] = [
     accent: "from-blue-600/20 via-indigo-600/10 to-teal-500/20",
     dotColor: "bg-blue-500",
     screenshots: [
-      "/projects/medicare-hms-1.png",
-      "/projects/medicare-hms-2.png",
-      "/projects/medicare-hms-3.png",
+      "https://iad.microlink.io/0WR0VC9roNYzpfEZ3BhA4hVcuUIQ03MD-EfvhuBFTWFzqz5exTs9_Sek03QywdU2u_aW7a8ckWVg9UPYv0L8ZA.png",
+      "https://iad.microlink.io/T6j31wxdE6G3aJiEes61c2cxF_EQpmN4uPw46cZSw6VZhOEhuOH2nuSx4WzicHV6UZCiaZWisnsX2U8StRLy7w.png",
+      "https://iad.microlink.io/Iewh5PR8tgpi43Sn8ls1VCuuebW9bbkMHxFaxwn59Cxcit49nV0ZH5MgTKKmCuzYunJHEVF9t1-oWkRcr0GUjA.png",
     ],
   },
   {
