@@ -78,7 +78,7 @@ function ServicesPage() {
         eyebrow="Services"
         title="A complete partner for modern product engineering."
         description="From discovery to launch and ongoing growth — senior, opinionated teams that ship outcomes."
-        image="https://images.unsplash.com/photo-1497366216548-37526070297c?w=1920&q=70&auto=format&fit=crop"
+        image="https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=1920&q=70&auto=format&fit=crop"
       >
         <div className="flex flex-wrap gap-3">
           <Link

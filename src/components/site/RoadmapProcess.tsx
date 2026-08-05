@@ -185,7 +185,7 @@ function DesktopRoadmap({
               fontWeight: 800,
               letterSpacing: "0.18em",
               textTransform: "uppercase",
-              color: "rgba(255,255,255,0.2)",
+              color: "rgba(255,255,255,0.75)",
             }}
           >
             Start
@@ -194,7 +194,7 @@ function DesktopRoadmap({
         {/* LIVE label */}
         <div
           className="absolute right-0 top-0 bottom-0 flex items-center pr-3"
-          style={{ borderLeft: "1px solid rgba(255,255,255,0.06)" }}
+          style={{ borderLeft: "1px solid rgba(255,255,255,0.12)" }}
         >
           <span
             style={{
@@ -202,7 +202,7 @@ function DesktopRoadmap({
               fontWeight: 800,
               letterSpacing: "0.18em",
               textTransform: "uppercase",
-              color: "rgba(255,255,255,0.2)",
+              color: "rgba(255,255,255,0.75)",
             }}
           >
             Live
@@ -285,8 +285,8 @@ function DesktopRoadmap({
                   style={{
                     background: isActive
                       ? `radial-gradient(circle at 35% 35%, ${s.accent}ee, ${s.accent}88)`
-                      : "rgba(255,255,255,0.07)",
-                    border: `2px solid ${isActive ? s.accent : "rgba(255,255,255,0.14)"}`,
+                      : "rgba(255,255,255,0.12)",
+                    border: `2px solid ${isActive ? s.accent : "rgba(255,255,255,0.22)"}`,
                     boxShadow: isActive
                       ? `0 0 22px ${s.accentGlow}, 0 0 6px ${s.accent}90`
                       : "none",
@@ -296,7 +296,7 @@ function DesktopRoadmap({
                   <Icon
                     className="size-[18px]"
                     style={{
-                      color: isActive ? "#fff" : "rgba(255,255,255,0.45)",
+                      color: isActive ? "#fff" : "rgba(255,255,255,0.85)",
                       transition: "color 0.3s",
                     }}
                     strokeWidth={2}
@@ -353,8 +353,8 @@ function MilestoneCard({
       onClick={onClick}
       className="group w-full rounded-xl p-3 text-left focus:outline-none transition-all duration-300"
       style={{
-        background: isActive ? s.accentBg : "rgba(255,255,255,0.04)",
-        border: `1px solid ${isActive ? s.accentBorder : "rgba(255,255,255,0.07)"}`,
+        background: isActive ? s.accentBg : "rgba(255,255,255,0.07)",
+        border: `1px solid ${isActive ? s.accentBorder : "rgba(255,255,255,0.15)"}`,
         boxShadow: isActive ? `0 6px 28px ${s.accentGlow}` : "none",
         transform: isActive ? "translateY(-2px)" : "translateY(0)",
       }}
@@ -378,13 +378,13 @@ function MilestoneCard({
       <div className="flex items-baseline justify-between gap-1">
         <span
           className="text-sm font-semibold"
-          style={{ color: "rgba(255,255,255,0.9)" }}
+          style={{ color: "#ffffff" }}
         >
           {s.title}
         </span>
         <span
           className="font-mono text-[11px] font-bold"
-          style={{ color: `${s.accent}60` }}
+          style={{ color: s.accent }}
         >
           {s.n}
         </span>
@@ -392,7 +392,7 @@ function MilestoneCard({
       {/* Body */}
       <p
         className="mt-1 text-[11px] leading-relaxed"
-        style={{ color: "rgba(255,255,255,0.5)" }}
+        style={{ color: "#ffffff" }}
       >
         {s.body}
       </p>
@@ -401,7 +401,7 @@ function MilestoneCard({
         <p
           className="mt-2 pt-2 text-[11px] leading-relaxed"
           style={{
-            color: "rgba(255,255,255,0.72)",
+            color: "#ffffff",
             borderTop: `1px solid ${s.accentBorder}`,
           }}
         >
@@ -500,19 +500,24 @@ function MobileRoadmap({
                     />
                   )}
                   <span
-                    className="relative flex size-[38px] items-center justify-center rounded-full transition-all duration-300"
+                    className="relative flex size-[42px] items-center justify-center rounded-full transition-all duration-300"
                     style={{
                       background: isActive
                         ? `radial-gradient(circle at 35% 35%, ${s.accent}ee, ${s.accent}88)`
-                        : "rgba(255,255,255,0.07)",
-                      border: `2px solid ${isActive ? s.accent : "rgba(255,255,255,0.14)"}`,
-                      boxShadow: isActive ? `0 0 18px ${s.accentGlow}` : "none",
-                      transform: isActive ? "scale(1.15)" : "scale(1)",
+                        : "rgba(255,255,255,0.12)",
+                      border: `2px solid ${isActive ? s.accent : "rgba(255,255,255,0.22)"}`,
+                      boxShadow: isActive
+                        ? `0 0 22px ${s.accentGlow}, 0 0 6px ${s.accent}90`
+                        : "none",
+                      transform: isActive ? "scale(1.18)" : "scale(1)",
                     }}
                   >
                     <Icon
-                      className="size-4"
-                      style={{ color: isActive ? "#fff" : "rgba(255,255,255,0.45)" }}
+                      className="size-[18px]"
+                      style={{
+                        color: isActive ? "#fff" : "rgba(255,255,255,0.85)",
+                        transition: "color 0.3s",
+                      }}
                       strokeWidth={2}
                     />
                   </span>
@@ -551,8 +556,8 @@ function MobileCard({
       onClick={onClick}
       className="w-full max-w-[148px] rounded-xl p-2.5 text-left transition-all duration-300 focus:outline-none"
       style={{
-        background: isActive ? s.accentBg : "rgba(255,255,255,0.04)",
-        border: `1px solid ${isActive ? s.accentBorder : "rgba(255,255,255,0.07)"}`,
+        background: isActive ? s.accentBg : "rgba(255,255,255,0.07)",
+        border: `1px solid ${isActive ? s.accentBorder : "rgba(255,255,255,0.15)"}`,
         boxShadow: isActive ? `0 4px 20px ${s.accentGlow}` : "none",
       }}
     >
@@ -562,16 +567,16 @@ function MobileCard({
       >
         {s.badge}
       </div>
-      <div className="text-[13px] font-semibold" style={{ color: "rgba(255,255,255,0.88)" }}>
+      <div className="text-[13px] font-semibold" style={{ color: "#ffffff" }}>
         {s.title}
       </div>
-      <div className="mt-0.5 text-[11px] leading-snug" style={{ color: "rgba(255,255,255,0.48)" }}>
+      <div className="mt-0.5 text-[11px] leading-snug" style={{ color: "#ffffff" }}>
         {s.body}
       </div>
       {isActive && (
         <p
           className="mt-2 pt-2 text-[11px] leading-relaxed"
-          style={{ color: "rgba(255,255,255,0.7)", borderTop: `1px solid ${s.accentBorder}` }}
+          style={{ color: "#ffffff", borderTop: `1px solid ${s.accentBorder}` }}
         >
           {s.detail}
         </p>

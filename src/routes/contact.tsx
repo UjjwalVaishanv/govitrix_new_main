@@ -97,7 +97,7 @@ function ContactPage() {
         eyebrow="Contact"
         title="Let's build something meaningful."
         description="Tell us about your goals. We typically respond within one business day."
-        image="https://images.unsplash.com/photo-1524749292158-7540c2494485?w=1920&q=70&auto=format&fit=crop"
+        image="https://images.unsplash.com/photo-1531482615713-2afd69097998?w=1920&q=70&auto=format&fit=crop"
       />
 
       <Section>

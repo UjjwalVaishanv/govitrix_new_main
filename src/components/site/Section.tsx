@@ -19,33 +19,40 @@ export function Section({
   className?: string;
   tone?: "default" | "surface" | "dark";
 }) {
+  const isDark = tone === "dark";
   const toneCls =
     tone === "surface"
-      ? "bg-surface"
-      : tone === "dark"
-      ? "bg-ink text-background"
-      : "bg-background";
+      ? "bg-surface text-ink"
+      : isDark
+        ? "bg-ink text-background"
+        : "bg-background text-ink";
 
   return (
-    <section id={id} className={`py-16 md:py-24 ${toneCls} ${className}`}>
-      <div className="container-page">
-        {(eyebrow || title || description) && (
-          <div className="mb-12 max-w-3xl">
-            {eyebrow && <p className="eyebrow">{eyebrow}</p>}
-            {title && (
-              <h2 className="mt-3 text-balance font-display text-3xl font-bold tracking-tight md:text-5xl md:leading-[1.1]">
-                {title}
-              </h2>
-            )}
-            {description && (
-              <p className="mt-4 text-pretty text-base text-ink-soft md:text-lg">{description}</p>
-            )}
-          </div>
-        )}
-        {children}
-      </div>
-    </section>
-  );
+  <section id={id} className={`py-16 md:py-24 ${toneCls} ${className}`}>
+    <div className="container-page">
+      {(eyebrow || title || description) && (
+        <div className="mb-12 max-w-3xl">
+          {eyebrow && (
+            <p className={`eyebrow ${isDark ? "!text-cyan-400" : ""}`}>
+              {eyebrow}
+            </p>
+          )}
+          {title && (
+            <h2 className={`mt-3 text-balance font-display text-3xl font-bold tracking-tight md:text-5xl md:leading-[1.1] ${isDark ? "!text-white" : "text-ink"}`}>
+              {title}
+            </h2>
+          )}
+          {description && (
+            <p className={`mt-4 text-pretty text-base md:text-lg ${isDark ? "!text-white" : "text-ink-soft"}`}>
+              {description}
+            </p>
+          )}
+        </div>
+      )}
+      {children}
+    </div>
+  </section>
+);
 }
 
 export function PageHero({
