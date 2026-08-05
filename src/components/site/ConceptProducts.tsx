@@ -136,7 +136,6 @@ export const conceptProducts: Product[] = [
     screenshots: [
       "/projects/sellmate-1.png",
       "/projects/sellmate-2.png",
-      "/projects/sellmate-3.png",
     ],
   },
   {
