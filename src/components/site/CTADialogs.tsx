@@ -430,11 +430,38 @@ export function ProposalDialog({ open, onClose }: { open: boolean; onClose: () =
     requirements: "", fileName: "",
   });
 
+  const canContinueStep1 = Boolean(form.name.trim() && form.company.trim() && form.email.trim());
+
+  const reset = () => {
+    setStep(1);
+    setSent(false);
+    setLoading(false);
+    setForm({
+      name: "", company: "", email: "", phone: "", country: "",
+      industry: "", budget: "", type: "", timeline: "",
+      requirements: "", fileName: "",
+    });
+  };
+
+  const handleClose = () => {
+    onClose();
+    setTimeout(reset, 300);
+  };
+
   const next = () => setStep((s) => Math.min(3, s + 1));
   const back = () => setStep((s) => Math.max(1, s - 1));
   
+  const handleContinue = () => {
+    if (step === 1 && !canContinueStep1) return;
+    next();
+  };
+
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (step < 3) {
+      handleContinue();
+      return;
+    }
     if (loading) return;
 
     setLoading(true);
@@ -491,7 +518,7 @@ Uploaded Brief: ${form.fileName || "None"}
   return (
     <Modal
       open={open}
-      onClose={onClose}
+      onClose={handleClose}
       title="Get a Proposal"
       description="Tell us about your project. Our team will review your requirements and provide a proposal within 24–48 hours."
       size="xl"
@@ -500,7 +527,7 @@ Uploaded Brief: ${form.fileName || "None"}
           <div className="flex items-center justify-between gap-3">
             <button type="button" onClick={back} disabled={step === 1 || loading} className="rounded-xl border border-border px-4 py-2.5 text-sm font-semibold text-ink-soft disabled:opacity-40 hover:bg-surface">Back</button>
             {step < 3 ? (
-              <button type="button" onClick={next} className="rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground hover:bg-secondary">Continue</button>
+              <button type="button" onClick={handleContinue} disabled={step === 1 && !canContinueStep1} className="rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground hover:bg-secondary disabled:opacity-50">Continue</button>
             ) : (
               <button type="submit" form="proposal-form" disabled={loading} className="rounded-xl bg-accent px-5 py-2.5 text-sm font-semibold text-accent-foreground shadow-soft hover:opacity-90 disabled:opacity-50">
                 {loading ? "Submitting..." : "Submit request"}
