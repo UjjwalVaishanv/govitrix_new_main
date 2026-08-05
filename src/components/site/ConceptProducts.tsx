@@ -317,16 +317,6 @@ export function ConceptProductsShowcase() {
                 alt={active.name}
                 className="max-h-80 w-full object-cover object-top"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent" />
-              
-              <div className="absolute bottom-4 inset-x-4 grid grid-cols-3 gap-3">
-                {active.results.map((r) => (
-                  <div key={r.label} className="rounded-xl border border-border bg-background/90 p-4 text-center backdrop-blur shadow-soft">
-                    <p className="font-display text-2xl font-bold text-ink">{r.value}</p>
-                    <p className="mt-1 text-xs font-medium text-ink-muted">{r.label}</p>
-                  </div>
-                ))}
-              </div>
             </div>
 
             {/* Screenshots Gallery if available */}
