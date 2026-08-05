@@ -219,7 +219,7 @@ export function ConceptProductsShowcase() {
           >
             <div>
               {/* Image Preview */}
-              <div className="relative h-52 overflow-hidden">
+              <div className="relative h-52 overflow-hidden bg-surface">
                 <img
                   src={p.screenshots[0]}
                   alt={p.name}
@@ -341,7 +341,7 @@ function ImageSlider({ screenshots, title }: { screenshots: string[]; title: str
         <img
           src={screenshots[activeIdx]}
           alt={`${title} screenshot ${activeIdx + 1}`}
-          className="h-[300px] md:h-[400px] w-full object-cover object-top transition-all duration-300"
+          className="h-[300px] md:h-[420px] w-full object-contain object-top bg-surface/50 p-1 md:p-2 transition-all duration-300"
         />
 
         {screenshots.length > 1 && (
