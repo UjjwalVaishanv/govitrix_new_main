@@ -46,6 +46,7 @@ export const conceptProducts: Product[] = [
     screenshots: [
       "/projects/medicare-hms-1.png",
       "/projects/medicare-hms-2.png",
+      "/projects/medicare-hms-3.png",
     ],
   },
   {
@@ -75,6 +76,7 @@ export const conceptProducts: Product[] = [
     screenshots: [
       "/projects/finbud-1.png",
       "/projects/finbud-2.png",
+      "/projects/finbud-3.png",
     ],
   },
   {
@@ -104,6 +106,7 @@ export const conceptProducts: Product[] = [
     screenshots: [
       "/projects/apexscore-1.png",
       "/projects/apexscore-2.png",
+      "/projects/apexscore-3.png",
     ],
   },
   {
@@ -133,6 +136,7 @@ export const conceptProducts: Product[] = [
     screenshots: [
       "/projects/sellmate-1.png",
       "/projects/sellmate-2.png",
+      "/projects/sellmate-3.png",
     ],
   },
   {
@@ -162,6 +166,7 @@ export const conceptProducts: Product[] = [
     screenshots: [
       "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=1200&q=80&auto=format&fit=crop",
       "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=1200&q=80&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&q=80&auto=format&fit=crop",
     ],
   },
 ];
