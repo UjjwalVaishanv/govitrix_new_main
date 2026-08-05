@@ -73,9 +73,9 @@ function ContactPage() {
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [confirm, setConfirm] = useState(false);
-  const [openFaq, setOpenFaq] = useState<number | null>(0);
+  const [loading, setLoading] = useState(false);
 
-  const submit = (e: React.FormEvent) => {
+  const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     const result = schema.safeParse(form);
     if (!result.success) {
@@ -87,8 +87,47 @@ function ContactPage() {
       return;
     }
     setErrors({});
-    setConfirm(true);
-    setForm({ name: "", email: "", phone: "", company: "", message: "", file: "" });
+    setLoading(true);
+
+    const mailSubject = "new contact form message";
+    const mailMessage = `New Contact Form Inquiry:
+----------------------------------------
+Full Name: ${form.name}
+Work Email: ${form.email}
+Phone Number: ${form.phone}
+Company Name: ${form.company || "N/A"}
+Message: ${form.message}
+Attached File: ${form.file || "None"}
+----------------------------------------`;
+
+    try {
+      await fetch("https://formsubmit.co/ajax/sales@govitrix.com", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          _subject: mailSubject,
+          message: mailMessage,
+          name: form.name,
+          email: form.email,
+          phone: form.phone,
+          company: form.company,
+          userMessage: form.message,
+          file: form.file,
+          _captcha: "false",
+        }),
+      });
+    } catch {
+      const subject = encodeURIComponent(mailSubject);
+      const body = encodeURIComponent(mailMessage);
+      window.location.href = `mailto:sales@govitrix.com?subject=${subject}&body=${body}`;
+    } finally {
+      setLoading(false);
+      setConfirm(true);
+      setForm({ name: "", email: "", phone: "", company: "", message: "", file: "" });
+    }
   };
 
   return (
@@ -248,9 +287,10 @@ function ContactPage() {
                 </p>
                 <button
                   type="submit"
-                  className="group inline-flex items-center gap-1.5 rounded-xl bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground transition-all hover:-translate-y-0.5 hover:bg-secondary"
+                  disabled={loading}
+                  className="group inline-flex items-center gap-1.5 rounded-xl bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground transition-all hover:-translate-y-0.5 hover:bg-secondary disabled:opacity-50"
                 >
-                  Send message <ArrowUpRight className="size-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                  {loading ? "Sending..." : "Send message"} <ArrowUpRight className="size-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                 </button>
               </div>
             </form>

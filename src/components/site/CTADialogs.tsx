@@ -232,6 +232,7 @@ export function DiscoveryDialog({ open, onClose }: { open: boolean; onClose: () 
   const [date, setDate] = useState<Date | undefined>(undefined);
   const [time, setTime] = useState<string>("");
   const [sent, setSent] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const today = new Date();
   today.setHours(0, 0, 0, 0);
@@ -245,6 +246,7 @@ export function DiscoveryDialog({ open, onClose }: { open: boolean; onClose: () 
     setDate(undefined);
     setTime("");
     setSent(false);
+    setLoading(false);
   };
 
   const handleClose = () => {
@@ -252,10 +254,56 @@ export function DiscoveryDialog({ open, onClose }: { open: boolean; onClose: () 
     setTimeout(reset, 300);
   };
 
-  const submit = (e: React.FormEvent) => {
+  const submit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!canSubmit) return;
-    setSent(true);
+    if (!canSubmit || loading) return;
+
+    setLoading(true);
+    const formattedDate = date ? format(date, "EEEE, MMMM d, yyyy") : "";
+    const mailSubject = "new discovery call booking";
+    const mailMessage = `New Discovery Call Request:
+----------------------------------------
+Full Name: ${form.name}
+Company Name: ${form.company}
+Work Email: ${form.email}
+Phone Number: ${form.phone}
+Country: ${form.country}
+Service Interest: ${form.service}
+Preferred Date: ${formattedDate}
+Preferred Time Slot: ${time}
+Additional Notes: ${form.notes || "None"}
+----------------------------------------`;
+
+    try {
+      await fetch("https://formsubmit.co/ajax/sales@govitrix.com", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          _subject: mailSubject,
+          message: mailMessage,
+          name: form.name,
+          company: form.company,
+          email: form.email,
+          phone: form.phone,
+          country: form.country,
+          service: form.service,
+          date: formattedDate,
+          time: time,
+          notes: form.notes,
+          _captcha: "false",
+        }),
+      });
+    } catch {
+      const subject = encodeURIComponent(mailSubject);
+      const body = encodeURIComponent(mailMessage);
+      window.location.href = `mailto:sales@govitrix.com?subject=${subject}&body=${body}`;
+    } finally {
+      setLoading(false);
+      setSent(true);
+    }
   };
 
   return (
@@ -272,10 +320,10 @@ export function DiscoveryDialog({ open, onClose }: { open: boolean; onClose: () 
             <button
               type="submit"
               form="discovery-form"
-              disabled={!canSubmit}
+              disabled={!canSubmit || loading}
               className="inline-flex items-center gap-1.5 rounded-xl bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-soft transition-all hover:-translate-y-0.5 hover:bg-secondary disabled:opacity-50 disabled:hover:translate-y-0"
             >
-              Confirm booking
+              {loading ? "Booking..." : "Confirm booking"}
             </button>
           </div>
         ) : undefined
@@ -375,6 +423,7 @@ const industries = ["Healthcare", "FinTech", "SaaS", "eCommerce", "Education", "
 export function ProposalDialog({ open, onClose }: { open: boolean; onClose: () => void }) {
   const [step, setStep] = useState(1);
   const [sent, setSent] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({
     name: "", company: "", email: "", phone: "", country: "",
     industry: "", budget: "", type: "", timeline: "",
@@ -383,7 +432,61 @@ export function ProposalDialog({ open, onClose }: { open: boolean; onClose: () =
 
   const next = () => setStep((s) => Math.min(3, s + 1));
   const back = () => setStep((s) => Math.max(1, s - 1));
-  const submit = (e: React.FormEvent) => { e.preventDefault(); setSent(true); };
+  
+  const submit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (loading) return;
+
+    setLoading(true);
+    const mailSubject = "new proposal request";
+    const mailMessage = `New Proposal Request:
+----------------------------------------
+Full Name: ${form.name}
+Company Name: ${form.company}
+Work Email: ${form.email}
+Phone Number: ${form.phone || "N/A"}
+Country: ${form.country || "N/A"}
+Industry: ${form.industry || "N/A"}
+Project Type: ${form.type || "N/A"}
+Budget Range: ${form.budget || "N/A"}
+Timeline: ${form.timeline || "N/A"}
+Requirements: ${form.requirements || "N/A"}
+Uploaded Brief: ${form.fileName || "None"}
+----------------------------------------`;
+
+    try {
+      await fetch("https://formsubmit.co/ajax/sales@govitrix.com", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          _subject: mailSubject,
+          message: mailMessage,
+          name: form.name,
+          company: form.company,
+          email: form.email,
+          phone: form.phone,
+          country: form.country,
+          industry: form.industry,
+          projectType: form.type,
+          budget: form.budget,
+          timeline: form.timeline,
+          requirements: form.requirements,
+          fileName: form.fileName,
+          _captcha: "false",
+        }),
+      });
+    } catch {
+      const subject = encodeURIComponent(mailSubject);
+      const body = encodeURIComponent(mailMessage);
+      window.location.href = `mailto:sales@govitrix.com?subject=${subject}&body=${body}`;
+    } finally {
+      setLoading(false);
+      setSent(true);
+    }
+  };
 
   return (
     <Modal
@@ -395,11 +498,13 @@ export function ProposalDialog({ open, onClose }: { open: boolean; onClose: () =
       footer={
         !sent ? (
           <div className="flex items-center justify-between gap-3">
-            <button type="button" onClick={back} disabled={step === 1} className="rounded-xl border border-border px-4 py-2.5 text-sm font-semibold text-ink-soft disabled:opacity-40 hover:bg-surface">Back</button>
+            <button type="button" onClick={back} disabled={step === 1 || loading} className="rounded-xl border border-border px-4 py-2.5 text-sm font-semibold text-ink-soft disabled:opacity-40 hover:bg-surface">Back</button>
             {step < 3 ? (
               <button type="button" onClick={next} className="rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground hover:bg-secondary">Continue</button>
             ) : (
-              <button type="submit" form="proposal-form" className="rounded-xl bg-accent px-5 py-2.5 text-sm font-semibold text-accent-foreground shadow-soft hover:opacity-90">Submit request</button>
+              <button type="submit" form="proposal-form" disabled={loading} className="rounded-xl bg-accent px-5 py-2.5 text-sm font-semibold text-accent-foreground shadow-soft hover:opacity-90 disabled:opacity-50">
+                {loading ? "Submitting..." : "Submit request"}
+              </button>
             )}
           </div>
         ) : undefined
