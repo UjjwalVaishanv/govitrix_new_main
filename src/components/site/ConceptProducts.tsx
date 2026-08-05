@@ -44,9 +44,8 @@ export const conceptProducts: Product[] = [
     accent: "from-blue-600/20 via-indigo-600/10 to-teal-500/20",
     dotColor: "bg-blue-500",
     screenshots: [
-      "https://iad.microlink.io/0WR0VC9roNYzpfEZ3BhA4hVcuUIQ03MD-EfvhuBFTWFzqz5exTs9_Sek03QywdU2u_aW7a8ckWVg9UPYv0L8ZA.png",
-      "https://iad.microlink.io/T6j31wxdE6G3aJiEes61c2cxF_EQpmN4uPw46cZSw6VZhOEhuOH2nuSx4WzicHV6UZCiaZWisnsX2U8StRLy7w.png",
-      "https://iad.microlink.io/Iewh5PR8tgpi43Sn8ls1VCuuebW9bbkMHxFaxwn59Cxcit49nV0ZH5MgTKKmCuzYunJHEVF9t1-oWkRcr0GUjA.png",
+      "/projects/medicare-hms-1.png",
+      "/projects/medicare-hms-2.png",
     ],
   },
   {
@@ -74,8 +73,8 @@ export const conceptProducts: Product[] = [
     accent: "from-emerald-600/20 via-teal-600/10 to-cyan-500/20",
     dotColor: "bg-emerald-500",
     screenshots: [
-      "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&q=80&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1559526324-4b87b5e36e44?w=1200&q=80&auto=format&fit=crop",
+      "/projects/finbud-1.png",
+      "/projects/finbud-2.png",
     ],
   },
   {
@@ -103,8 +102,8 @@ export const conceptProducts: Product[] = [
     accent: "from-purple-600/20 via-pink-600/10 to-indigo-500/20",
     dotColor: "bg-purple-500",
     screenshots: [
-      "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=1200&q=80&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1501504905252-473c47e087f8?w=1200&q=80&auto=format&fit=crop",
+      "/projects/apexscore-1.png",
+      "/projects/apexscore-2.png",
     ],
   },
   {
@@ -132,8 +131,8 @@ export const conceptProducts: Product[] = [
     accent: "from-amber-600/20 via-orange-600/10 to-rose-500/20",
     dotColor: "bg-amber-500",
     screenshots: [
-      "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&q=80&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1542744094-3a31727202b3?w=1200&q=80&auto=format&fit=crop",
+      "/projects/sellmate-1.png",
+      "/projects/sellmate-2.png",
     ],
   },
   {
