@@ -137,32 +137,86 @@ const benefits = [
 function CareersPage() {
   const [viewRole, setViewRole] = useState<Role | null>(null);
   const [applyRole, setApplyRole] = useState<Role | null>(null);
-  const [form, setForm] = useState({
+  const [form, setForm] = useState<{
+    name: string;
+    email: string;
+    phone: string;
+    role: string;
+    message: string;
+    resume: string;
+    resumeFile: File | null;
+  }>({
     name: "",
     email: "",
     phone: "",
     role: "",
     message: "",
     resume: "",
+    resumeFile: null,
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [confirm, setConfirm] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const submit = (e: React.FormEvent) => {
+  const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     const errs: Record<string, string> = {};
     if (!form.name.trim()) errs.name = "Required";
     if (!form.email.trim() || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(form.email)) errs.email = "Valid email required";
     if (!form.phone.trim()) errs.phone = "Required";
     if (!form.role) errs.role = "Please select a role";
-    if (!form.resume) errs.resume = "Please attach your resume";
+    if (!form.resume && !form.resumeFile) errs.resume = "Please attach your resume";
     if (Object.keys(errs).length) {
       setErrors(errs);
       return;
     }
     setErrors({});
-    setConfirm(true);
-    setForm({ name: "", email: "", phone: "", role: "", message: "", resume: "" });
+    setLoading(true);
+
+    const mailSubject = `new career application - ${form.role}`;
+    const mailMessage = `New Job Application Received:
+----------------------------------------
+Full Name: ${form.name}
+Email Address: ${form.email}
+Contact Number: ${form.phone}
+Job Role: ${form.role}
+Message: ${form.message || "None"}
+Upload Resume / CV: ${form.resume || "Attached"}
+----------------------------------------`;
+
+    const formData = new FormData();
+    formData.append("_subject", mailSubject);
+    formData.append("_template", "table");
+    formData.append("_captcha", "false");
+    formData.append("Full Name", form.name);
+    formData.append("Email Address", form.email);
+    formData.append("Contact Number", form.phone);
+    formData.append("Job Role", form.role);
+    formData.append("Message", form.message || "None");
+
+    if (form.resumeFile) {
+      formData.append("attachment", form.resumeFile, form.resumeFile.name);
+      formData.append("file", form.resumeFile, form.resumeFile.name);
+      formData.append("resume", form.resumeFile, form.resumeFile.name);
+    }
+
+    try {
+      await fetch("https://formsubmit.co/ajax/sales@govitrix.com", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+        },
+        body: formData,
+      });
+    } catch {
+      const subject = encodeURIComponent(mailSubject);
+      const body = encodeURIComponent(mailMessage);
+      window.location.href = `mailto:sales@govitrix.com?subject=${subject}&body=${body}`;
+    } finally {
+      setLoading(false);
+      setConfirm(true);
+      setForm({ name: "", email: "", phone: "", role: "", message: "", resume: "", resumeFile: null });
+    }
   };
 
   return (
@@ -312,16 +366,25 @@ function CareersPage() {
                   type="file"
                   accept=".pdf,.doc,.docx"
                   className="sr-only"
-                  onChange={(e) => setForm({ ...form, resume: e.target.files?.[0]?.name || "" })}
+                  onChange={(e) => {
+                    const fileObj = e.target.files?.[0] || null;
+                    setForm((prev) => ({
+                      ...prev,
+                      resumeFile: fileObj,
+                      resume: fileObj ? fileObj.name : "",
+                    }));
+                  }}
                 />
               </label>
             </Field>
           </div>
           <button
             type="submit"
-            className="mt-6 inline-flex items-center gap-1.5 rounded-xl bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground transition-all hover:-translate-y-0.5 hover:bg-secondary"
+            disabled={loading}
+            className="mt-6 inline-flex items-center gap-1.5 rounded-xl bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground transition-all hover:-translate-y-0.5 hover:bg-secondary disabled:opacity-50"
           >
-            Submit application <ArrowUpRight className="size-4" />
+            {loading ? "Submitting..." : "Submit application"}{" "}
+            <ArrowUpRight className="size-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
           </button>
         </form>
       </Section>

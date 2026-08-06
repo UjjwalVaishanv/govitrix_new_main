@@ -36,7 +36,7 @@ function CaseStudiesPage() {
       <CTASection
         title="Have a project in mind?"
         description="Let's build a high-performance software solution tailored to your enterprise goals."
-        actionText="Book a Discovery Call"
+        primary={{ label: "Book a Discovery Call", to: "/contact" }}
       />
     </>
   );

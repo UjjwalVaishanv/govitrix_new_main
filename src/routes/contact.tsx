@@ -63,13 +63,22 @@ const faqs = [
 ];
 
 function ContactPage() {
-  const [form, setForm] = useState({
+  const [form, setForm] = useState<{
+    name: string;
+    email: string;
+    phone: string;
+    company: string;
+    message: string;
+    file: string;
+    fileObj: File | null;
+  }>({
     name: "",
     email: "",
     phone: "",
     company: "",
     message: "",
     file: "",
+    fileObj: null,
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [confirm, setConfirm] = useState(false);
@@ -101,24 +110,28 @@ Message: ${form.message}
 Attached File: ${form.file || "None"}
 ----------------------------------------`;
 
+    const formData = new FormData();
+    formData.append("_subject", mailSubject);
+    formData.append("_template", "table");
+    formData.append("_captcha", "false");
+    formData.append("Full Name", form.name);
+    formData.append("Work Email", form.email);
+    formData.append("Phone Number", form.phone);
+    formData.append("Company Name", form.company || "N/A");
+    formData.append("Message", form.message);
+
+    if (form.fileObj) {
+      formData.append("attachment", form.fileObj, form.fileObj.name);
+      formData.append("file", form.fileObj, form.fileObj.name);
+    }
+
     try {
       await fetch("https://formsubmit.co/ajax/sales@govitrix.com", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
           Accept: "application/json",
         },
-        body: JSON.stringify({
-          _subject: mailSubject,
-          message: mailMessage,
-          name: form.name,
-          email: form.email,
-          phone: form.phone,
-          company: form.company,
-          userMessage: form.message,
-          file: form.file,
-          _captcha: "false",
-        }),
+        body: formData,
       });
     } catch {
       const subject = encodeURIComponent(mailSubject);
@@ -127,7 +140,7 @@ Attached File: ${form.file || "None"}
     } finally {
       setLoading(false);
       setConfirm(true);
-      setForm({ name: "", email: "", phone: "", company: "", message: "", file: "" });
+      setForm({ name: "", email: "", phone: "", company: "", message: "", file: "", fileObj: null });
     }
   };
 
@@ -292,7 +305,14 @@ Attached File: ${form.file || "None"}
                       <input
                         type="file"
                         className="sr-only"
-                        onChange={(e) => setForm({ ...form, file: e.target.files?.[0]?.name || "" })}
+                        onChange={(e) => {
+                          const f = e.target.files?.[0] || null;
+                          setForm((prev) => ({
+                            ...prev,
+                            fileObj: f,
+                            file: f ? f.name : "",
+                          }));
+                        }}
                       />
                     </label>
                   </Field>

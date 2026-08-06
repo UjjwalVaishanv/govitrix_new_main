@@ -452,10 +452,14 @@ export function ProposalDialog({ open, onClose }: { open: boolean; onClose: () =
   const [sent, setSent] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const [form, setForm] = useState({
+  const [form, setForm] = useState<{
+    name: string; company: string; email: string; phone: string; country: string;
+    industry: string; budget: string; type: string; timeline: string;
+    requirements: string; fileName: string; fileObj: File | null;
+  }>({
     name: "", company: "", email: "", phone: "", country: "",
     industry: "", budget: "", type: "", timeline: "",
-    requirements: "", fileName: "",
+    requirements: "", fileName: "", fileObj: null,
   });
 
   const validateStep1 = () => {
@@ -490,7 +494,7 @@ export function ProposalDialog({ open, onClose }: { open: boolean; onClose: () =
     setForm({
       name: "", company: "", email: "", phone: "", country: "",
       industry: "", budget: "", type: "", timeline: "",
-      requirements: "", fileName: "",
+      requirements: "", fileName: "", fileObj: null,
     });
   };
 
@@ -501,7 +505,7 @@ export function ProposalDialog({ open, onClose }: { open: boolean; onClose: () =
 
   const next = () => setStep((s) => Math.min(3, s + 1));
   const back = () => { setErrors({}); setStep((s) => Math.max(1, s - 1)); };
-  
+
   const handleContinue = () => {
     if (step === 1) {
       if (!validateStep1()) return;
@@ -536,29 +540,33 @@ Requirements: ${form.requirements || "N/A"}
 Uploaded Brief: ${form.fileName || "None"}
 ----------------------------------------`;
 
+    const formData = new FormData();
+    formData.append("_subject", mailSubject);
+    formData.append("_template", "table");
+    formData.append("_captcha", "false");
+    formData.append("Full Name", form.name);
+    formData.append("Company Name", form.company);
+    formData.append("Work Email", form.email);
+    formData.append("Phone Number", form.phone || "N/A");
+    formData.append("Country", form.country || "N/A");
+    formData.append("Industry", form.industry || "N/A");
+    formData.append("Project Type", form.type || "N/A");
+    formData.append("Budget Range", form.budget || "N/A");
+    formData.append("Timeline", form.timeline || "N/A");
+    formData.append("Requirements", form.requirements || "N/A");
+
+    if (form.fileObj) {
+      formData.append("attachment", form.fileObj, form.fileObj.name);
+      formData.append("file", form.fileObj, form.fileObj.name);
+    }
+
     try {
       await fetch("https://formsubmit.co/ajax/sales@govitrix.com", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
           Accept: "application/json",
         },
-        body: JSON.stringify({
-          _subject: mailSubject,
-          message: mailMessage,
-          name: form.name,
-          company: form.company,
-          email: form.email,
-          phone: form.phone,
-          country: form.country,
-          industry: form.industry,
-          projectType: form.type,
-          budget: form.budget,
-          timeline: form.timeline,
-          requirements: form.requirements,
-          fileName: form.fileName,
-          _captcha: "false",
-        }),
+        body: formData,
       });
     } catch {
       const subject = encodeURIComponent(mailSubject);
@@ -658,7 +666,18 @@ Uploaded Brief: ${form.fileName || "None"}
                   <p className="text-xs text-ink-muted">{form.fileName || "PDF, DOCX, Figma link file — max 20MB"}</p>
                 </div>
                 <span className="rounded-lg border border-border bg-background px-3 py-1.5 text-xs font-semibold text-ink">Choose file</span>
-                <input type="file" className="hidden" onChange={(e) => setForm({ ...form, fileName: e.target.files?.[0]?.name || "" })} />
+                <input
+                  type="file"
+                  className="hidden"
+                  onChange={(e) => {
+                    const f = e.target.files?.[0] || null;
+                    setForm((prev) => ({
+                      ...prev,
+                      fileObj: f,
+                      fileName: f ? f.name : "",
+                    }));
+                  }}
+                />
               </label>
             </div>
           )}
