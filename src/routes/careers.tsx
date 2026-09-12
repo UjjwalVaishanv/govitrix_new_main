@@ -137,13 +137,22 @@ const benefits = [
 function CareersPage() {
   const [viewRole, setViewRole] = useState<Role | null>(null);
   const [applyRole, setApplyRole] = useState<Role | null>(null);
-  const [form, setForm] = useState({
+  const [form, setForm] = useState<{
+    name: string;
+    email: string;
+    phone: string;
+    role: string;
+    message: string;
+    resume: string;
+    resumeFile: File | null;
+  }>({
     name: "",
     email: "",
     phone: "",
     role: "",
     message: "",
     resume: "",
+    resumeFile: null,
   });
   const [resumeFile, setResumeFile] = useState<File | null>(null);
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -156,8 +165,7 @@ function CareersPage() {
     if (!form.name.trim()) errs.name = "Required";
     if (!form.email.trim() || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(form.email)) errs.email = "Valid email required";
     if (!form.phone.trim()) errs.phone = "Required";
-    if (!form.role) errs.role = "Please select a role";
-    if (!resumeFile && !form.resume) errs.resume = "Please attach your resume";
+    if (!resumeFile && !form.resume && !form.resumeFile) errs.resume = "Please attach your resume";
     if (Object.keys(errs).length) {
       setErrors(errs);
       return;
@@ -166,29 +174,31 @@ function CareersPage() {
     setLoading(true);
 
     const mailSubject = `Job Application: ${form.role} - ${form.name}`;
-    const mailMessage = `New Career Job Application:
+    const mailMessage = `New Job Application Received:
 ----------------------------------------
-Candidate Name: ${form.name}
+Full Name: ${form.name}
 Email Address: ${form.email}
-Phone Number: ${form.phone}
-Target Role: ${form.role}
-Cover Note / Message: ${form.message || "N/A"}
-Resume Attached: ${resumeFile ? resumeFile.name : form.resume || "None"}
+Contact Number: ${form.phone}
+Job Role: ${form.role}
+Message: ${form.message || "None"}
+Upload Resume / CV: ${resumeFile ? resumeFile.name : form.resume || "Attached"}
 ----------------------------------------`;
 
     const formData = new FormData();
     formData.append("_subject", mailSubject);
+    formData.append("_template", "table");
     formData.append("_captcha", "false");
-    formData.append("name", form.name);
-    formData.append("email", form.email);
-    formData.append("phone", form.phone);
-    formData.append("role", form.role);
-    formData.append("message", mailMessage);
-    if (form.message) formData.append("userMessage", form.message);
+    formData.append("Full Name", form.name);
+    formData.append("Email Address", form.email);
+    formData.append("Contact Number", form.phone);
+    formData.append("Job Role", form.role);
+    formData.append("Message", form.message || "None");
 
-    if (resumeFile) {
-      formData.append("attachment", resumeFile, resumeFile.name);
-      formData.append("file", resumeFile, resumeFile.name);
+    const activeResume = resumeFile || form.resumeFile;
+    if (activeResume) {
+      formData.append("attachment", activeResume, activeResume.name);
+      formData.append("file", activeResume, activeResume.name);
+      formData.append("resume", activeResume, activeResume.name);
     }
 
     try {
@@ -207,7 +217,7 @@ Resume Attached: ${resumeFile ? resumeFile.name : form.resume || "None"}
       setLoading(false);
       setConfirm(true);
       setResumeFile(null);
-      setForm({ name: "", email: "", phone: "", role: "", message: "", resume: "" });
+      setForm({ name: "", email: "", phone: "", role: "", message: "", resume: "", resumeFile: null });
     }
   };
 
@@ -380,7 +390,7 @@ Resume Attached: ${resumeFile ? resumeFile.name : form.resume || "None"}
                           e.stopPropagation();
                           e.preventDefault();
                           setResumeFile(null);
-                          setForm({ ...form, resume: "" });
+                          setForm((prev) => ({ ...prev, resume: "", resumeFile: null }));
                         }}
                         className="rounded-lg border border-destructive/30 bg-destructive/10 px-2.5 py-1 text-xs font-semibold text-destructive hover:bg-destructive/20"
                       >
@@ -399,7 +409,11 @@ Resume Attached: ${resumeFile ? resumeFile.name : form.resume || "None"}
                     onChange={(e) => {
                       const selected = e.target.files?.[0] || null;
                       setResumeFile(selected);
-                      setForm({ ...form, resume: selected ? selected.name : "" });
+                      setForm((prev) => ({
+                        ...prev,
+                        resumeFile: selected,
+                        resume: selected ? selected.name : "",
+                      }));
                     }}
                   />
                 </label>

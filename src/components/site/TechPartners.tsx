@@ -1,4 +1,8 @@
 const partners = [
+  { name: "Python", slug: "python", color: "#3776AB" },
+  { name: "Java", slug: "openjdk", color: "#007396" },
+  { name: "C# / .NET", slug: "dotnet", color: "#512BD4" },
+  { name: "Go", slug: "go", color: "#00ADD8" },
   { name: "AWS", slug: "amazonaws", color: "#FF9900" },
   { name: "Microsoft Azure", slug: "microsoftazure", color: "#0089D6" },
   { name: "Google Cloud", slug: "googlecloud", color: "#4285F4" },
@@ -7,15 +11,12 @@ const partners = [
   { name: "GitHub", slug: "github", color: "#24292F" },
   { name: "Docker", slug: "docker", color: "#2496ED" },
   { name: "Kubernetes", slug: "kubernetes", color: "#326CE5" },
-  { name: "Razorpay", slug: "razorpay", color: "#072654" },
-  { name: "Easebuzz", slug: null, color: "#6366F1" },
+  { name: "React", slug: "react", color: "#00D8FF" },
+  { name: "Node.js", slug: "nodedotjs", color: "#5FA04E" },
   { name: "PostgreSQL", slug: "postgresql", color: "#4169E1" },
   { name: "MongoDB", slug: "mongodb", color: "#47A248" },
   { name: "Stripe", slug: "stripe", color: "#635BFF" },
   { name: "Flutter", slug: "flutter", color: "#02569B" },
-  { name: "React", slug: "react", color: "#00D8FF" },
-  { name: "Next.js", slug: "nextdotjs", color: "#000000" },
-  { name: "Node.js", slug: "nodedotjs", color: "#5FA04E" },
 ];
 
 const standards = [

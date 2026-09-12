@@ -26,7 +26,7 @@ export const conceptProducts: Product[] = [
     tagline: "Hospital Management & Clinical System",
     description: "Comprehensive Hospital Management System streamlining patient, doctor, appointment, billing, and administrative workflows in a single unified platform.",
     challenge: "Multi-department hospitals rely on fragmented tools — separate systems for OPD, billing, pharmacy, labs, and admin — which creates handoff errors, revenue leakage, and slow patient flow.",
-    solution: "A modular HMS that unifies patient records, scheduling, billing, pharmacy, labs, and inventory with role-based access, HIPAA-aligned workflows, and real-time dashboards for administrators.",
+    solution: "A modular HMS built with Java Spring Boot and React that unifies patient records, scheduling, billing, pharmacy, labs, and inventory with role-based access, HIPAA-aligned workflows, and real-time dashboards.",
     features: [
       "Patient EMR & appointment scheduling",
       "Doctor rostering & OPD queues",
@@ -35,7 +35,7 @@ export const conceptProducts: Product[] = [
       "Lab reports & radiology integration",
       "Analytics for administrators",
     ],
-    stack: ["React", "Node.js", "PostgreSQL", "AWS", "HL7 / FHIR"],
+    stack: ["Java", "Spring Boot", "React", "PostgreSQL", "AWS", "HL7 / FHIR"],
     results: [
       { value: "−42%", label: "Patient triage time" },
       { value: "+31%", label: "Billing accuracy" },
@@ -56,7 +56,7 @@ export const conceptProducts: Product[] = [
     tagline: "Personal Finance & Wealth Intelligence",
     description: "Personal finance and budgeting platform that helps users track expenses, set savings goals, monitor investments, and improve overall financial health.",
     challenge: "Retail users juggle multiple accounts, cards, and investment apps with no single view of their money — leading to overspending and missed savings goals.",
-    solution: "A goal-first personal finance platform with automatic transaction categorization, budget envelopes, investment tracking, and a nudging engine that improves financial habits.",
+    solution: "A high-performance C# .NET microservice ecosystem with a React Native cross-platform mobile frontend, featuring automatic transaction categorization, budget envelopes, and investment tracking.",
     features: [
       "Bank & card aggregation",
       "Smart auto-categorization",
@@ -65,7 +65,7 @@ export const conceptProducts: Product[] = [
       "Recurring subscription detector",
       "Insights & monthly reviews",
     ],
-    stack: ["React Native", "Node.js", "PostgreSQL", "Plaid", "GCP"],
+    stack: ["C#", ".NET 9", "React Native", "SQL Server", "Azure", "Plaid"],
     results: [
       { value: "+22%", label: "Monthly savings rate" },
       { value: "89%", label: "30-day retention" },
@@ -86,7 +86,7 @@ export const conceptProducts: Product[] = [
     tagline: "AI-Enabled Assessment Platform",
     description: "AI-enabled assessment and scoring platform with performance analytics — designed for institutions, coaching centers, and enterprise learning teams.",
     challenge: "Assessments today are static, slow to grade, and offer little personalized feedback — making it hard to identify strengths, gaps, and learning trajectories at scale.",
-    solution: "An adaptive assessment engine with AI-powered scoring for open-ended responses, proctoring, granular analytics, and a personalized learning path recommendation layer.",
+    solution: "An adaptive assessment engine powered by Python FastAPI microservices and OpenAI models, featuring automated essay scoring, proctoring, and personalized learning pathways.",
     features: [
       "Adaptive test engine",
       "AI scoring for essays & code",
@@ -95,7 +95,7 @@ export const conceptProducts: Product[] = [
       "Personalized learning paths",
       "Institution admin console",
     ],
-    stack: ["Next.js", "Python", "OpenAI", "PostgreSQL", "AWS"],
+    stack: ["Python", "FastAPI", "Next.js", "OpenAI", "PostgreSQL", "AWS"],
     results: [
       { value: "10x", label: "Faster grading" },
       { value: "+3.4x", label: "Learner engagement" },
@@ -116,7 +116,7 @@ export const conceptProducts: Product[] = [
     tagline: "Lead Management & Sales Intelligence",
     description: "Lead management and sales productivity platform that unifies pipeline, communication, forecasting, and AI-assisted next-best-actions for revenue teams.",
     challenge: "SMB sales teams lose deals because leads slip through the cracks between spreadsheets, WhatsApp, and legacy CRMs — with no visibility into pipeline health or rep productivity.",
-    solution: "A modern CRM with unified inbox, pipeline automation, AI-drafted follow-ups, and forecasting — designed for founder-led sales orgs that need enterprise capabilities without enterprise friction.",
+    solution: "A modern CRM powered by Node.js microservices and Vue 3 / TypeScript, featuring pipeline automation, AI-drafted follow-ups, and real-time sales forecasting.",
     features: [
       "Unified lead inbox",
       "Kanban & forecast pipelines",
@@ -125,7 +125,7 @@ export const conceptProducts: Product[] = [
       "Team dashboards & goals",
       "Web & mobile parity",
     ],
-    stack: ["Next.js", "Node.js", "PostgreSQL", "OpenAI", "Twilio"],
+    stack: ["Node.js", "Vue.js", "TypeScript", "PostgreSQL", "OpenAI", "Twilio"],
     results: [
       { value: "+38%", label: "Win rate uplift" },
       { value: "−54%", label: "Time in admin" },
@@ -139,13 +139,71 @@ export const conceptProducts: Product[] = [
     ],
   },
   {
+    slug: "insuredge",
+    name: "InsurEdge",
+    category: "InsurTech",
+    tagline: "Automated Claims & Policy Engine",
+    description: "Enterprise insurance policy administration and claims processing engine built for high throughput and strict compliance.",
+    challenge: "Traditional insurance claims processing requires manual document review, leading to 2-3 week turnaround times and high fraud risk.",
+    solution: "An enterprise ASP.NET Core and C# microservice architecture integrated with Angular and Azure Cognitive Services to automate claims validation and risk scoring.",
+    features: [
+      "Automated claims intake & OCR",
+      "Fraud risk scoring engine",
+      "Policyholder self-service portal",
+      "Underwriter decision workbench",
+      "Regulatory audit trail & reporting",
+      "Multi-currency payment gateways",
+    ],
+    stack: ["C#", "ASP.NET Core", "Angular", "Azure SQL", "Docker", "Azure"],
+    results: [
+      { value: "−65%", label: "Claims processing time" },
+      { value: "99.9%", label: "Uptime SLA" },
+      { value: "+40%", label: "Underwriter throughput" },
+    ],
+    accent: "from-violet-600/20 via-purple-600/10 to-pink-500/20",
+    dotColor: "bg-violet-500",
+    screenshots: [
+      "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=1200&q=80&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=1200&q=80&auto=format&fit=crop",
+    ],
+  },
+  {
+    slug: "logichain-pro",
+    name: "LogiChain Pro",
+    category: "Supply Chain & IoT",
+    tagline: "Real-Time Fleet & Telematics Control",
+    description: "High-concurrency IoT and telematics tracking platform for global supply chains and cold storage logistics.",
+    challenge: "Global logistics operators lack real-time visibility into temperature-sensitive cargo, causing high spoilage rates and delayed dispatch operations.",
+    solution: "A high-performance Go (Golang) and Java backend event streaming platform using Apache Kafka, connecting thousands of IoT telematics sensors to a live tracking dashboard.",
+    features: [
+      "Real-time GPS & telemetry tracking",
+      "Cold-chain temperature alerts",
+      "Automated route optimization",
+      "Driver safety analytics",
+      "Inventory & warehouse sync",
+      "Partner API gateway",
+    ],
+    stack: ["Go (Golang)", "Java", "React", "Kafka", "Docker", "GCP"],
+    results: [
+      { value: "< 50ms", label: "Telemetry latency" },
+      { value: "−28%", label: "Fuel consumption" },
+      { value: "99.4%", label: "On-time delivery" },
+    ],
+    accent: "from-blue-600/20 via-cyan-600/10 to-teal-500/20",
+    dotColor: "bg-cyan-500",
+    screenshots: [
+      "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=1200&q=80&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=1200&q=80&auto=format&fit=crop",
+    ],
+  },
+  {
     slug: "anahata-ai",
     name: "Anahata AI",
     category: "Artificial Intelligence",
     tagline: "Enterprise AI Copilot & Assistant",
     description: "AI-powered business assistant for automation, analytics, and intelligent decision-making — a single copilot that plugs into the tools you already use.",
     challenge: "Operators drown in dashboards, docs, and inboxes — but insights and actions still require humans to stitch everything together across siloed SaaS tools.",
-    solution: "A retrieval-augmented AI assistant that connects to your data warehouse, docs, and business apps to answer questions in natural language, generate reports, and safely execute agentic workflows.",
+    solution: "A retrieval-augmented AI assistant built with Python, PyTorch, and LangChain that connects to your data warehouse, docs, and business apps to answer questions in natural language.",
     features: [
       "Natural language BI queries",
       "RAG over docs & databases",
@@ -154,14 +212,14 @@ export const conceptProducts: Product[] = [
       "Audit trail & governance",
       "SSO & enterprise integrations",
     ],
-    stack: ["Python", "LangChain", "OpenAI", "PostgreSQL", "AWS"],
+    stack: ["Python", "PyTorch", "LangChain", "FastAPI", "React", "AWS"],
     results: [
       { value: "8h/wk", label: "Reclaimed per exec" },
       { value: "−67%", label: "Report cycle time" },
       { value: "100%", label: "Auditable actions" },
     ],
     accent: "from-cyan-600/20 via-blue-600/10 to-indigo-500/20",
-    dotColor: "bg-cyan-500",
+    dotColor: "bg-blue-500",
     screenshots: [
       "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=1200&q=80&auto=format&fit=crop",
       "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=1200&q=80&auto=format&fit=crop",
@@ -170,7 +228,7 @@ export const conceptProducts: Product[] = [
   },
 ];
 
-const categories = ["All Projects", "Healthcare", "Fintech", "Education & Assessment", "Sales & CRM", "Artificial Intelligence"];
+const categories = ["All Projects", "Healthcare", "Fintech", "Education & Assessment", "Sales & CRM", "InsurTech", "Supply Chain & IoT", "Artificial Intelligence"];
 
 export function ConceptProductsShowcase() {
   const [activeCategory, setActiveCategory] = useState("All Projects");

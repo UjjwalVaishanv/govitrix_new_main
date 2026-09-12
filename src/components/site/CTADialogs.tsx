@@ -453,10 +453,14 @@ export function ProposalDialog({ open, onClose }: { open: boolean; onClose: () =
   const [loading, setLoading] = useState(false);
   const [briefFile, setBriefFile] = useState<File | null>(null);
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const [form, setForm] = useState({
+  const [form, setForm] = useState<{
+    name: string; company: string; email: string; phone: string; country: string;
+    industry: string; budget: string; type: string; timeline: string;
+    requirements: string; fileName: string; fileObj: File | null;
+  }>({
     name: "", company: "", email: "", phone: "", country: "",
     industry: "", budget: "", type: "", timeline: "",
-    requirements: "", fileName: "",
+    requirements: "", fileName: "", fileObj: null,
   });
 
   const validateStep1 = () => {
@@ -492,7 +496,7 @@ export function ProposalDialog({ open, onClose }: { open: boolean; onClose: () =
     setForm({
       name: "", company: "", email: "", phone: "", country: "",
       industry: "", budget: "", type: "", timeline: "",
-      requirements: "", fileName: "",
+      requirements: "", fileName: "", fileObj: null,
     });
   };
 
@@ -503,7 +507,7 @@ export function ProposalDialog({ open, onClose }: { open: boolean; onClose: () =
 
   const next = () => setStep((s) => Math.min(3, s + 1));
   const back = () => { setErrors({}); setStep((s) => Math.max(1, s - 1)); };
-  
+
   const handleContinue = () => {
     if (step === 1) {
       if (!validateStep1()) return;
@@ -540,22 +544,23 @@ Uploaded Brief: ${briefFile ? briefFile.name : form.fileName || "None"}
 
     const formData = new FormData();
     formData.append("_subject", mailSubject);
+    formData.append("_template", "table");
     formData.append("_captcha", "false");
-    formData.append("name", form.name);
-    formData.append("company", form.company);
-    formData.append("email", form.email);
-    formData.append("phone", form.phone || "N/A");
-    formData.append("country", form.country || "N/A");
-    formData.append("industry", form.industry || "N/A");
-    formData.append("projectType", form.type || "N/A");
-    formData.append("budget", form.budget || "N/A");
-    formData.append("timeline", form.timeline || "N/A");
-    formData.append("requirements", form.requirements);
-    formData.append("message", mailMessage);
+    formData.append("Full Name", form.name);
+    formData.append("Company Name", form.company);
+    formData.append("Work Email", form.email);
+    formData.append("Phone Number", form.phone || "N/A");
+    formData.append("Country", form.country || "N/A");
+    formData.append("Industry", form.industry || "N/A");
+    formData.append("Project Type", form.type || "N/A");
+    formData.append("Budget Range", form.budget || "N/A");
+    formData.append("Timeline", form.timeline || "N/A");
+    formData.append("Requirements", form.requirements || "N/A");
 
-    if (briefFile) {
-      formData.append("attachment", briefFile, briefFile.name);
-      formData.append("file", briefFile, briefFile.name);
+    const activeBrief = briefFile || form.fileObj;
+    if (activeBrief) {
+      formData.append("attachment", activeBrief, activeBrief.name);
+      formData.append("file", activeBrief, activeBrief.name);
     }
 
     try {
@@ -671,7 +676,7 @@ Uploaded Brief: ${briefFile ? briefFile.name : form.fileName || "None"}
                         e.stopPropagation();
                         e.preventDefault();
                         setBriefFile(null);
-                        setForm({ ...form, fileName: "" });
+                        setForm((prev) => ({ ...prev, fileName: "", fileObj: null }));
                       }}
                       className="rounded-lg border border-destructive/30 bg-destructive/10 px-2.5 py-1 text-xs font-semibold text-destructive hover:bg-destructive/20"
                     >
@@ -687,7 +692,11 @@ Uploaded Brief: ${briefFile ? briefFile.name : form.fileName || "None"}
                   onChange={(e) => {
                     const selected = e.target.files?.[0] || null;
                     setBriefFile(selected);
-                    setForm({ ...form, fileName: selected ? selected.name : "" });
+                    setForm((prev) => ({
+                      ...prev,
+                      fileObj: selected,
+                      fileName: selected ? selected.name : "",
+                    }));
                   }}
                 />
               </label>

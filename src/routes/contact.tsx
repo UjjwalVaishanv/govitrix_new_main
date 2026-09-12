@@ -63,13 +63,22 @@ const faqs = [
 ];
 
 function ContactPage() {
-  const [form, setForm] = useState({
+  const [form, setForm] = useState<{
+    name: string;
+    email: string;
+    phone: string;
+    company: string;
+    message: string;
+    file: string;
+    fileObj: File | null;
+  }>({
     name: "",
     email: "",
     phone: "",
     company: "",
     message: "",
     file: "",
+    fileObj: null,
   });
   const [fileObject, setFileObject] = useState<File | null>(null);
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -104,17 +113,18 @@ Attached File: ${fileObject ? fileObject.name : "None"}
 
     const formData = new FormData();
     formData.append("_subject", mailSubject);
+    formData.append("_template", "table");
     formData.append("_captcha", "false");
-    formData.append("name", form.name);
-    formData.append("email", form.email);
-    formData.append("phone", form.phone);
-    formData.append("company", form.company || "N/A");
-    formData.append("message", mailMessage);
-    formData.append("userMessage", form.message);
+    formData.append("Full Name", form.name);
+    formData.append("Work Email", form.email);
+    formData.append("Phone Number", form.phone);
+    formData.append("Company Name", form.company || "N/A");
+    formData.append("Message", form.message);
 
-    if (fileObject) {
-      formData.append("attachment", fileObject, fileObject.name);
-      formData.append("file", fileObject, fileObject.name);
+    const activeFile = fileObject || form.fileObj;
+    if (activeFile) {
+      formData.append("attachment", activeFile, activeFile.name);
+      formData.append("file", activeFile, activeFile.name);
     }
 
     try {
@@ -133,7 +143,7 @@ Attached File: ${fileObject ? fileObject.name : "None"}
       setLoading(false);
       setConfirm(true);
       setFileObject(null);
-      setForm({ name: "", email: "", phone: "", company: "", message: "", file: "" });
+      setForm({ name: "", email: "", phone: "", company: "", message: "", file: "", fileObj: null });
     }
   };
 
@@ -319,7 +329,11 @@ Attached File: ${fileObject ? fileObject.name : "None"}
                         onChange={(e) => {
                           const selected = e.target.files?.[0] || null;
                           setFileObject(selected);
-                          setForm({ ...form, file: selected ? selected.name : "" });
+                          setForm((prev) => ({
+                            ...prev,
+                            fileObj: selected,
+                            file: selected ? selected.name : "",
+                          }));
                         }}
                       />
                     </label>
