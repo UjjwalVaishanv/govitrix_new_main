@@ -145,24 +145,70 @@ function CareersPage() {
     message: "",
     resume: "",
   });
+  const [resumeFile, setResumeFile] = useState<File | null>(null);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [confirm, setConfirm] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const submit = (e: React.FormEvent) => {
+  const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     const errs: Record<string, string> = {};
     if (!form.name.trim()) errs.name = "Required";
     if (!form.email.trim() || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(form.email)) errs.email = "Valid email required";
     if (!form.phone.trim()) errs.phone = "Required";
     if (!form.role) errs.role = "Please select a role";
-    if (!form.resume) errs.resume = "Please attach your resume";
+    if (!resumeFile && !form.resume) errs.resume = "Please attach your resume";
     if (Object.keys(errs).length) {
       setErrors(errs);
       return;
     }
     setErrors({});
-    setConfirm(true);
-    setForm({ name: "", email: "", phone: "", role: "", message: "", resume: "" });
+    setLoading(true);
+
+    const mailSubject = `Job Application: ${form.role} - ${form.name}`;
+    const mailMessage = `New Career Job Application:
+----------------------------------------
+Candidate Name: ${form.name}
+Email Address: ${form.email}
+Phone Number: ${form.phone}
+Target Role: ${form.role}
+Cover Note / Message: ${form.message || "N/A"}
+Resume Attached: ${resumeFile ? resumeFile.name : form.resume || "None"}
+----------------------------------------`;
+
+    const formData = new FormData();
+    formData.append("_subject", mailSubject);
+    formData.append("_captcha", "false");
+    formData.append("name", form.name);
+    formData.append("email", form.email);
+    formData.append("phone", form.phone);
+    formData.append("role", form.role);
+    formData.append("message", mailMessage);
+    if (form.message) formData.append("userMessage", form.message);
+
+    if (resumeFile) {
+      formData.append("attachment", resumeFile, resumeFile.name);
+      formData.append("file", resumeFile, resumeFile.name);
+    }
+
+    try {
+      await fetch("https://formsubmit.co/ajax/sales@govitrix.com", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+        },
+        body: formData,
+      });
+    } catch {
+      const subject = encodeURIComponent(mailSubject);
+      const body = encodeURIComponent(mailMessage);
+      window.location.href = `mailto:sales@govitrix.com?subject=${subject}&body=${body}`;
+    } finally {
+      setLoading(false);
+      setConfirm(true);
+      setResumeFile(null);
+      setForm({ name: "", email: "", phone: "", role: "", message: "", resume: "" });
+    }
   };
 
   return (
@@ -244,86 +290,130 @@ function CareersPage() {
 
       {/* APPLICATION */}
       <Section id="apply" eyebrow="Apply" title="Tell us about you">
-        <form
-          noValidate
-          onSubmit={submit}
-          className="mx-auto max-w-2xl rounded-3xl border border-border bg-background p-8 shadow-soft"
-        >
-          <div className="grid gap-5 sm:grid-cols-2">
-            <Field label="Full Name*" error={errors.name}>
-              <input
-                value={form.name}
-                onChange={(e) => setForm({ ...form, name: e.target.value })}
-                placeholder="e.g. Anika Sharma"
-                className="input"
-              />
-            </Field>
-            <Field label="Email Address*" error={errors.email}>
-              <input
-                type="email"
-                value={form.email}
-                onChange={(e) => setForm({ ...form, email: e.target.value })}
-                placeholder="you@company.com"
-                className="input"
-              />
-            </Field>
-            <Field label="Contact Number*" error={errors.phone}>
-              <input
-                type="tel"
-                value={form.phone}
-                onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                placeholder="+91 98XXXXXX00"
-                className="input"
-              />
-            </Field>
-            <Field label="Job Role*" error={errors.role}>
-              <select
-                value={form.role}
-                onChange={(e) => setForm({ ...form, role: e.target.value })}
-                className="input"
-              >
-                <option value="">Select an open position</option>
-                {roles.map((r) => (
-                  <option key={r.slug} value={r.title}>
-                    {r.title}
-                  </option>
-                ))}
-              </select>
-            </Field>
-            <Field label="Message" className="sm:col-span-2">
-              <textarea
-                rows={5}
-                value={form.message}
-                onChange={(e) => setForm({ ...form, message: e.target.value })}
-                placeholder="Tell us about your work, projects you're proud of, or what excites you about Govitrix."
-                className="input resize-y"
-              />
-            </Field>
-            <Field label="Upload Resume / CV*" error={errors.resume} className="sm:col-span-2">
-              <label className="flex cursor-pointer items-center justify-between gap-3 rounded-xl border border-dashed border-border bg-surface px-4 py-3 text-sm text-ink-soft hover:border-border-strong hover:bg-background">
-                <span className="inline-flex items-center gap-2">
-                  <Upload className="size-4" strokeWidth={1.75} />
-                  {form.resume || "Choose a file (PDF, DOC, DOCX)"}
-                </span>
-                <span className="rounded-lg border border-border bg-background px-2.5 py-1 text-xs font-semibold text-ink">
-                  Browse
-                </span>
-                <input
-                  type="file"
-                  accept=".pdf,.doc,.docx"
-                  className="sr-only"
-                  onChange={(e) => setForm({ ...form, resume: e.target.files?.[0]?.name || "" })}
-                />
-              </label>
-            </Field>
+        {confirm ? (
+          <div className="mx-auto max-w-2xl rounded-3xl border border-border bg-background p-8 py-16 text-center shadow-soft animate-fade-in">
+            <div className="mx-auto inline-flex size-16 items-center justify-center rounded-full bg-success/15 text-success animate-scale-in">
+              <CheckCircle2 className="size-8" strokeWidth={2} />
+            </div>
+            <h3 className="mt-6 font-display text-2xl font-semibold text-ink md:text-3xl">
+              Application submitted successfully
+            </h3>
+            <p className="mx-auto mt-4 max-w-lg text-sm leading-relaxed text-ink-soft md:text-base">
+              Thank you for applying to Govitrix. Your resume and application details have been received. Our recruitment team will review your profile and contact you if your qualifications align with our current opportunities.
+            </p>
+            <button
+              type="button"
+              onClick={() => setConfirm(false)}
+              className="mt-8 inline-flex items-center gap-1.5 rounded-xl bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-soft transition-all hover:-translate-y-0.5 hover:bg-secondary"
+            >
+              Submit another application
+            </button>
           </div>
-          <button
-            type="submit"
-            className="mt-6 inline-flex items-center gap-1.5 rounded-xl bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground transition-all hover:-translate-y-0.5 hover:bg-secondary"
+        ) : (
+          <form
+            noValidate
+            encType="multipart/form-data"
+            onSubmit={submit}
+            className="mx-auto max-w-2xl rounded-3xl border border-border bg-background p-8 shadow-soft"
           >
-            Submit application <ArrowUpRight className="size-4" />
-          </button>
-        </form>
+            <div className="grid gap-5 sm:grid-cols-2">
+              <Field label="Full Name*" error={errors.name}>
+                <input
+                  value={form.name}
+                  onChange={(e) => setForm({ ...form, name: e.target.value })}
+                  placeholder="e.g. Anika Sharma"
+                  className="input"
+                />
+              </Field>
+              <Field label="Email Address*" error={errors.email}>
+                <input
+                  type="email"
+                  value={form.email}
+                  onChange={(e) => setForm({ ...form, email: e.target.value })}
+                  placeholder="you@company.com"
+                  className="input"
+                />
+              </Field>
+              <Field label="Contact Number*" error={errors.phone}>
+                <input
+                  type="tel"
+                  value={form.phone}
+                  onChange={(e) => setForm({ ...form, phone: e.target.value })}
+                  placeholder="+91 98XXXXXX00"
+                  className="input"
+                />
+              </Field>
+              <Field label="Job Role*" error={errors.role}>
+                <select
+                  value={form.role}
+                  onChange={(e) => setForm({ ...form, role: e.target.value })}
+                  className="input"
+                >
+                  <option value="">Select an open position</option>
+                  {roles.map((r) => (
+                    <option key={r.slug} value={r.title}>
+                      {r.title}
+                    </option>
+                  ))}
+                </select>
+              </Field>
+              <Field label="Message" className="sm:col-span-2">
+                <textarea
+                  rows={5}
+                  value={form.message}
+                  onChange={(e) => setForm({ ...form, message: e.target.value })}
+                  placeholder="Tell us about your work, projects you're proud of, or what excites you about Govitrix."
+                  className="input resize-y"
+                />
+              </Field>
+              <Field label="Upload Resume / CV*" error={errors.resume} className="sm:col-span-2">
+                <label className="flex cursor-pointer items-center justify-between gap-3 rounded-xl border border-dashed border-border bg-surface px-4 py-3 text-sm text-ink-soft hover:border-border-strong hover:bg-background">
+                  <span className="inline-flex items-center gap-2 truncate">
+                    <Upload className="size-4 shrink-0" strokeWidth={1.75} />
+                    {resumeFile ? resumeFile.name : form.resume || "Choose a file (PDF, DOC, DOCX)"}
+                  </span>
+                  <div className="flex items-center gap-2 shrink-0">
+                    {(resumeFile || form.resume) && (
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          e.preventDefault();
+                          setResumeFile(null);
+                          setForm({ ...form, resume: "" });
+                        }}
+                        className="rounded-lg border border-destructive/30 bg-destructive/10 px-2.5 py-1 text-xs font-semibold text-destructive hover:bg-destructive/20"
+                      >
+                        Remove
+                      </button>
+                    )}
+                    <span className="rounded-lg border border-border bg-background px-2.5 py-1 text-xs font-semibold text-ink">
+                      Browse
+                    </span>
+                  </div>
+                  <input
+                    type="file"
+                    name="attachment"
+                    accept=".pdf,.doc,.docx"
+                    className="sr-only"
+                    onChange={(e) => {
+                      const selected = e.target.files?.[0] || null;
+                      setResumeFile(selected);
+                      setForm({ ...form, resume: selected ? selected.name : "" });
+                    }}
+                  />
+                </label>
+              </Field>
+            </div>
+            <button
+              type="submit"
+              disabled={loading}
+              className="mt-6 inline-flex items-center gap-1.5 rounded-xl bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground transition-all hover:-translate-y-0.5 hover:bg-secondary disabled:opacity-50"
+            >
+              {loading ? "Submitting application..." : "Submit application"} <ArrowUpRight className="size-4" />
+            </button>
+          </form>
+        )}
       </Section>
 
       {/* LETS BUILD — careers variant */}

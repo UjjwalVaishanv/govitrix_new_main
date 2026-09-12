@@ -206,21 +206,21 @@ function HomePage() {
           className="absolute inset-0 bg-gradient-to-r from-background via-background/80 to-transparent pointer-events-none"
         />
         <div aria-hidden className="absolute inset-0 hairline-grid opacity-[0.40] pointer-events-none" />
-        <div aria-hidden className="soft-blur-orb left-1/2 top-0 h-[420px] w-[420px] -translate-x-1/2 bg-accent/15 pointer-events-none" />
+        <div aria-hidden className="soft-blur-orb -right-24 -top-24 h-[420px] w-[420px] bg-accent/15 pointer-events-none" />
         <div className="container-page relative py-20 md:py-32">
-          <div className="mx-auto max-w-4xl text-center fade-in-up">
+          <div className="max-w-4xl fade-in-up">
             <h1 className="mt-4 text-balance text-4xl font-semibold tracking-tight text-ink md:text-6xl md:leading-[1.05] lg:text-[68px]">
               Transforming Businesses.{" "}
               <span className="relative whitespace-nowrap">
                 <span className="relative z-10 bg-gradient-to-r from-accent to-success bg-clip-text text-transparent">Intelligently.</span>
               </span>
             </h1>
-            <p className="mt-6 mx-auto max-w-2xl text-pretty text-lg text-ink-soft">
+            <p className="mt-6 max-w-2xl text-pretty text-lg text-ink-soft">
               We build intelligent digital products, AI-powered solutions, and scalable enterprise
               platforms that help organizations innovate, grow, and lead in the digital era.
             </p>
 
-            <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
+            <div className="mt-10 flex flex-wrap items-center justify-start gap-3">
               <button
                 type="button"
                 onClick={() => setDiscoveryOpen(true)}
@@ -244,7 +244,7 @@ function HomePage() {
               </button>
             </div>
 
-            <div className="mt-12 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-xs font-medium text-ink-muted">
+            <div className="mt-12 flex flex-wrap items-center justify-start gap-x-8 gap-y-3 text-xs font-medium text-ink-muted">
               {trustChips.map((c) => (
                 <span key={c} className="inline-flex items-center gap-2">
                   <Check className="size-3.5 text-success" />

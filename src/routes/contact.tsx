@@ -71,6 +71,7 @@ function ContactPage() {
     message: "",
     file: "",
   });
+  const [fileObject, setFileObject] = useState<File | null>(null);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [confirm, setConfirm] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -98,27 +99,31 @@ Work Email: ${form.email}
 Phone Number: ${form.phone}
 Company Name: ${form.company || "N/A"}
 Message: ${form.message}
-Attached File: ${form.file || "None"}
+Attached File: ${fileObject ? fileObject.name : "None"}
 ----------------------------------------`;
+
+    const formData = new FormData();
+    formData.append("_subject", mailSubject);
+    formData.append("_captcha", "false");
+    formData.append("name", form.name);
+    formData.append("email", form.email);
+    formData.append("phone", form.phone);
+    formData.append("company", form.company || "N/A");
+    formData.append("message", mailMessage);
+    formData.append("userMessage", form.message);
+
+    if (fileObject) {
+      formData.append("attachment", fileObject, fileObject.name);
+      formData.append("file", fileObject, fileObject.name);
+    }
 
     try {
       await fetch("https://formsubmit.co/ajax/sales@govitrix.com", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
           Accept: "application/json",
         },
-        body: JSON.stringify({
-          _subject: mailSubject,
-          message: mailMessage,
-          name: form.name,
-          email: form.email,
-          phone: form.phone,
-          company: form.company,
-          userMessage: form.message,
-          file: form.file,
-          _captcha: "false",
-        }),
+        body: formData,
       });
     } catch {
       const subject = encodeURIComponent(mailSubject);
@@ -127,6 +132,7 @@ Attached File: ${form.file || "None"}
     } finally {
       setLoading(false);
       setConfirm(true);
+      setFileObject(null);
       setForm({ name: "", email: "", phone: "", company: "", message: "", file: "" });
     }
   };
@@ -233,6 +239,7 @@ Attached File: ${form.file || "None"}
             ) : (
               <form
                 noValidate
+                encType="multipart/form-data"
                 onSubmit={submit}
                 className="rounded-3xl border border-border bg-background p-8 shadow-soft"
               >
@@ -282,17 +289,38 @@ Attached File: ${form.file || "None"}
                   </Field>
                   <Field label="Upload File" className="sm:col-span-2">
                     <label className="flex cursor-pointer items-center justify-between gap-3 rounded-xl border border-dashed border-border bg-surface px-4 py-3 text-sm text-ink-soft hover:border-border-strong hover:bg-background">
-                      <span className="inline-flex items-center gap-2">
-                        <Upload className="size-4" strokeWidth={1.75} />
-                        {form.file || "Attach a brief, spec, or reference (optional)"}
+                      <span className="inline-flex items-center gap-2 truncate">
+                        <Upload className="size-4 shrink-0" strokeWidth={1.75} />
+                        {fileObject ? fileObject.name : "Attach a brief, spec, or reference (optional)"}
                       </span>
-                      <span className="rounded-lg border border-border bg-background px-2.5 py-1 text-xs font-semibold text-ink">
-                        Browse
-                      </span>
+                      <div className="flex items-center gap-2 shrink-0">
+                        {fileObject && (
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              e.preventDefault();
+                              setFileObject(null);
+                              setForm({ ...form, file: "" });
+                            }}
+                            className="rounded-lg border border-destructive/30 bg-destructive/10 px-2.5 py-1 text-xs font-semibold text-destructive hover:bg-destructive/20"
+                          >
+                            Remove
+                          </button>
+                        )}
+                        <span className="rounded-lg border border-border bg-background px-2.5 py-1 text-xs font-semibold text-ink">
+                          Browse
+                        </span>
+                      </div>
                       <input
                         type="file"
+                        name="attachment"
                         className="sr-only"
-                        onChange={(e) => setForm({ ...form, file: e.target.files?.[0]?.name || "" })}
+                        onChange={(e) => {
+                          const selected = e.target.files?.[0] || null;
+                          setFileObject(selected);
+                          setForm({ ...form, file: selected ? selected.name : "" });
+                        }}
                       />
                     </label>
                   </Field>

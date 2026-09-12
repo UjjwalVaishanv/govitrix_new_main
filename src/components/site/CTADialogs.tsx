@@ -451,6 +451,7 @@ export function ProposalDialog({ open, onClose }: { open: boolean; onClose: () =
   const [step, setStep] = useState(1);
   const [sent, setSent] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [briefFile, setBriefFile] = useState<File | null>(null);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [form, setForm] = useState({
     name: "", company: "", email: "", phone: "", country: "",
@@ -486,6 +487,7 @@ export function ProposalDialog({ open, onClose }: { open: boolean; onClose: () =
     setStep(1);
     setSent(false);
     setLoading(false);
+    setBriefFile(null);
     setErrors({});
     setForm({
       name: "", company: "", email: "", phone: "", country: "",
@@ -533,32 +535,36 @@ Project Type: ${form.type || "N/A"}
 Budget Range: ${form.budget || "N/A"}
 Timeline: ${form.timeline || "N/A"}
 Requirements: ${form.requirements || "N/A"}
-Uploaded Brief: ${form.fileName || "None"}
+Uploaded Brief: ${briefFile ? briefFile.name : form.fileName || "None"}
 ----------------------------------------`;
+
+    const formData = new FormData();
+    formData.append("_subject", mailSubject);
+    formData.append("_captcha", "false");
+    formData.append("name", form.name);
+    formData.append("company", form.company);
+    formData.append("email", form.email);
+    formData.append("phone", form.phone || "N/A");
+    formData.append("country", form.country || "N/A");
+    formData.append("industry", form.industry || "N/A");
+    formData.append("projectType", form.type || "N/A");
+    formData.append("budget", form.budget || "N/A");
+    formData.append("timeline", form.timeline || "N/A");
+    formData.append("requirements", form.requirements);
+    formData.append("message", mailMessage);
+
+    if (briefFile) {
+      formData.append("attachment", briefFile, briefFile.name);
+      formData.append("file", briefFile, briefFile.name);
+    }
 
     try {
       await fetch("https://formsubmit.co/ajax/sales@govitrix.com", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
           Accept: "application/json",
         },
-        body: JSON.stringify({
-          _subject: mailSubject,
-          message: mailMessage,
-          name: form.name,
-          company: form.company,
-          email: form.email,
-          phone: form.phone,
-          country: form.country,
-          industry: form.industry,
-          projectType: form.type,
-          budget: form.budget,
-          timeline: form.timeline,
-          requirements: form.requirements,
-          fileName: form.fileName,
-          _captcha: "false",
-        }),
+        body: formData,
       });
     } catch {
       const subject = encodeURIComponent(mailSubject);
@@ -602,7 +608,7 @@ Uploaded Brief: ${form.fileName || "None"}
           <button onClick={handleClose} className="mt-6 inline-flex rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground hover:bg-secondary">Close</button>
         </div>
       ) : (
-        <form id="proposal-form" onSubmit={(e) => { e.preventDefault(); submit(); }} className="grid gap-6">
+        <form id="proposal-form" encType="multipart/form-data" onSubmit={(e) => { e.preventDefault(); submit(); }} className="grid gap-6">
           <div className="flex items-center gap-2 text-xs font-medium text-ink-muted">
             {[1, 2, 3].map((n) => (
               <div key={n} className="flex flex-1 items-center gap-2">
@@ -653,12 +659,37 @@ Uploaded Brief: ${form.fileName || "None"}
                 {errors.requirements && <p className="mt-1 text-xs font-medium text-destructive">{errors.requirements}</p>}
               </div>
               <label className="flex cursor-pointer items-center justify-between gap-4 rounded-xl border border-dashed border-border bg-surface px-4 py-4 text-sm text-ink-soft hover:border-border-strong">
-                <div>
+                <div className="truncate">
                   <p className="font-medium text-ink">Upload a brief (optional)</p>
-                  <p className="text-xs text-ink-muted">{form.fileName || "PDF, DOCX, Figma link file — max 20MB"}</p>
+                  <p className="text-xs text-ink-muted truncate">{briefFile ? briefFile.name : form.fileName || "PDF, DOCX, Figma link file — max 20MB"}</p>
                 </div>
-                <span className="rounded-lg border border-border bg-background px-3 py-1.5 text-xs font-semibold text-ink">Choose file</span>
-                <input type="file" className="hidden" onChange={(e) => setForm({ ...form, fileName: e.target.files?.[0]?.name || "" })} />
+                <div className="flex items-center gap-2 shrink-0">
+                  {(briefFile || form.fileName) && (
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        e.preventDefault();
+                        setBriefFile(null);
+                        setForm({ ...form, fileName: "" });
+                      }}
+                      className="rounded-lg border border-destructive/30 bg-destructive/10 px-2.5 py-1 text-xs font-semibold text-destructive hover:bg-destructive/20"
+                    >
+                      Remove
+                    </button>
+                  )}
+                  <span className="rounded-lg border border-border bg-background px-3 py-1.5 text-xs font-semibold text-ink">Choose file</span>
+                </div>
+                <input
+                  type="file"
+                  name="attachment"
+                  className="hidden"
+                  onChange={(e) => {
+                    const selected = e.target.files?.[0] || null;
+                    setBriefFile(selected);
+                    setForm({ ...form, fileName: selected ? selected.name : "" });
+                  }}
+                />
               </label>
             </div>
           )}
