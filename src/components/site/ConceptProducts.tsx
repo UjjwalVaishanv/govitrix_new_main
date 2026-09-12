@@ -139,64 +139,6 @@ export const conceptProducts: Product[] = [
     ],
   },
   {
-    slug: "insuredge",
-    name: "InsurEdge",
-    category: "InsurTech",
-    tagline: "Automated Claims & Policy Engine",
-    description: "Enterprise insurance policy administration and claims processing engine built for high throughput and strict compliance.",
-    challenge: "Traditional insurance claims processing requires manual document review, leading to 2-3 week turnaround times and high fraud risk.",
-    solution: "An enterprise ASP.NET Core and C# microservice architecture integrated with Angular and Azure Cognitive Services to automate claims validation and risk scoring.",
-    features: [
-      "Automated claims intake & OCR",
-      "Fraud risk scoring engine",
-      "Policyholder self-service portal",
-      "Underwriter decision workbench",
-      "Regulatory audit trail & reporting",
-      "Multi-currency payment gateways",
-    ],
-    stack: ["C#", "ASP.NET Core", "Angular", "Azure SQL", "Docker", "Azure"],
-    results: [
-      { value: "−65%", label: "Claims processing time" },
-      { value: "99.9%", label: "Uptime SLA" },
-      { value: "+40%", label: "Underwriter throughput" },
-    ],
-    accent: "from-violet-600/20 via-purple-600/10 to-pink-500/20",
-    dotColor: "bg-violet-500",
-    screenshots: [
-      "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=1200&q=80&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=1200&q=80&auto=format&fit=crop",
-    ],
-  },
-  {
-    slug: "logichain-pro",
-    name: "LogiChain Pro",
-    category: "Supply Chain & IoT",
-    tagline: "Real-Time Fleet & Telematics Control",
-    description: "High-concurrency IoT and telematics tracking platform for global supply chains and cold storage logistics.",
-    challenge: "Global logistics operators lack real-time visibility into temperature-sensitive cargo, causing high spoilage rates and delayed dispatch operations.",
-    solution: "A high-performance Go (Golang) and Java backend event streaming platform using Apache Kafka, connecting thousands of IoT telematics sensors to a live tracking dashboard.",
-    features: [
-      "Real-time GPS & telemetry tracking",
-      "Cold-chain temperature alerts",
-      "Automated route optimization",
-      "Driver safety analytics",
-      "Inventory & warehouse sync",
-      "Partner API gateway",
-    ],
-    stack: ["Go (Golang)", "Java", "React", "Kafka", "Docker", "GCP"],
-    results: [
-      { value: "< 50ms", label: "Telemetry latency" },
-      { value: "−28%", label: "Fuel consumption" },
-      { value: "99.4%", label: "On-time delivery" },
-    ],
-    accent: "from-blue-600/20 via-cyan-600/10 to-teal-500/20",
-    dotColor: "bg-cyan-500",
-    screenshots: [
-      "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=1200&q=80&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=1200&q=80&auto=format&fit=crop",
-    ],
-  },
-  {
     slug: "anahata-ai",
     name: "Anahata AI",
     category: "Artificial Intelligence",
@@ -228,7 +170,7 @@ export const conceptProducts: Product[] = [
   },
 ];
 
-const categories = ["All Projects", "Healthcare", "Fintech", "Education & Assessment", "Sales & CRM", "InsurTech", "Supply Chain & IoT", "Artificial Intelligence"];
+const categories = ["All Projects", "Healthcare", "Fintech", "Education & Assessment", "Sales & CRM", "Artificial Intelligence"];
 
 export function ConceptProductsShowcase() {
   const [activeCategory, setActiveCategory] = useState("All Projects");
