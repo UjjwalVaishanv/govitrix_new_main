@@ -240,7 +240,7 @@ function HomePage() {
                 onClick={() => scrollTo("products")}
                 className="inline-flex items-center gap-1.5 rounded-xl border border-border bg-background px-6 py-3.5 text-sm font-semibold text-ink transition-all hover:-translate-y-0.5 hover:bg-surface"
               >
-                Explore Portfolio <ArrowRight className="size-4" />
+                Explore Case Studies <ArrowRight className="size-4" />
               </button>
             </div>
 
@@ -300,10 +300,10 @@ function HomePage() {
 
         <div className="mt-10 text-center">
           <Link
-            to="/portfolio"
+            to="/case-studies"
             className="inline-flex items-center gap-1.5 rounded-xl border border-border bg-background px-5 py-3 text-sm font-semibold text-ink transition-all hover:-translate-y-0.5 hover:bg-surface"
           >
-            Explore the full portfolio <ArrowRight className="size-4" />
+            Explore Case Studies <ArrowRight className="size-4" />
           </Link>
         </div>
       </Section>

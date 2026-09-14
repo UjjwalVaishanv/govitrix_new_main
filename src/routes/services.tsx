@@ -95,10 +95,10 @@ function ServicesPage() {
             Book Discovery Call
           </button>
           <Link
-            to="/portfolio"
+            to="/case-studies"
             className="inline-flex items-center gap-1.5 rounded-xl border border-border bg-background px-5 py-3 text-sm font-semibold text-ink transition-all hover:-translate-y-0.5 hover:bg-surface"
           >
-            See client work
+            See case studies
           </Link>
         </div>
       </PageHero>
