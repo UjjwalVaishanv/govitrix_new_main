@@ -193,7 +193,7 @@ export function SiteFooter() {
               <Instagram className="size-4" strokeWidth={1.75} />
             </a>
             <a
-              href="https://x.com/govitrix"
+              href="https://x.com/HarshRa30697754"
               target="_blank"
               rel="noreferrer"
               aria-label="X (Twitter)"
