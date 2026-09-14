@@ -26,7 +26,6 @@ const groups = [
   {
     title: "Work",
     links: [
-      { to: "/portfolio", label: "Portfolio" },
       { to: "/case-studies", label: "Case Studies" },
       { to: "/industries", label: "Industries" },
     ],

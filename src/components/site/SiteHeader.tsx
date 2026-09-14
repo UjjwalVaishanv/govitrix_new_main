@@ -7,7 +7,6 @@ import { DiscoveryDialog, ProposalDialog } from "./CTADialogs";
 const nav = [
   { to: "/", label: "Home" },
   { to: "/services", label: "Services" },
-  { to: "/portfolio", label: "Portfolio" },
   { to: "/case-studies", label: "Case Studies" },
   { to: "/industries", label: "Industries" },
   { to: "/insights", label: "Insights" },
