@@ -20,7 +20,7 @@ const testimonials: T[] = [
     company: "Anahata AI",
     country: "India",
     flag: "🇮🇳",
-    photo: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop&crop=faces&q=80",
+    photo: "/testimonials/rajneesh-panwar.jpg",
   },
   {
     quote:
